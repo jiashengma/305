@@ -4,6 +4,7 @@
 CREATE TABLE airline (
     id      INTEGER,
     name    CHAR(2) NOT NULL,
+    longName VARCHAR(60) NOT NULL,
     PRIMARY KEY (id)
 );
 
