@@ -134,3 +134,11 @@ CREATE TABLE leg (
 );
 
 -- TODO: fare restrictions
+
+/* At the moment, this will count the number of seats found in the
+Leg table. This will have to change if we update the schema to match
+the E-R diagram. */
+CREATE VIEW FlightCount AS
+SELECT aid, flightNumber, COUNT(seatNumber) FROM leg
+GROUP BY aid, flightNumber;
+
