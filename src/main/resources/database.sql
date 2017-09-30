@@ -1,47 +1,47 @@
--- Author: Jia Sheng Ma
-
+-- Author: AJA(x)
 -- TODO: keys, constraints
 CREATE TABLE airline (
-    id      INTEGER,
-    name    CHAR(2) NOT NULL,
-    longName VARCHAR(60) NOT NULL,
+    id      INTEGER,                    -- Airline ID for query reference
+    name    CHAR(2) NOT NULL,           -- 2Letter name for display purposes
+    longName VARCHAR(60) NOT NULL,      -- Full Name of this airline
     PRIMARY KEY (id)
 );
 
 CREATE TABLE airport (
-    id      INTEGER,
-    name    CHAR(3)  NOT NULL,
-    longName VARCHAR(64) NOT NULL,
-    city    VARCHAR(64) NOT NULL,
-    country VARCHAR(64) NOT NULL,
-    PRIMARY KEY (id)
+    id      INTEGER,                    -- Airport ID for query reference
+    name    CHAR(3)  NOT NULL,          -- 3Letter name >> UNIQUE per airline ONLY >> display purpose
+    longName VARCHAR(64) NOT NULL,      -- Full Name of this airport
+    city    VARCHAR(64) NOT NULL,       -- City where airport is located
+    country VARCHAR(64) NOT NULL,       -- Country where airport is located
+    aid		INTEGER,					-- References Airline for uniqueness 
+    -- May need a TIMEZONE to properly display times if use epoch timings
+	
+    PRIMARY KEY (id),
+	-- Need a FOREIGNKEY REFERENCE AIRLINE to avoid duplicates with other airports of same name
+	FOREIGN KEY (aid) REFERENCES airline(id)
 );
 
 -- TODO
 CREATE TABLE flight (
-    flightNumber    INTEGER,
-    aid             INTEGER, -- airline id
+    flightNumber    INTEGER,            -- Flight ID for query reference-
+    aid             INTEGER,            -- Airline id
     numSeat         INTEGER,
     -- ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
-    fare            FLOAT(10,2),
-    -- lowest bid the airline is willing to accept
-    hiddenFare      FLOAT(10,2) NOT NULL, 
+    fare            FLOAT(10,2),		-- Standard price on this flight
+    hiddenFare      FLOAT(10,2) NOT NULL,-- lowest bid the airline is willing to accept
     -- TODO: fare restrictions?
     PRIMARY KEY (flightNumber, aid),
     FOREIGN KEY (aid) REFERENCES airline(id)
 );
 
 CREATE TABLE stops (
-    id              INTEGER,    -- stop number
-    aid             INTEGER NOT NULL,  -- airline id
+    id              INTEGER,    		-- stop number
+    aid             INTEGER NOT NULL,  	-- airline id
     flightNumber    INTEGER NOT NULL,
-    /* TODO: can we use airports instead of citys as stops? b/c flight stops
-            at airport
-    */ 
-    fromAirport     INTEGER NOT NULL,
-    toAirport       INTEGER NOT NULL,
-    departureTime   DATETIME,-- TODO: type?
-    arrivalTime     DATETIME,-- TODO: type?
+    fromAirport     INTEGER NOT NULL,	-- Origin Airport ID
+    toAirport       INTEGER NOT NULL,	-- Destination Airport ID
+    departureTime   DATETIME,			-- TODO: type?	Epoch?
+    arrivalTime     DATETIME,			-- TODO: type?	Epoch?
 
     PRIMARY KEY (id),
     FOREIGN KEY (flightNumber,aid) REFERENCES flight(flightNumber,aid),
@@ -54,7 +54,7 @@ CREATE TABLE stops (
 CREATE TABLE operatesOn (
     flightNumber    INTEGER,
     aid             INTEGER,
-    day             INTEGER(1),
+    day             INTEGER(1),			-- ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun') ?
     PRIMARY KEY (flightNumber, aid, day)
 );
 
@@ -66,55 +66,53 @@ CREATE TABLE person (
     city        VARCHAR(32) NOT NULL,
     state       CHAR(2) NOT NULL,
     zipcode     INTEGER(5) NOT NULL,
-    phone       CHAR(10) NOT NULL, -- TODO: CHECK WHAT FORMAT
+    phone       CHAR(10) NOT NULL, 		-- TODO: CHECK WHAT FORMAT
     email       VARCHAR(64) NOT NULL,
 
     PRIMARY KEY (id)
 );
 CREATE TABLE customer (
-    id          INTEGER UNIQUE NOT NULL,
-    account     INTEGER NOT NULL,    -- account number
-    accountCreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    creditCardNum   BIGINT NOT NULL, 
-    rating      INTEGER DEFAULT 0, -- each ticket transcation rating should +1
+    id          INTEGER UNIQUE NOT NULL,-- person ID
+    account     INTEGER NOT NULL,    	-- account number
+    accountCreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,	-- would this ever become null if defaults to CURRENT_TIMESTAMP
+    creditCardNum   BIGINT NOT NULL,
+    rating      INTEGER DEFAULT 0, 		-- each ticket transcation rating should +1
 
     PRIMARY KEY(account),
     FOREIGN KEY (id) REFERENCES person(id)
-
 );
 
 
 CREATE TABLE employee(
     id          INTEGER UNIQUE NOT NULL,
+	eid			INTEGER UNIQUE NOT NULL,	-- Employee ID ?
     ssn         CHAR(12),
     isManager   TINYINT DEFAULT 0 NOT NULL, -- customer representative
-    startDate   DATE , -- TODO: DEFAULT DATE ON CREATE?
+    startDate   DATE, 					-- TODO: DEFAULT DATE ON CREATE?	Date started working?
     hourlyRate  FLOAT(5,2),
-    PRIMARY KEY(ssn),
+    PRIMARY KEY(eid),
     FOREIGN KEY (id) REFERENCES person(id)
 );
--- customer's preferene 
+-- customer's preference
 CREATE TABLE preference (
-    customer    INTEGER, -- customer account number
-    seat        ENUM('Aisle Seat', 'Window Seat'),
-    meal        ENUM('Meal 1', 'Meal 2'), -- TODO: check meal options \
+    customer    INTEGER, 				-- customer account number
+    seat        ENUM('Aisle Seat', 'Window Seat'),	-- add 'Middle Seat' ?
+    meal        ENUM('Meal 1', 'Meal 2'), -- TODO: check meal options \ Want to name them? Ramen, Sashimi, Beef wellington
     FOREIGN KEY (customer) REFERENCES customer(account)
 );
 CREATE TABLE reservation (
     reservationNumber      INTEGER, 
     -- TODO: set default to current date on create 
     reservationDate   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    totalFare   FLOAT(10,2),
+    totalFare   FLOAT(10,2),			-- Does this include the bookingFee?
     bookingFee  FLOAT(10,2),
     seatCount   INTEGER NOT NULL DEFAULT 1,
     customer    INTEGER NOT NULL,
-    eid         INTEGER, -- employee (customer representative) id
+    eid         INTEGER, 				-- employee (customer representative) id
     
     PRIMARY KEY (reservationNumber),
-    -- TODO: create an id for customer representative or use ssn?
-    -- FOREIGN KEY (eid) REFERENCES employee(ssn),
-    -- ^ eid & ssn types don't match.
     FOREIGN KEY (customer) REFERENCES customer (account)
+	FOREIGN KEY (eid) REFERENCES employee (eid)
 );
 
 CREATE TABLE leg (
