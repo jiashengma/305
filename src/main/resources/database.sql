@@ -93,13 +93,7 @@ CREATE TABLE employee(
     PRIMARY KEY(eid),
     FOREIGN KEY (id) REFERENCES person(id)
 );
--- customer's preference
-CREATE TABLE preference (
-    customer    INTEGER, 				-- customer account number
-    seat        ENUM('Aisle Seat', 'Window Seat'),	-- add 'Middle Seat' ?
-    meal        ENUM('Meal 1', 'Meal 2'), -- TODO: check meal options \ Want to name them? Ramen, Sashimi, Beef wellington
-    FOREIGN KEY (customer) REFERENCES customer(account)
-);
+
 CREATE TABLE reservation (
     reservationNumber      INTEGER, 
     -- TODO: set default to current date on create 
