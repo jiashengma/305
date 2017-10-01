@@ -30,6 +30,9 @@ CREATE TABLE flight (
     advancePurchase     ENUM(3, 7, 14, 21), -- pay # days in advance
     lengthOfStay        INTEGER,            -- TODO: ENUM or INT
 
+    departureTime   TIMESTAMP DEFAULT NULL, -- actual departure time
+    arrivalTime     TIMESTAMP DEFAULT NULL, -- actual arrival time
+    
     PRIMARY KEY (flightNumber, aid),
     FOREIGN KEY (aid) REFERENCES airline(id)
 );
@@ -61,14 +64,13 @@ CREATE TABLE person (
 CREATE TABLE customer (
     id          INTEGER UNIQUE NOT NULL,-- person ID
     account     INTEGER NOT NULL,    	-- account number
-    accountCreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,	-- would this ever become null if defaults to CURRENT_TIMESTAMP
+    accountCreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     creditCardNum   BIGINT NOT NULL,
-    rating      INTEGER DEFAULT 0, 		-- each ticket transcation rating should +1
+    rating      INTEGER DEFAULT 0, -- +1 for each ticket transcation
 
     PRIMARY KEY(account),
     FOREIGN KEY (id) REFERENCES person(id)
 );
-
 
 CREATE TABLE employee(
     id          INTEGER UNIQUE NOT NULL,
@@ -78,6 +80,17 @@ CREATE TABLE employee(
     hourlyRate  FLOAT(5,2),
     PRIMARY KEY(ssn),
     FOREIGN KEY (id) REFERENCES person(id)
+);
+
+CREATE TABLE manages (
+    -- TODO: if we were to use ids instead of ssns, 
+    -- then id will need to be pk in employee table
+    mSSN     INTEGER,
+    eSSN     INTEGER,
+
+    PRIMARY KEY (mSSN, eSSN),
+    FOREIGN KEY (mSSN) REFERENCES employee(ssn),
+    FOREIGN KEY (eSSN) REFERENCES employee(ssn)
 );
 
 CREATE TABLE reservation (
@@ -113,6 +126,9 @@ CREATE TABLE leg (
     arrivalTime     TIMESTAMP,
     meal            VARCHAR(32), -- TODO: USE ENUM?
     class          ENUM('Economy','Business','First'),
+
+    departureTime   TIMESTAMP DEFAULT NULL, -- expected departure time
+    arrivalTime     TIMESTAMP DEFAULT NULL, -- expected arrival time
 
     FOREIGN KEY (reservationNumber) REFERENCES reservation(reservationNumber),
     FOREIGN KEY (fromAirport) REFERENCES airport(id),
