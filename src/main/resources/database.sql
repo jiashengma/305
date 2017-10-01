@@ -113,10 +113,10 @@ CREATE TABLE reservation (
 
 CREATE TABLE leg (
     reservationNumber   INTEGER,
-    fromAirport     INTEGER,
-    toAirport       INTEGER,
-    flightNumber    INTEGER,
-    aid             INTEGER,
+    fromAirport     INTEGER NOT NULL,
+    toAirport       INTEGER NOT NULL,
+    flightNumber    INTEGER NOT NULL,
+    aid             INTEGER NOT NULL,
     seatNumber      INTEGER,
     departureTime   TIMESTAMP,
     arrivalTime     TIMESTAMP,
@@ -126,7 +126,7 @@ CREATE TABLE leg (
     FOREIGN KEY (reservationNumber) REFERENCES reservation(reservationNumber),
     FOREIGN KEY (fromAirport) REFERENCES airport(id),
     FOREIGN KEY (toAirport) REFERENCES airport(id),
-    FOREIGN KEY (aid) REFERENCES airline(id)
+    FOREIGN KEY (flightNumber, aid) REFERENCES flight(flightNumber, aid)
 );
 
 -- TODO: fare restrictions
