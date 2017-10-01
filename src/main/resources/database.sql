@@ -4,7 +4,8 @@ CREATE TABLE airline (
     id      INTEGER,                    -- Airline ID for query reference
     name    CHAR(2) NOT NULL,           -- 2Letter name for display purposes
     longName VARCHAR(60) NOT NULL,      -- Full Name of this airline
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (name, longName);
 );
 
 CREATE TABLE airport (
@@ -17,6 +18,7 @@ CREATE TABLE airport (
     -- May need a TIMEZONE to properly display times if use epoch timings
 	
     PRIMARY KEY (id),
+    UNIQUE (name, longName);
 	-- Need a FOREIGNKEY REFERENCE AIRLINE to avoid duplicates with other airports of same name
 	FOREIGN KEY (aid) REFERENCES airline(id)
 );
