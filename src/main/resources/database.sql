@@ -1,5 +1,5 @@
--- Author: AJA(x)
--- TODO: keys, constraints
+-- Author: AJA(x) - Antonio Aliberti, Jia Sheng Ma, Andrew Lam
+
 CREATE TABLE airline (
     id      INTEGER,                    -- Airline ID for query reference
     name    CHAR(2) NOT NULL,           -- 2Letter name for display purposes
@@ -14,16 +14,12 @@ CREATE TABLE airport (
     longName VARCHAR(64) NOT NULL,      -- Full Name of this airport
     city    VARCHAR(64) NOT NULL,       -- City where airport is located
     country VARCHAR(64) NOT NULL,       -- Country where airport is located
-    aid		INTEGER,					-- References Airline for uniqueness 
-    -- May need a TIMEZONE to properly display times if use epoch timings
-	
+
+    -- TODO: May need a TIMEZONE to properly display times if use epoch timings
     PRIMARY KEY (id),
     UNIQUE (name, longName);
-	-- Need a FOREIGNKEY REFERENCE AIRLINE to avoid duplicates with other airports of same name
-	FOREIGN KEY (aid) REFERENCES airline(id)
 );
 
--- TODO
 CREATE TABLE flight (
     flightNumber    INTEGER,            -- Flight ID for query reference-
     aid             INTEGER,            -- Airline id
@@ -31,33 +27,22 @@ CREATE TABLE flight (
     -- ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
     fare            FLOAT(10,2),		-- Standard price on this flight
     hiddenFare      FLOAT(10,2) NOT NULL,-- lowest bid the airline is willing to accept
-    -- TODO: fare restrictions?
+    advancePurchase     ENUM(3, 7, 14, 21), -- pay # days in advance
+    lengthOfStay        INTEGER,            -- TODO: ENUM or INT
+
     PRIMARY KEY (flightNumber, aid),
     FOREIGN KEY (aid) REFERENCES airline(id)
-);
-
-CREATE TABLE stops (
-    id              INTEGER,    		-- stop number
-    aid             INTEGER NOT NULL,  	-- airline id
-    flightNumber    INTEGER NOT NULL,
-    fromAirport     INTEGER NOT NULL,	-- Origin Airport ID
-    toAirport       INTEGER NOT NULL,	-- Destination Airport ID
-    departureTime   DATETIME,			-- TODO: type?	Epoch?
-    arrivalTime     DATETIME,			-- TODO: type?	Epoch?
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (flightNumber,aid) REFERENCES flight(flightNumber,aid),
-    FOREIGN KEY (fromAirport) REFERENCES airport(id),
-    FOREIGN KEY (toAirport) REFERENCES airport(id)
-
 );
 
 -- flight operates on what day(s)
 CREATE TABLE operatesOn (
     flightNumber    INTEGER,
     aid             INTEGER,
-    day             INTEGER(1),			-- ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun') ?
-    PRIMARY KEY (flightNumber, aid, day)
+    day             INTEGER(1),
+    -- ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun') ?
+    PRIMARY KEY (flightNumber, aid, day),
+    FOREIGN KEY (aid) REFERENCES airline(id),
+    FOREIGN KEY (flightNumber) REFERENCES flight
 );
 
 CREATE TABLE person (
@@ -87,12 +72,11 @@ CREATE TABLE customer (
 
 CREATE TABLE employee(
     id          INTEGER UNIQUE NOT NULL,
-	eid			INTEGER UNIQUE NOT NULL,	-- Employee ID ?
     ssn         CHAR(12),
     isManager   TINYINT DEFAULT 0 NOT NULL, -- customer representative
-    startDate   DATE, 					-- TODO: DEFAULT DATE ON CREATE?	Date started working?
+    startDate   DATE, -- TODO: DEFAULT DATE ON CREATE?	Date started working?
     hourlyRate  FLOAT(5,2),
-    PRIMARY KEY(eid),
+    PRIMARY KEY(ssn),
     FOREIGN KEY (id) REFERENCES person(id)
 );
 
@@ -103,12 +87,19 @@ CREATE TABLE reservation (
     totalFare   FLOAT(10,2),			-- Does this include the bookingFee?
     bookingFee  FLOAT(10,2),
     seatCount   INTEGER NOT NULL DEFAULT 1,
-    customer    INTEGER NOT NULL,
     eid         INTEGER, 				-- employee (customer representative) id
     
     PRIMARY KEY (reservationNumber),
     FOREIGN KEY (customer) REFERENCES customer (account)
 	FOREIGN KEY (eid) REFERENCES employee (eid)
+);
+
+-- who reserves what
+CREATE TABLE reserves (
+    customer            INTEGER, -- customer account number
+    reservationNumber   INTEGER,
+
+    PRIMARY KEY (cid, reservationNumber)
 );
 
 CREATE TABLE leg (
@@ -129,7 +120,6 @@ CREATE TABLE leg (
     FOREIGN KEY (flightNumber, aid) REFERENCES flight(flightNumber, aid)
 );
 
--- TODO: fare restrictions
 
 /* At the moment, this will count the number of seats found in the
 Leg table. This will have to change if we update the schema to match
