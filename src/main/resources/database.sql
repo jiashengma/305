@@ -19,8 +19,6 @@ CREATE TABLE airport (
 	
     PRIMARY KEY (id),
     UNIQUE (name, longName);
-	-- Need a FOREIGNKEY REFERENCE AIRLINE to avoid duplicates with other airports of same name
-	FOREIGN KEY (aid) REFERENCES airline(id)
 );
 
 -- TODO
