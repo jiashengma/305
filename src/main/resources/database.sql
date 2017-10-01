@@ -75,7 +75,6 @@ CREATE TABLE customer (
 CREATE TABLE employee(
     id          INTEGER UNIQUE NOT NULL,
     ssn         CHAR(12),
-    isManager   TINYINT DEFAULT 0 NOT NULL, -- customer representative
     startDate   DATE, -- TODO: DEFAULT DATE ON CREATE?	Date started working?
     hourlyRate  FLOAT(5,2),
     PRIMARY KEY(ssn),
