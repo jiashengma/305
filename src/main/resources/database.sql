@@ -67,7 +67,7 @@ CREATE TABLE customer (
     creditCardNum   BIGINT NOT NULL,
     rating      INTEGER DEFAULT 0, -- +1 for each ticket transcation
 
-    PRIMARY KEY(account),
+    PRIMARY KEY(id),
     FOREIGN KEY (id) REFERENCES person(id)
 );
 
@@ -76,7 +76,7 @@ CREATE TABLE employee(
     ssn         CHAR(12),
     startDate   DATE,
     hourlyRate  FLOAT(5,2),
-    PRIMARY KEY(ssn),
+    PRIMARY KEY(id),
     FOREIGN KEY (id) REFERENCES person(id)
 );
 
