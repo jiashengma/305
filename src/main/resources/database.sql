@@ -24,7 +24,6 @@ CREATE TABLE flight (
     flightNumber    INTEGER,            -- Flight ID for query reference-
     aid             INTEGER,            -- Airline id
     numSeat         INTEGER,
-    -- ENUM('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
     fare            FLOAT(10,2),		-- Standard price on this flight
     hiddenFare      FLOAT(10,2) NOT NULL,-- lowest bid the airline is willing to accept
     advancePurchase     ENUM(3, 7, 14, 21), -- pay # days in advance
@@ -75,7 +74,7 @@ CREATE TABLE customer (
 CREATE TABLE employee(
     id          INTEGER UNIQUE NOT NULL,
     ssn         CHAR(12),
-    startDate   DATE, -- TODO: DEFAULT DATE ON CREATE?	Date started working?
+    startDate   DATE,
     hourlyRate  FLOAT(5,2),
     PRIMARY KEY(ssn),
     FOREIGN KEY (id) REFERENCES person(id)
@@ -96,7 +95,7 @@ CREATE TABLE reservation (
     reservationNumber      INTEGER, 
     -- TODO: set default to current date on create 
     reservationDate   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    totalFare   FLOAT(10,2),			-- Does this include the bookingFee?
+    totalFare   FLOAT(10,2),
     bookingFee  FLOAT(10,2),
     seatCount   INTEGER NOT NULL DEFAULT 1,
     eid         INTEGER, 				-- employee (customer representative) id

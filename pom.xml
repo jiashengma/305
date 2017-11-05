@@ -2,7 +2,7 @@
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.305</groupId>
-    <artifactId>305finalProject</artifactId>
+    <artifactId>AJAX</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>305finalProject</name>
@@ -16,6 +16,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+		
+		<!-- https://mvnrepository.com/artifact/jstl/jstl -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>4.2.2.RELEASE</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
@@ -27,7 +40,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     </dependencies>
 
     <build>
-        <finalName>305finalProject</finalName>
+        <finalName>AJAx</finalName>
 
         <plugins>
             <!-- tomcat -->
