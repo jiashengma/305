@@ -4,11 +4,14 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.springframework.stereotype.Service;
+
 /**
  * 
  * @author majiasheng
  *
  */
+@Service
 public class PasswordUtility {
 	
 	// salt for added security for password hashing
@@ -19,7 +22,7 @@ public class PasswordUtility {
 	 * @param userPassword
 	 * @return
 	 */
-	public static String getSecuredPassword(String userPassword) {
+	public String getSecuredPassword(String userPassword) {
 		
 		String saltedPassword = SALT + userPassword;
 		String hashedPassword = generateHashedPassword(saltedPassword);
@@ -32,7 +35,7 @@ public class PasswordUtility {
 	 * @param saltedPassword
 	 * @return
 	 */
-	private static String generateHashedPassword(String saltedPassword) {
+	private String generateHashedPassword(String saltedPassword) {
 		String hashedPassword = null;
 		try {
 			MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
@@ -55,7 +58,7 @@ public class PasswordUtility {
 	 * @param hashedPassword
 	 * @return
 	 */
-	public static boolean isPasswordMatch(String userPassword, String hashedPassword) {
-		return hashedPassword.equals(getSecuredPassword(userPassword));
-	}
+	// public static boolean isPasswordMatch(String userPassword, String hashedPassword) {
+	// 	return hashedPassword.equals(getSecuredPassword(userPassword));
+	// }
 }

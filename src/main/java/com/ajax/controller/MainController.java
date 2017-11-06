@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -30,6 +31,10 @@ import com.ajax.model.User;
 @ControllerAdvice
 public class MainController {
 	
+	@Autowired
+	private UserManager userManager;
+	@Autowired
+	private PasswordUtility passwordUtility;
 	/**
 	 * 
 	 * @param binder
@@ -88,10 +93,10 @@ public class MainController {
 		} else {
 			
 			// update users password to a hash for security
-			user.setPassword(PasswordUtility.getSecuredPassword(user.getPassword()));
+			user.setPassword(passwordUtility.getSecuredPassword(user.getPassword()));
 			
 			//TODO: add user to database
-			if (UserManager.addUser(user) == -1) {
+			if (userManager.addUser(user) == -1) {
 				redirectAttributes.addFlashAttribute("msg", "Error in registering: failed to add user to database");
 			} else {
 				redirectAttributes.addFlashAttribute("msg", "Registration success");
@@ -114,7 +119,7 @@ public class MainController {
 
 		// redirect to prevent double submission when refreshing page
 		ModelAndView modelAndView = new ModelAndView("redirect:/login");
-		
+
 		/* 
 		 *	if username and password match,
 		 *		load user info to session
@@ -122,9 +127,9 @@ public class MainController {
 		 *	else 
 		 *		show an popup to indicate username and password mismatch
 		 */
-		
 		// get/validate user
-		User user = UserManager.getUser(requestParams.get("username"), requestParams.get("password"));
+		// User user = UserManager.getUser(requestParams.get("username"), requestParams.get("password"));
+		User user = userManager.getUser(requestParams.get("username"), requestParams.get("password"));
 		
 		if(user == null) {
 			//TODO: show an popup to indicate username and password mismatch
