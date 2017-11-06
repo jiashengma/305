@@ -1,0 +1,11 @@
+body {
+	background-image: url("/resources/image/background");
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+#resrForm {
+	background: rgba(54, 25, 25, .5);
+	color: white;
+}
