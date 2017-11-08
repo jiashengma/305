@@ -6,10 +6,10 @@ package com.ajax.model;
  * @author majiasheng
  */
 public class Address {
-    String street;
-    String city;
-    State state;
-    String zipCode;
+    private String street;
+    private String city;
+    private State state;
+    private int zipCode;
 
     public String getStreet() {
         return street;
@@ -35,11 +35,11 @@ public class Address {
         this.state = state;
     }
 
-    public String getZipCode() {
+    public int getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(String zipCode) {
+    public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
     }
     

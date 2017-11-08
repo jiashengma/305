@@ -14,17 +14,14 @@
         Tel<input type="tel" name="phone" placeholder="Phone Number"><br>
         Address<input type="text" name="street" placeholder="Street">
         <input type="text" name="city" placeholder="City">
-
         <select name="state">
-            <!--TODO: iterate through state enum-->
-
             <c:forEach var="state" items="${states}">
                 <option name="${state}">${state}</option>
             </c:forEach>
-
         </select>
         <input type="number" name="zipcode" placeholder="Zip Code"><br>
-
+        Credit Card Number<input type="number" name="creditcard" placeholder="Credit Card No"><br>
+        
         <input type="submit" name="submit" value="Sign Me Up">
     </form>
 </div>

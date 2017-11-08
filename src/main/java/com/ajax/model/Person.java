@@ -9,10 +9,19 @@ public class Person {
     // count for person id (used in creations)
     public static int count = 0;
 
+    protected int id;
     protected String firstName;
     protected String lastName;
-    protected String phone;
+    protected int phone;
     protected Address address;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -30,11 +39,11 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getPhone() {
+    public int getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(int phone) {
         this.phone = phone;
     }
 

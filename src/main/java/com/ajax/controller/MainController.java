@@ -21,6 +21,7 @@ import com.ajax.dbm.PasswordUtility;
 import com.ajax.dbm.PersonEntitiesManager;
 import com.ajax.model.Customer;
 import com.ajax.model.State;
+import com.ajax.service.RegitrationService;
 
 /**
  * Created by majiasheng on 7/14/17.
@@ -31,7 +32,7 @@ public class MainController {
 
     State state;
     @Autowired
-    private PersonEntitiesManager personEntitiesManager;
+    private RegitrationService regitrationService;    
     @Autowired
     private PasswordUtility passwordUtility;
 
@@ -74,18 +75,19 @@ public class MainController {
     /**
      * Post,Redirect,Get(PRG) - P,R -- handles user registration form
      *
-     * @param user
+     * @param customer
      * @param result
      * @param redirectAttributes
      * @return
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView handleRegistration(@ModelAttribute("user") Customer user,
+    public ModelAndView handleRegistration(
+            @ModelAttribute("customer") Customer customer,
             BindingResult result,
             final RedirectAttributes redirectAttributes) {
 
         // redirect to prevent double submission when refreshing page
-        ModelAndView modelAndView = new ModelAndView("redirect:registra");
+        ModelAndView modelAndView = new ModelAndView("redirect:register");
 
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg",
@@ -93,10 +95,11 @@ public class MainController {
         } else {
 
             // update users password to a hash for security
-            user.setPassword(passwordUtility.getSecuredPassword(user.getPassword()));
+            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
 
             //TODO: add user to database
-            if (personEntitiesManager.addCustomer(user) == -1) {
+            // if (personEntitiesManager.addCustomer(customer) == -1) {
+            if (regitrationService.addCustomer(customer) == -1) {
                 redirectAttributes.addFlashAttribute("msg", "Error in registering: failed to add user to database");
             } else {
                 redirectAttributes.addFlashAttribute("msg", "Registration success");
@@ -128,6 +131,8 @@ public class MainController {
          */
         // get/validate user
         // Customer user = PersonEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
+        
+        // TODO: do this in service layer
         Customer user = personEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
 
         if (user == null) {

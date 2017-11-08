@@ -35,22 +35,42 @@ public class PersonEntitiesManager {
      */
     public int addCustomer(Customer customer) {
         Connection conn = MySQLConnection.connect();
-        String query = "INSERT INTO " + DBConstants.CUSTOMER_TABLE + " (firstName, lastName, email) VALUES (?,?,?)";
+        String queryInsertToPerson = "INSERT INTO " 
+                + DBConstants.PERSON_TABLE 
+                + " (?,?,?,?,?,?,?,?)";
+        
+        String queryInsertToCustomer = "INSERT INTO " 
+                + DBConstants.PERSON_TABLE 
+                + " (?,?,?,?,?,?,?,?)";
+        
+        int ret = -1;
 
         //TODO: populate 3 tables 
         try {
 
-            // add 
-            addLoginForCustomer(customer);
+            /* try to add log in information for registering customer
+             * return immediately if error happens
+             */
+            if (addLoginForCustomer(customer) != -1) {
+                
+                
+                PreparedStatement stmt = conn.prepareStatement(queryInsertToPerson);
+                stmt.setInt(1, customer.getId());
+                stmt.setString(2, customer.getFirstName());
+                stmt.setString(3, customer.getLastName());
+                stmt.setString(4, customer.getAddress().getStreet());
+                stmt.setString(5, customer.getAddress().getCity());
+                stmt.setString(6, customer.getAddress().getState().name());
+                stmt.setInt(7, customer.getAddress().getZipCode());
+                stmt.setInt(8, customer.getPhone());
+                //TODO: insert person, move to another method
+                stmt.executeUpdate();
+                
+                conn.prepareStatement(queryInsertToCustomer);
 
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, customer.getUserName());
-            stmt.setString(2, customer.getFirstName());
-            stmt.setString(3, customer.getLastName());
-            stmt.setString(4, customer.getEmail());
-            stmt.setString(5, customer.getPassword());
+                ret = stmt.executeUpdate();
+            }
 
-            return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -61,7 +81,7 @@ public class PersonEntitiesManager {
             }
         }
 
-        return -1;
+        return ret;
     }
 
     /**

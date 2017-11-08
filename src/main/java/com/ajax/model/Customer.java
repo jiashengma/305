@@ -12,14 +12,10 @@ public class Customer extends Person {
     private int rating;
 
     public Customer() {
+        // rating is default as 0
+        rating = 0;
     }
 
-//    public Customer(String email, String userName, String firstName, String lastName) {
-//        this.email = email;
-//        this.userName = userName;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//    }
     public String getEmail() {
         return email;
     }
