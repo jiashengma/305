@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Deal</title>
+    <title>AJA(X) Flight Reservation</title>
     
 	<spring:url value="/resources/css/style.css" var="style" />
 	<spring:url value="/resources/css/bootstrap.min.css" var="bootstrap" />
