@@ -133,15 +133,15 @@ public class MainController {
         // Customer user = PersonEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
         
         // TODO: do this in service layer
-        Customer user = personEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
-
-        if (user == null) {
-            //TODO: show an popup to indicate username and password mismatch
-            redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
-        } else {
-            // add user to session            
-            request.getSession().setAttribute("user", user);
-        }
+//        Customer user = personEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
+//
+//        if (user == null) {
+//            //TODO: show an popup to indicate username and password mismatch
+//            redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
+//        } else {
+//            // add user to session            
+//            request.getSession().setAttribute("user", user);
+//        }
 
         return modelAndView;
     }
