@@ -4,7 +4,7 @@ package com.ajax.model;
  *
  * @author majiasheng
  */
-enum State {
+public enum State {
 
     AL,
     AK,

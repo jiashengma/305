@@ -5,7 +5,7 @@ package com.ajax.model;
  *
  * @author majiasheng
  */
-class Address {
+public class Address {
     String street;
     String city;
     State state;

@@ -8,9 +8,9 @@ import java.util.List;
  * @author majiasheng
  */
 public class CustomerRepresentative {
-    
+
     private List<Customer> customers;
-    
+
     public CustomerRepresentative() {
         customers = new ArrayList<Customer>();
     }
@@ -22,7 +22,5 @@ public class CustomerRepresentative {
     public void addCustomers(Customer customer) {
         customers.add(customer);
     }
-    
-    
-    
+
 }

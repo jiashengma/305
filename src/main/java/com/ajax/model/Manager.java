@@ -8,10 +8,11 @@ import java.util.List;
  * @author majiasheng
  */
 public class Manager {
+
     List<Employee> subordinates;
-    
+
     public Manager() {
-        subordinates = new ArrayList<Employee>();        
+        subordinates = new ArrayList<Employee>();
     }
 
     public List<Employee> getSubordinates() {
@@ -21,5 +22,5 @@ public class Manager {
     public void addSubordinates(Employee subordinate) {
         subordinates.add(subordinate);
     }
-    
+
 }

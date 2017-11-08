@@ -1,22 +1,33 @@
 body {
-	background-image: url("/resources/image/background");
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+    background-image: url("/resources/image/background2.jpg");
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .navbar {
-	/*background: rgba(54, 25, 25, .8);*/
+    /*background: rgba(54, 25, 25, .8);*/
 }
 
 #resrForm {
-	background: rgba(54, 25, 25, .6);
-	/*color: white;*/
-	margin: 5em 2.5em;
-	padding: 1em;
+    /*background: rgba(54, 25, 25, .6);*/
+    background: rgba(217, 217, 217, .6);
+    /*color: white;*/
+    margin: 5em 2.5em;
+    padding: 1em;
 }
 
 #resrForm > form > * {
-	margin: 0.5em;
+    margin: 0.5em;
+}
+
+#regform {
+    background: rgba(217, 217, 217, .6);
+    padding: 1em;
+    height: 100%;
+}
+#regform > form > * {
+    margin: 0.3em;
 }

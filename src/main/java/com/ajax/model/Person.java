@@ -6,12 +6,12 @@ package com.ajax.model;
  */
 public class Person {
 
-    // count of person (used in creations)
+    // count for person id (used in creations)
     public static int count = 0;
-    
-    protected String  firstName;
-    protected String  lastName;
-    protected String  phone;
+
+    protected String firstName;
+    protected String lastName;
+    protected String phone;
     protected Address address;
 
     public String getFirstName() {
@@ -45,5 +45,5 @@ public class Person {
     public void setAddress(Address address) {
         this.address = address;
     }
-    
+
 }

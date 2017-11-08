@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ajax.dbm.PasswordUtility;
 import com.ajax.dbm.PersonEntitiesManager;
 import com.ajax.model.Customer;
+import com.ajax.model.State;
 
 /**
  * Created by majiasheng on 7/14/17.
@@ -28,8 +29,9 @@ import com.ajax.model.Customer;
 @ControllerAdvice
 public class MainController {
 
+    State state;
     @Autowired
-    private PersonEntitiesManager userManager;
+    private PersonEntitiesManager personEntitiesManager;
     @Autowired
     private PasswordUtility passwordUtility;
 
@@ -40,7 +42,7 @@ public class MainController {
     @InitBinder
     public void InitBinder(WebDataBinder binder) {
 
-		// can use binder.setDisallowedFields() to un-bind a property
+        // can use binder.setDisallowedFields() to un-bind a property
         // SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
         // use a customized date format for "dateAcquired" request param
         //binder.registerCustomEditor(Date.class, "dateAcquired" ,new CustomDateEditor(simpleDateFormat, false));
@@ -53,7 +55,9 @@ public class MainController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     private ModelAndView registration() {
-        return new ModelAndView("registration");
+        ModelAndView mv = new ModelAndView("registration");
+        mv.addObject("states", State.values());
+        return mv;
     }
 
     /**
@@ -92,7 +96,7 @@ public class MainController {
             user.setPassword(passwordUtility.getSecuredPassword(user.getPassword()));
 
             //TODO: add user to database
-            if (userManager.addCustomer(user) == -1) {
+            if (personEntitiesManager.addCustomer(user) == -1) {
                 redirectAttributes.addFlashAttribute("msg", "Error in registering: failed to add user to database");
             } else {
                 redirectAttributes.addFlashAttribute("msg", "Registration success");
@@ -124,7 +128,7 @@ public class MainController {
          */
         // get/validate user
         // Customer user = PersonEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
-        Customer user = userManager.login(requestParams.get("username"), requestParams.get("password"));
+        Customer user = personEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
 
         if (user == null) {
             //TODO: show an popup to indicate username and password mismatch

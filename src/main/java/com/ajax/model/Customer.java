@@ -2,12 +2,15 @@ package com.ajax.model;
 
 public class Customer extends Person {
 
+    // counter for account number
+    public static int count = 0;
+
     private String email;
     private String userName;
     private String password;
     private int accNum;
     private int rating;
-    
+
     public Customer() {
     }
 
@@ -17,7 +20,6 @@ public class Customer extends Person {
 //        this.firstName = firstName;
 //        this.lastName = lastName;
 //    }
-
     public String getEmail() {
         return email;
     }
@@ -57,7 +59,7 @@ public class Customer extends Person {
     public void setRating(int rating) {
         this.rating = rating;
     }
-    
+
     @Override
     public String toString() {
         return "username: " + userName + "\n"

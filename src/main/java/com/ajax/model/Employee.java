@@ -7,6 +7,7 @@ import java.sql.Date;
  * @author majiasheng
  */
 public class Employee extends Person {
+
     private int ssn;
     private Date startDate;
     private double hourlyRate;
@@ -34,6 +35,5 @@ public class Employee extends Person {
     public void setHourlyRate(double hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
-    
-    
+
 }
