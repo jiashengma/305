@@ -9,18 +9,18 @@ public class Person {
     // count for person id (used in creations)
     public static int count = 0;
 
-    protected int id;
+    protected final int id;
     protected String firstName;
     protected String lastName;
     protected int phone;
     protected Address address;
 
-    public int getId() {
-        return id;
+    public Person() {
+        id = count++;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getId() {
+        return id;
     }
 
     public String getFirstName() {

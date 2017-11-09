@@ -19,8 +19,8 @@
                 <option name="${state}">${state}</option>
             </c:forEach>
         </select>
-        <input type="number" name="zipcode" placeholder="Zip Code"><br>
-        Credit Card Number<input type="number" name="creditcard" placeholder="Credit Card No"><br>
+        <input type="number" name="zipCode" placeholder="Zip Code"><br>
+        Credit Card Number<input type="number" name="creditCard" placeholder="Credit Card No."><br>
         
         <input type="submit" name="submit" value="Sign Me Up">
     </form>

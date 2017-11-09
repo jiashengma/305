@@ -8,11 +8,13 @@ public class Customer extends Person {
     private String email;
     private String userName;
     private String password;
-    private int accNum;
+    private int creditCard;
     private int rating;
+    private final int accNum;
 
     public Customer() {
         // rating is default as 0
+        accNum = count++;
         rating = 0;
     }
 
@@ -44,8 +46,15 @@ public class Customer extends Person {
         return accNum;
     }
 
-    public void setAccNum(int accNum) {
-        this.accNum = accNum;
+//    public void setAccNum(int accNum) {
+//        this.accNum = accNum;
+//    }
+    public int getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(int creditCard) {
+        this.creditCard = creditCard;
     }
 
     public int getRating() {

@@ -24,11 +24,6 @@ public class RegitrationService {
      */
     public int addCustomer(Customer customer) {
         
-        // assign id to person
-        customer.setId(Person.count++);
-        // assign account number to customer
-        customer.setAccNum(Customer.count++);
-
         return personEntitiesManager.addCustomer(customer);
     }
 }

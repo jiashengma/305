@@ -84,11 +84,12 @@ public class MainController {
     public ModelAndView handleRegistration(
             @ModelAttribute("customer") Customer customer,
             BindingResult result,
+            
             final RedirectAttributes redirectAttributes) {
 
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:register");
-
+        
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg",
                     "Error in registration form");
