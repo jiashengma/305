@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ajax.model.Customer;
+import com.ajax.model.Person;
+import com.ajax.service.ReturnValue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,39 +37,20 @@ public class PersonEntitiesManager {
      */
     public int addCustomer(Customer customer) {
         Connection conn = MySQLConnection.connect();
-        String queryInsertToPerson = "INSERT INTO " 
-                + DBConstants.PERSON_TABLE 
-                + " (?,?,?,?,?,?,?,?)";
+        int ret = ReturnValue.ERROR;
         
-        String queryInsertToCustomer = "INSERT INTO " 
-                + DBConstants.PERSON_TABLE 
-                + " (?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO "
+                + DBConstants.PERSON_TABLE
+                + " VALUES (?,?,?,?,?,?,?,?)";
         
-        int ret = -1;
-
-        //TODO: populate 3 tables 
         try {
-
-            /* try to add log in information for registering customer
-             * return immediately if error happens
+            /* try to add login information and add person record for 
+             * registering customer
+             * return immediately if error occurred
              */
-            if (addLoginForCustomer(customer) != -1) {
-                
-                
-                PreparedStatement stmt = conn.prepareStatement(queryInsertToPerson);
-                stmt.setInt(1, customer.getId());
-                stmt.setString(2, customer.getFirstName());
-                stmt.setString(3, customer.getLastName());
-                stmt.setString(4, customer.getAddress().getStreet());
-                stmt.setString(5, customer.getAddress().getCity());
-                stmt.setString(6, customer.getAddress().getState().name());
-                stmt.setInt(7, customer.getAddress().getZipCode());
-                stmt.setInt(8, customer.getPhone());
-                //TODO: insert person, move to another method
-                stmt.executeUpdate();
-                
-                conn.prepareStatement(queryInsertToCustomer);
-
+            if (addLoginForCustomer(customer) != ReturnValue.ERROR && addPerson(customer) != ReturnValue.ERROR) {
+                PreparedStatement stmt = conn.prepareStatement(query);
+                conn.prepareStatement(query);
                 ret = stmt.executeUpdate();
             }
 
@@ -85,6 +68,37 @@ public class PersonEntitiesManager {
     }
 
     /**
+     * 
+     * @param person
+     * @return 
+     */
+    public int addPerson(Person person) {
+        int ret = ReturnValue.ERROR;
+        try {
+            Connection conn = MySQLConnection.connect();
+            String query = "INSERT INTO "
+                    + DBConstants.PERSON_TABLE
+                    + " VALUES (?,?,?,?,?,?,?,?)";
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, person.getId());
+            stmt.setString(2, person.getFirstName());
+            stmt.setString(3, person.getLastName());
+            stmt.setString(4, person.getAddress().getStreet());
+            stmt.setString(5, person.getAddress().getCity());
+            stmt.setString(6, person.getAddress().getState().name());
+            stmt.setInt(7, person.getAddress().getZipCode());
+            stmt.setInt(8, person.getPhone());
+
+            ret = stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ret;
+    }
+
+    /**
      * Adds login account and password information for a customer.
      *
      * @param customer
@@ -92,14 +106,16 @@ public class PersonEntitiesManager {
      */
     public int addLoginForCustomer(Customer customer) {
         Connection conn = MySQLConnection.connect();
-        String query = "INSERT INTO " + DBConstants.LOGIN_TABLE + "(email, username, password) VALUES (?,?,?)";
-
+        String query = "INSERT INTO " 
+                + DBConstants.LOGIN_TABLE 
+                + " VALUES (?,?,?)";
+        int ret = ReturnValue.ERROR;
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, customer.getEmail());
-            stmt.setString(1, customer.getUserName());
-            stmt.setString(1, customer.getPassword());
-            return stmt.executeUpdate();
+            stmt.setString(2, customer.getUserName());
+            stmt.setString(3, customer.getPassword());
+            ret = stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -110,7 +126,7 @@ public class PersonEntitiesManager {
             }
         }
 
-        return -1;
+        return ret;
     }
 
     /**

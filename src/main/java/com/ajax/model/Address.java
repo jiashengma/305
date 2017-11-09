@@ -1,4 +1,3 @@
-
 package com.ajax.model;
 
 /**
@@ -6,6 +5,7 @@ package com.ajax.model;
  * @author majiasheng
  */
 public class Address {
+
     private String street;
     private String city;
     private State state;
@@ -31,8 +31,8 @@ public class Address {
         return state;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setState(String state) {
+        this.state = State.valueOf(state);
     }
 
     public int getZipCode() {
@@ -42,5 +42,13 @@ public class Address {
     public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
     }
-    
+
+    @Override
+    public String toString() {
+        return street + " "
+                + city + " "
+                + state.name() + " "
+                + zipCode;
+    }
+
 }

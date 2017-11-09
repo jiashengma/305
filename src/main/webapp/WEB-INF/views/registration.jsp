@@ -4,24 +4,25 @@
 <h2 id="h">Sign Me Up</h2>
 <div id="regform">
     <form method="POST" action="/register">
-        First Name<input type="text" name="firstName" placeholder="First Name"><br>
+        First Name<input type="text" name="customerfirstName" placeholder="First Name"><br>
         Last Name<input type="text" name="lastName" placeholder="Last Name"><br>
         Email<input type="text" name="email" placeholder="email"><br>
         Re-enter email<input type="text" name="reemail" placeholder="Re-enter email"><br>
         Username<input type="text" name="userName" placeholder="Username"><br>
         Password<input type="password" name="password" placeholder="password"><br>
         Re-enter password<input type="password" name="repassword" placeholder="Re-enter password"><br>
-        Tel<input type="tel" name="phone" placeholder="Phone Number"><br>
-        Address<input type="text" name="street" placeholder="Street">
-        <input type="text" name="city" placeholder="City">
+        <!--        Tel<input type="tel" name="phone" placeholder="Phone Number"><br>-->
+        Tel<input type="number" name="phone" placeholder="Phone Number"><br>
+        Address<input type="text" name="address.street" placeholder="Street">
+        <input type="text" name="address.city" placeholder="City">
         <select name="state">
             <c:forEach var="state" items="${states}">
                 <option name="${state}">${state}</option>
             </c:forEach>
         </select>
-        <input type="number" name="zipCode" placeholder="Zip Code"><br>
+        <input type="number" name="address.zipCode" placeholder="Zip Code"><br>
         Credit Card Number<input type="number" name="creditCard" placeholder="Credit Card No."><br>
-        
+
         <input type="submit" name="submit" value="Sign Me Up">
     </form>
 </div>

@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class FlightReservationController {
     
-    @RequestMapping(value = "/register", method = RequestMethod.GET) 
+    @RequestMapping(value = "/search", method = RequestMethod.GET) 
     public ModelAndView searchFlight(HttpServletRequest request) {
         // TODO: please add view(URL)
         ModelAndView mv = new ModelAndView("");

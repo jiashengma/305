@@ -22,6 +22,7 @@ import com.ajax.dbm.PersonEntitiesManager;
 import com.ajax.model.Customer;
 import com.ajax.model.State;
 import com.ajax.service.RegitrationService;
+import com.ajax.service.ReturnValue;
 
 /**
  * Created by majiasheng on 7/14/17.
@@ -32,9 +33,7 @@ public class MainController {
 
     State state;
     @Autowired
-    private RegitrationService regitrationService;    
-    @Autowired
-    private PasswordUtility passwordUtility;
+    private RegitrationService regitrationService;
 
     /**
      *
@@ -77,6 +76,8 @@ public class MainController {
      *
      * @param customer
      * @param result
+     * @param formValues
+     * @param request
      * @param redirectAttributes
      * @return
      */
@@ -84,23 +85,27 @@ public class MainController {
     public ModelAndView handleRegistration(
             @ModelAttribute("customer") Customer customer,
             BindingResult result,
-            
+            @RequestParam Map<String, String> formValues,
+            HttpServletRequest request,
             final RedirectAttributes redirectAttributes) {
 
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:register");
-        
+
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg",
                     "Error in registration form");
         } else {
+            // set state (the enum type)
+            customer.getAddress().setState(formValues.get("state"));
 
-            // update users password to a hash for security
-            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
+            // DEBUG
+            System.out.println("*******");
+            System.out.println("customer:" + customer + "\n\n result tostring: " + result.toString());
+            System.out.println("*******");
 
-            //TODO: add user to database
-            // if (personEntitiesManager.addCustomer(customer) == -1) {
-            if (regitrationService.addCustomer(customer) == -1) {
+            // add user to database
+            if (regitrationService.addCustomer(customer, formValues) == ReturnValue.ERROR) {
                 redirectAttributes.addFlashAttribute("msg", "Error in registering: failed to add user to database");
             } else {
                 redirectAttributes.addFlashAttribute("msg", "Registration success");
@@ -132,7 +137,6 @@ public class MainController {
          */
         // get/validate user
         // Customer user = PersonEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
-        
         // TODO: do this in service layer
 //        Customer user = personEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
 //
@@ -143,7 +147,6 @@ public class MainController {
 //            // add user to session            
 //            request.getSession().setAttribute("user", user);
 //        }
-
         return modelAndView;
     }
 

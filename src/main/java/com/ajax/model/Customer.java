@@ -67,8 +67,10 @@ public class Customer extends Person {
 
     @Override
     public String toString() {
-        return "username: " + userName + "\n"
+        return "Username: " + userName + "\n"
                 + "Full name: " + firstName + " " + lastName + "\n"
-                + "email: " + email + "\n";
+                + "Email: " + email + "\n"
+                + "Address :" + address.toString();
+        
     }
 }

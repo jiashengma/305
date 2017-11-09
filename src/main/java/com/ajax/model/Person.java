@@ -1,5 +1,6 @@
 package com.ajax.model;
 
+//import javax.validation.constraints.Pattern;
 /**
  *
  * @author majiasheng
@@ -10,7 +11,9 @@ public class Person {
     public static int count = 0;
 
     protected final int id;
+//    @Pattern(regexp="\c+")
     protected String firstName;
+//    @Pattern(regexp="\c+")
     protected String lastName;
     protected int phone;
     protected Address address;
