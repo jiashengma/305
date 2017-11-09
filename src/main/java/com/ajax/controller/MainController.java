@@ -81,20 +81,15 @@ public class MainController {
      * @return
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView handleRegistration(
-            @ModelAttribute("customer") Customer customer,
-            BindingResult result,
-            
-            final RedirectAttributes redirectAttributes) {
+    public ModelAndView handleRegistration(@ModelAttribute("customer") Customer customer,
+            BindingResult result, final RedirectAttributes redirectAttributes) {
 
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:register");
         
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("msg",
-                    "Error in registration form");
+            redirectAttributes.addFlashAttribute("msg","Error in registration form");
         } else {
-
             // update users password to a hash for security
             customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
 
