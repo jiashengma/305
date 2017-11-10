@@ -1,4 +1,4 @@
-<div id="resrForm" >
+<div id="flightSearchForm" >
     <form action="/search" method="POST">
         <div class="row">
             <div class="col-md-3">Flying From</div>

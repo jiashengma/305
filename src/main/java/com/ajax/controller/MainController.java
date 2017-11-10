@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ajax.dbm.PasswordUtility;
-import com.ajax.dbm.PersonEntitiesManager;
+import com.ajax.persistence.PasswordUtility;
+import com.ajax.persistence.PersonEntitiesManager;
 import com.ajax.model.Customer;
 import com.ajax.model.State;
 import com.ajax.service.RegitrationService;
@@ -34,19 +34,6 @@ public class MainController {
     State state;
     @Autowired
     private RegitrationService regitrationService;
-
-    /**
-     *
-     * @param binder
-     */
-    @InitBinder
-    public void InitBinder(WebDataBinder binder) {
-
-        // can use binder.setDisallowedFields() to un-bind a property
-        // SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        // use a customized date format for "dateAcquired" request param
-        //binder.registerCustomEditor(Date.class, "dateAcquired" ,new CustomDateEditor(simpleDateFormat, false));
-    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private ModelAndView home() {
@@ -119,7 +106,7 @@ public class MainController {
         return new ModelAndView("index");
     }
 
-    //TODO: may need to have 2/3 login hanlders, customer, admin(manager,representative)
+    //TODO: may need to have 3 login handlers, customer, admin(manager,representative)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView handleLogin(@RequestParam Map<String, String> requestParams,
             HttpServletRequest request,

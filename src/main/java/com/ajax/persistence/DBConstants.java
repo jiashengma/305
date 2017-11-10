@@ -1,4 +1,4 @@
-package com.ajax.dbm;
+package com.ajax.persistence;
 
 /**
  *

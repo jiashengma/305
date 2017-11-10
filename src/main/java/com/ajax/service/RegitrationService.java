@@ -1,7 +1,7 @@
 package com.ajax.service;
 
-import com.ajax.dbm.PasswordUtility;
-import com.ajax.dbm.PersonEntitiesManager;
+import com.ajax.persistence.PasswordUtility;
+import com.ajax.persistence.PersonEntitiesManager;
 import com.ajax.model.Customer;
 import com.ajax.model.Person;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * 
  * @author majiasheng
  */
 @Service

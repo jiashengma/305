@@ -1,4 +1,4 @@
-package com.ajax.dbm;
+package com.ajax.persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
