@@ -20,7 +20,9 @@ public class MySQLConnection {
                     DBConstants.USERNAME,
                     DBConstants.PASSWORD
             );
-            connection.setAutoCommit(true);
+
+            connection.setAutoCommit(false);
+
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

@@ -38,31 +38,43 @@ public class PersonEntitiesManager {
     public int addCustomer(Customer customer) {
         Connection conn = MySQLConnection.connect();
         int ret = ReturnValue.ERROR;
-        
+
         String query = "INSERT INTO "
                 + DBConstants.CUSTOMER_TABLE
-                + " VALUES (?,?,?,?,?,?,?,?)";
-        
+                + " ("
+                + DBConstants.ID_FIELD + ", "
+                + DBConstants.ACCOUNTNO_FIELD + ", "
+                + DBConstants.CREDITCARDNO_FIELD + ", "
+                + DBConstants.EMAIL_FIELD + ", "
+                + DBConstants.RATING_FIELD 
+                + " ) "
+                + " VALUES (?,?,?,?,?)";
+
         try {
             /* try to add login information and add person record for 
              * registering customer
              * return immediately if error occurred
              */
             if (addLoginForCustomer(customer) != ReturnValue.ERROR && addPerson(customer) != ReturnValue.ERROR) {
+                //FIXME: how to rollback the transactions above if anyone of the transactions failed
+                
                 PreparedStatement stmt = conn.prepareStatement(query);
                 conn.prepareStatement(query);
-                
-                //TODO: add values to customer table 
+
+                stmt.setInt(1, customer.getId());
+                stmt.setInt(2, customer.getAccNum());
+                stmt.setLong(3, customer.getCreditCard());
+                stmt.setString(4, customer.getEmail());
+                stmt.setInt(5, customer.getRating());
+
                 ret = stmt.executeUpdate();
-                
+                conn.commit();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                //TODO: rollback if error or set the commit point to here, disable auto commit
-                
                 conn.close();
             } catch (SQLException ex) {
                 Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,19 +85,20 @@ public class PersonEntitiesManager {
     }
 
     /**
-     * 
+     *
      * @param person
-     * @return 
+     * @return
      */
     public int addPerson(Person person) {
         int ret = ReturnValue.ERROR;
+        String query = "INSERT INTO "
+                + DBConstants.PERSON_TABLE
+                + " VALUES (?,?,?,?,?,?,?,?)";
+
         try {
             Connection conn = MySQLConnection.connect();
-            String query = "INSERT INTO "
-                    + DBConstants.PERSON_TABLE
-                    + " VALUES (?,?,?,?,?,?,?,?)";
-
             PreparedStatement stmt = conn.prepareStatement(query);
+
             stmt.setInt(1, person.getId());
             stmt.setString(2, person.getFirstName());
             stmt.setString(3, person.getLastName());
@@ -96,7 +109,7 @@ public class PersonEntitiesManager {
             stmt.setLong(8, person.getPhone());
 
             ret = stmt.executeUpdate();
-
+            conn.commit();
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,16 +124,19 @@ public class PersonEntitiesManager {
      */
     public int addLoginForCustomer(Customer customer) {
         Connection conn = MySQLConnection.connect();
-        String query = "INSERT INTO " 
-                + DBConstants.LOGIN_TABLE 
+        String query = "INSERT INTO "
+                + DBConstants.LOGIN_TABLE
                 + " VALUES (?,?,?)";
         int ret = ReturnValue.ERROR;
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
+            
             stmt.setInt(1, customer.getId());
             stmt.setString(2, customer.getUserName());
             stmt.setString(3, customer.getPassword());
+            
             ret = stmt.executeUpdate();
+            conn.commit();
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -143,10 +159,10 @@ public class PersonEntitiesManager {
     public Person login(String username, String password) {
         Person person = null;
         Connection conn = MySQLConnection.connect();
-        String query = "SELECT * FROM " + DBConstants.LOGIN_TABLE 
-                + " WHERE " 
-                + DBConstants.USERNAME_FIELD 
-                +" = ? AND password = ? LIMIT 1;";
+        String query = "SELECT * FROM " + DBConstants.LOGIN_TABLE
+                + " WHERE "
+                + DBConstants.USERNAME_FIELD
+                + " = ? AND password = ? LIMIT 1;";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -155,12 +171,12 @@ public class PersonEntitiesManager {
             stmt.setString(2, passwordUtility.getSecuredPassword(password));
 
             ResultSet rs = stmt.executeQuery();
-            // conn.commit(); 
+            conn.commit();
 
             // construct user
             while (rs.next()) {
                 // FIXME
-                 person = new Person();
+                person = new Person();
                 // person.setId(rs.getInt("id"));
 
                 // limit 1
@@ -169,6 +185,12 @@ public class PersonEntitiesManager {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return person;
