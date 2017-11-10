@@ -20,7 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ajax.persistence.PasswordUtility;
 import com.ajax.persistence.PersonEntitiesManager;
 import com.ajax.model.Customer;
+import com.ajax.model.Person;
 import com.ajax.model.State;
+import com.ajax.service.LoginService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
 
@@ -34,6 +36,8 @@ public class MainController {
     State state;
     @Autowired
     private RegitrationService regitrationService;
+    @Autowired
+    private LoginService loginService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private ModelAndView home() {
@@ -79,17 +83,18 @@ public class MainController {
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:register");
 
+        // DEBUG
+        System.out.println("*******");
+        customer.getAddress().setState(formValues.get("state"));
+        System.out.println("customer:" + customer + "\n\n result tostring: " + result.toString());
+        System.out.println("*******");
+
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg",
                     "Error in registration form");
         } else {
             // set state (the enum type)
             customer.getAddress().setState(formValues.get("state"));
-
-            // DEBUG
-            System.out.println("*******");
-            System.out.println("customer:" + customer + "\n\n result tostring: " + result.toString());
-            System.out.println("*******");
 
             // add user to database
             if (regitrationService.addCustomer(customer, formValues) == ReturnValue.ERROR) {
@@ -123,16 +128,14 @@ public class MainController {
          *		show an popup to indicate username and password mismatch
          */
         // get/validate user
-        // Customer user = PersonEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
-        // TODO: do this in service layer
-//        Customer user = personEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
-//
+        Person person = loginService.login(requestParams.get("username"), requestParams.get("password"));
+        
 //        if (user == null) {
 //            //TODO: show an popup to indicate username and password mismatch
 //            redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
 //        } else {
 //            // add user to session            
-//            request.getSession().setAttribute("user", user);
+//            request.getSession().setAttribute("person", person);
 //        }
         return modelAndView;
     }

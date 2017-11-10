@@ -1,5 +1,5 @@
 
-<a href="#" class="dropdown-toggle" data-toggle="dropdown">${customer.firstName} ${customer.lastName}<strong class="caret"></strong></a>
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">${person.firstName} ${person.lastName}<strong class="caret"></strong></a>
 
 <ul class="dropdown-menu">
     <li>

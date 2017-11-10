@@ -5,7 +5,7 @@ public class Customer extends Person {
     // counter for account number
     public static int count = 0;
 
-    private String email;
+    protected String email;
     private String userName;
     private String password;
     private int creditCard;
@@ -71,6 +71,6 @@ public class Customer extends Person {
                 + "Full name: " + firstName + " " + lastName + "\n"
                 + "Email: " + email + "\n"
                 + "Address :" + address.toString();
-        
+
     }
 }

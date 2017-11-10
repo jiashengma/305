@@ -15,7 +15,7 @@ public class Person {
     protected String firstName;
 //    @Pattern(regexp="\c+")
     protected String lastName;
-    protected int phone;
+    protected long phone;
     protected Address address;
 
     public Person() {
@@ -42,7 +42,7 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public int getPhone() {
+    public long getPhone() {
         return phone;
     }
 

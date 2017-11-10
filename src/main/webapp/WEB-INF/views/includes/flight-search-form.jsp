@@ -1,5 +1,5 @@
-<div id="flightSearchForm" >
-    <form action="/search" method="POST">
+<div class="searchform">
+    <form action="/search" method="GET">
         <div class="row">
             <div class="col-md-3">Flying From</div>
             <div class="col-md-3">Flying To</div>
