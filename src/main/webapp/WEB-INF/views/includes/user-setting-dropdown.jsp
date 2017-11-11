@@ -3,13 +3,10 @@
 
 <ul class="dropdown-menu">
     <li>
-        <a href="/account">Account</a>
+        <a href="">Account</a>
     </li>
     <li>
-        <a href="/general">General</a>
-    </li>
-    <li>
-        <a href="/posts">Posts</a>
+        <a href="">Reservation History</a>
     </li>
     <li class="divider">
     </li>
