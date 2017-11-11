@@ -26,7 +26,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <c:choose>
-                <c:when test="${empty user}">
+                <c:when test="${empty person}">
                     <li><a href="/registration">Register</a></li>
                     <li><%@include file="/WEB-INF/views/includes/login-modal.jsp" %></li>
                 </c:when>

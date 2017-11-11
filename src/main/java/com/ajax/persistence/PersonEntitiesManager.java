@@ -1,5 +1,6 @@
 package com.ajax.persistence;
 
+import com.ajax.model.Address;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -167,7 +168,6 @@ public class PersonEntitiesManager {
                     + " P." + DBConstants.PHONE_FILED + ", "
                     + " C." + DBConstants.ACCOUNTNO_FIELD + ", "
                     + " C." + DBConstants.CREDITCARDNO_FIELD + ", "
-                    + " C." + DBConstants.ACCOUNTNO_FIELD + ", "
                     + " C." + DBConstants.EMAIL_FIELD + ", "
                     + " C." + DBConstants.RATING_FIELD
                     + " FROM "
@@ -178,21 +178,57 @@ public class PersonEntitiesManager {
                     + " = ? "
                     + "AND "
                     + " C." + DBConstants.ID_FIELD
-                    + " = ? "
-                    + "LIMIT 1;";
+                    + " =  "
+                    + " P." + DBConstants.ID_FIELD
+                    + " LIMIT 1;";
 
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setInt(1, id);
-            stmt.setInt(2, id);
 
             ResultSet rs = stmt.executeQuery();
             conn.commit();
 
             while (rs.next()) {
-                //TODO: get all the fields
+                // get all the fields
+                String firstname = rs.getString(DBConstants.FIRSTNAME_FILED);
+                String lastname = rs.getString(DBConstants.LASTNAME_FILED);
+                String street = rs.getString(DBConstants.STREET_FILED);
+                String city = rs.getString(DBConstants.CITY_FILED);
+                String state = rs.getString(DBConstants.STATE_FILED);
+                int zipCode = rs.getInt(DBConstants.ZIPCODE_FILED);
+                long phone = rs.getLong(DBConstants.PHONE_FILED);
+                int acc = rs.getInt(DBConstants.ACCOUNTNO_FIELD);
+                long creditCard = rs.getLong(DBConstants.CREDITCARDNO_FIELD);
+                String email = rs.getString(DBConstants.EMAIL_FIELD);
+                int rating = rs.getInt(DBConstants.RATING_FIELD);
+
+                System.out.println(
+                        "\nfrist name: " + firstname + "\n"
+                        + "last name: " + lastname + "\n"
+                        + "street: " + street + "\n"
+                                + "city: " + city + "\n"
+                                + "state: " + state + "\n"
+                                + "phone: " + phone + "\n"
+                );
+
+                // set all the fields in customer 
                 customer = new Customer();
-                //TODO: set all the fields in customer 
+                customer.setFirstName(firstname);
+                customer.setLastName(lastname);
+                Address address = new Address();
+                address.setStreet(street);
+                address.setCity(city);
+                address.setState(state);
+                address.setZipCode(zipCode);
+                customer.setAddress(address);
+                customer.setPhone(zipCode);
+                customer.setCreditCard(creditCard);
+                customer.setEmail(email);
+                customer.setRating(rating);
+
+                // limit 1 customer
+                break;
             }
 
         } catch (SQLException ex) {

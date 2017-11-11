@@ -22,6 +22,7 @@ import com.ajax.persistence.PersonEntitiesManager;
 import com.ajax.model.Customer;
 import com.ajax.model.Person;
 import com.ajax.model.State;
+import com.ajax.persistence.DBConstants;
 import com.ajax.service.LoginService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
@@ -128,8 +129,9 @@ public class MainController {
          *		show an popup to indicate username and password mismatch
          */
         // get/validate user
-        Person person = loginService.login(requestParams.get("username"), requestParams.get("password"));
-        
+        Person person = loginService.login(requestParams.get(DBConstants.USERNAME_FIELD),
+                requestParams.get(DBConstants.PASSWORD_FIELD));
+
         if (person == null) {
             //TODO: show an popup to indicate username and password mismatch
             redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
