@@ -130,13 +130,13 @@ public class MainController {
         // get/validate user
         Person person = loginService.login(requestParams.get("username"), requestParams.get("password"));
         
-//        if (user == null) {
-//            //TODO: show an popup to indicate username and password mismatch
-//            redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
-//        } else {
-//            // add user to session            
-//            request.getSession().setAttribute("person", person);
-//        }
+        if (person == null) {
+            //TODO: show an popup to indicate username and password mismatch
+            redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
+        } else {
+            // add user to session            
+            request.getSession().setAttribute("person", person);
+        }
         return modelAndView;
     }
 

@@ -10,16 +10,22 @@ public class Person {
     // count for person id (used in creations)
     public static int count = 0;
 
-    protected final int id;
+    protected int id;
 //    @Pattern(regexp="\c+")
     protected String firstName;
 //    @Pattern(regexp="\c+")
     protected String lastName;
     protected long phone;
     protected Address address;
+    protected String userName;
+    protected String password;
 
     public Person() {
         id = count++;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -56,6 +62,22 @@ public class Person {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

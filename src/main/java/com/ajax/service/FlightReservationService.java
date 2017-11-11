@@ -32,4 +32,9 @@ public class FlightReservationService {
         
         return null;
     }
+    
+    public boolean bookFlight(Flight flight) {
+        return flightReservationManager.bookFlight(flight);
+    }
+    
 }

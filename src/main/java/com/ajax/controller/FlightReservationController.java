@@ -59,7 +59,7 @@ public class FlightReservationController {
         // FlightReservationService.searchFlight(String src, String dst, Date dep, Date ret)
         ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(null, null, null, null);
 
-        // add a list of flights as the search result for the view to render
+        // add a list of flights as the search result for the view/jsp to render
         mv.addObject("result", flights);
 
         return mv;
@@ -68,9 +68,17 @@ public class FlightReservationController {
     @RequestMapping(value = "/bookflight", method = RequestMethod.GET)
     public ModelAndView handleBookFlight(@RequestParam Map<String, String> requestParams) {
         
-        ModelAndView mv = new ModelAndView("");
         
-        //TODO:
+        ModelAndView mv = new ModelAndView();
+        
+        //TODO: pass flight to be booked to bookFlight()
+        if(flightReservationService.bookFlight(null)) {
+            //TODO: booking flight succeeded, set view 
+            mv.setView(null);
+        } else {
+            // TODO: set view or display message
+            // mv.setView(null);
+        }
         
         
         return mv;

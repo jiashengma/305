@@ -39,25 +39,25 @@ public class PersonEntitiesManager {
         Connection conn = MySQLConnection.connect();
         int ret = ReturnValue.ERROR;
 
-        String query = "INSERT INTO "
-                + DBConstants.CUSTOMER_TABLE
-                + " ("
-                + DBConstants.ID_FIELD + ", "
-                + DBConstants.ACCOUNTNO_FIELD + ", "
-                + DBConstants.CREDITCARDNO_FIELD + ", "
-                + DBConstants.EMAIL_FIELD + ", "
-                + DBConstants.RATING_FIELD 
-                + " ) "
-                + " VALUES (?,?,?,?,?)";
-
         try {
+            String query = "INSERT INTO "
+                    + DBConstants.CUSTOMER_TABLE
+                    + " ("
+                    + DBConstants.ID_FIELD + ", "
+                    + DBConstants.ACCOUNTNO_FIELD + ", "
+                    + DBConstants.CREDITCARDNO_FIELD + ", "
+                    + DBConstants.EMAIL_FIELD + ", "
+                    + DBConstants.RATING_FIELD
+                    + " ) "
+                    + " VALUES (?,?,?,?,?)";
+
             /* try to add login information and add person record for 
              * registering customer
              * return immediately if error occurred
              */
             if (addLoginForCustomer(customer) != ReturnValue.ERROR && addPerson(customer) != ReturnValue.ERROR) {
                 //FIXME: how to rollback the transactions above if anyone of the transactions failed
-                
+
                 PreparedStatement stmt = conn.prepareStatement(query);
                 conn.prepareStatement(query);
 
@@ -91,12 +91,13 @@ public class PersonEntitiesManager {
      */
     public int addPerson(Person person) {
         int ret = ReturnValue.ERROR;
-        String query = "INSERT INTO "
-                + DBConstants.PERSON_TABLE
-                + " VALUES (?,?,?,?,?,?,?,?)";
+        Connection conn = MySQLConnection.connect();
 
         try {
-            Connection conn = MySQLConnection.connect();
+            String query = "INSERT INTO "
+                    + DBConstants.PERSON_TABLE
+                    + " VALUES (?,?,?,?,?,?,?,?)";
+
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setInt(1, person.getId());
@@ -130,11 +131,11 @@ public class PersonEntitiesManager {
         int ret = ReturnValue.ERROR;
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
-            
+
             stmt.setInt(1, customer.getId());
             stmt.setString(2, customer.getUserName());
             stmt.setString(3, customer.getPassword());
-            
+
             ret = stmt.executeUpdate();
             conn.commit();
         } catch (SQLException ex) {
@@ -150,6 +151,62 @@ public class PersonEntitiesManager {
         return ret;
     }
 
+    public Customer getCustomerById(int id) {
+        Customer customer = null;
+        Connection conn = MySQLConnection.connect();
+        try {
+
+            // get customer from customer and person table
+            String query = "SELECT "
+                    + " P." + DBConstants.FIRSTNAME_FILED + ", "
+                    + " P." + DBConstants.LASTNAME_FILED + ", "
+                    + " P." + DBConstants.STREET_FILED + ", "
+                    + " P." + DBConstants.CITY_FILED + ", "
+                    + " P." + DBConstants.STATE_FILED + ", "
+                    + " P." + DBConstants.ZIPCODE_FILED + ", "
+                    + " P." + DBConstants.PHONE_FILED + ", "
+                    + " C." + DBConstants.ACCOUNTNO_FIELD + ", "
+                    + " C." + DBConstants.CREDITCARDNO_FIELD + ", "
+                    + " C." + DBConstants.ACCOUNTNO_FIELD + ", "
+                    + " C." + DBConstants.EMAIL_FIELD + ", "
+                    + " C." + DBConstants.RATING_FIELD
+                    + " FROM "
+                    + DBConstants.CUSTOMER_TABLE + " C, "
+                    + DBConstants.PERSON_TABLE + " P"
+                    + " WHERE "
+                    + " P." + DBConstants.ID_FIELD
+                    + " = ? "
+                    + "AND "
+                    + " C." + DBConstants.ID_FIELD
+                    + " = ? "
+                    + "LIMIT 1;";
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            stmt.setInt(1, id);
+            stmt.setInt(2, id);
+
+            ResultSet rs = stmt.executeQuery();
+            conn.commit();
+
+            while (rs.next()) {
+                //TODO: get all the fields
+                customer = new Customer();
+                //TODO: set all the fields in customer 
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return customer;
+    }
+
     /**
      *
      * @param username
@@ -157,12 +214,16 @@ public class PersonEntitiesManager {
      * @return
      */
     public Person login(String username, String password) {
+        /*TODO: check return type: is Customer more suitable if employees use
+         different login portal */
         Person person = null;
         Connection conn = MySQLConnection.connect();
         String query = "SELECT * FROM " + DBConstants.LOGIN_TABLE
                 + " WHERE "
                 + DBConstants.USERNAME_FIELD
-                + " = ? AND password = ? LIMIT 1;";
+                + " = ? AND "
+                + DBConstants.PASSWORD_FIELD
+                + " = ? LIMIT 1;";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -175,10 +236,11 @@ public class PersonEntitiesManager {
 
             // construct user
             while (rs.next()) {
-                // FIXME
-                person = new Person();
-                // person.setId(rs.getInt("id"));
 
+                int personId = rs.getInt("id");
+
+                // query db to construct person object
+                person = getCustomerById(personId);
                 // limit 1
                 break;
             }
