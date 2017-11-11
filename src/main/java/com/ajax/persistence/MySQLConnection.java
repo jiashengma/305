@@ -1,4 +1,4 @@
-package com.ajax.dbm;
+package com.ajax.persistence;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,7 +20,9 @@ public class MySQLConnection {
                     DBConstants.USERNAME,
                     DBConstants.PASSWORD
             );
-            connection.setAutoCommit(true);
+
+            connection.setAutoCommit(false);
+
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

@@ -5,10 +5,8 @@ public class Customer extends Person {
     // counter for account number
     public static int count = 0;
 
-    private String email;
-    private String userName;
-    private String password;
-    private int creditCard;
+    protected String email;
+    private long creditCard;
     private int rating;
     private final int accNum;
 
@@ -26,22 +24,6 @@ public class Customer extends Person {
         this.email = email;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getAccNum() {
         return accNum;
     }
@@ -49,11 +31,11 @@ public class Customer extends Person {
 //    public void setAccNum(int accNum) {
 //        this.accNum = accNum;
 //    }
-    public int getCreditCard() {
+    public long getCreditCard() {
         return creditCard;
     }
 
-    public void setCreditCard(int creditCard) {
+    public void setCreditCard(long creditCard) {
         this.creditCard = creditCard;
     }
 
@@ -67,8 +49,10 @@ public class Customer extends Person {
 
     @Override
     public String toString() {
-        return "username: " + userName + "\n"
+        return "Username: " + userName + "\n"
                 + "Full name: " + firstName + " " + lastName + "\n"
-                + "email: " + email + "\n";
+                + "Email: " + email + "\n"
+                + "Address :" + address.toString();
+
     }
 }

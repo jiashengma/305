@@ -3,7 +3,7 @@
 <!-- body -->
 
 <p>${msg}</p>
-<%@include file="/WEB-INF/views/includes/reservation-form.jsp" %>
+<%@include file="/WEB-INF/views/includes/flight-search-form.jsp" %>
 <!-- end body -->
 
 <%@include file="/WEB-INF/views/includes/footer.jsp" %>

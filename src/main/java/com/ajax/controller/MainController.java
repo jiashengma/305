@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ajax.dbm.PasswordUtility;
-import com.ajax.dbm.PersonEntitiesManager;
+import com.ajax.persistence.PasswordUtility;
+import com.ajax.persistence.PersonEntitiesManager;
 import com.ajax.model.Customer;
+import com.ajax.model.Person;
 import com.ajax.model.State;
+import com.ajax.service.LoginService;
 import com.ajax.service.RegitrationService;
+import com.ajax.service.ReturnValue;
 
 /**
  * Created by majiasheng on 7/14/17.
@@ -32,22 +35,9 @@ public class MainController {
 
     State state;
     @Autowired
-    private RegitrationService regitrationService;    
+    private RegitrationService regitrationService;
     @Autowired
-    private PasswordUtility passwordUtility;
-
-    /**
-     *
-     * @param binder
-     */
-    @InitBinder
-    public void InitBinder(WebDataBinder binder) {
-
-        // can use binder.setDisallowedFields() to un-bind a property
-        // SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        // use a customized date format for "dateAcquired" request param
-        //binder.registerCustomEditor(Date.class, "dateAcquired" ,new CustomDateEditor(simpleDateFormat, false));
-    }
+    private LoginService loginService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private ModelAndView home() {
@@ -65,7 +55,7 @@ public class MainController {
      * PRG - G
      *
      * @return
-     * @see handleRegistration
+     * //@see handleRegistration
      */
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     private ModelAndView redirectRegistration() {
@@ -77,25 +67,40 @@ public class MainController {
      *
      * @param customer
      * @param result
+     * @param formValues
+     * @param request
      * @param redirectAttributes
      * @return
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView handleRegistration(@ModelAttribute("customer") Customer customer,
-            BindingResult result, final RedirectAttributes redirectAttributes) {
+    public ModelAndView handleRegistration(
+            @ModelAttribute("customer") Customer customer,
+            BindingResult result,
+            @RequestParam Map<String, String> formValues,
+            HttpServletRequest request,
+            final RedirectAttributes redirectAttributes) {
 
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:register");
-        
+
+        // DEBUG
+        System.out.println("*******");
+        customer.getAddress().setState(formValues.get("state"));
+        System.out.println("customer:" + customer + "\n\n result tostring: " + result.toString());
+        System.out.println("*******");
+
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg","Error in registration form");
         } else {
-            // update users password to a hash for security
-            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
+                    // update users password to a hash for security
+//            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
 
             //TODO: add user to database
-            // if (personEntitiesManager.addCustomer(customer) == -1) {
-            if (regitrationService.addCustomer(customer) == -1) {
+            // set state (the enum type)
+            customer.getAddress().setState(formValues.get("state"));
+
+            // add user to database
+            if (regitrationService.addCustomer(customer, formValues) == ReturnValue.ERROR) {
                 redirectAttributes.addFlashAttribute("msg", "Error in registering: failed to add user to database");
             } else {
                 redirectAttributes.addFlashAttribute("msg", "Registration success");
@@ -109,7 +114,7 @@ public class MainController {
         return new ModelAndView("index");
     }
 
-    //TODO: may need to have 2/3 login hanlders, customer, admin(manager,representative)
+    //TODO: may need to have 3 login handlers, customer, admin(manager,representative)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView handleLogin(@RequestParam Map<String, String> requestParams,
             HttpServletRequest request,
@@ -126,19 +131,15 @@ public class MainController {
          *		show an popup to indicate username and password mismatch
          */
         // get/validate user
-        // Customer user = PersonEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
+        Person person = loginService.login(requestParams.get("username"), requestParams.get("password"));
         
-        // TODO: do this in service layer
-//        Customer user = personEntitiesManager.login(requestParams.get("username"), requestParams.get("password"));
-//
-//        if (user == null) {
-//            //TODO: show an popup to indicate username and password mismatch
-//            redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
-//        } else {
-//            // add user to session            
-//            request.getSession().setAttribute("user", user);
-//        }
-
+        if (person == null) {
+            //TODO: show an popup to indicate username and password mismatch
+            redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
+        } else {
+            // add user to session            
+            request.getSession().setAttribute("person", person);
+        }
         return modelAndView;
     }
 

@@ -1,4 +1,4 @@
-package com.ajax.dbm;
+package com.ajax.persistence;
 
 /**
  *
@@ -7,7 +7,7 @@ package com.ajax.dbm;
 public class DBConstants {
 
     // mysql connection
-    protected static final String HOSTNAME = "mysql2.cs.stonybrook.edu";
+    protected static final String HOSTNAME = "localhost";
     protected static final String DBNAME = "ajax305";
     protected static final String USERNAME = "ajaxadmin";
     protected static final String PASSWORD = "passwordajax305";
@@ -16,7 +16,7 @@ public class DBConstants {
     protected static final String LOGIN_TABLE = "login";
 
     protected static final String PERSON_TABLE = "person";
-    protected static final String ID_FILED = "Id";
+    protected static final String ID_FIELD = "Id";
     protected static final String FIRSTNAME_FILED = "FirstName";
     protected static final String LASTNAME_FILED = "LastName";
     protected static final String STREET_FILED = "Street";
@@ -30,5 +30,7 @@ public class DBConstants {
     protected static final String CREDITCARDNO_FIELD = "CreditCardNo";
     protected static final String EMAIL_FIELD = "Email";
     protected static final String RATING_FIELD = "Rating";
-
+    
+    protected static final String USERNAME_FIELD = "username";
+    protected static final String PASSWORD_FIELD = "password";
 }
