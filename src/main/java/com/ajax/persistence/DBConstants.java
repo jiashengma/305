@@ -13,7 +13,7 @@ public class DBConstants {
     public static final String PASSWORD = "passwordajax305";
 
     // table and filed names
-    public static final String LOGIN_TABLE = "login";
+    
 
     public static final String PERSON_TABLE = "person";
     public static final String ID_FIELD = "Id";
@@ -31,6 +31,19 @@ public class DBConstants {
     public static final String EMAIL_FIELD = "Email";
     public static final String RATING_FIELD = "Rating";
     
+    public static final String LOGIN_TABLE = "login";
     public static final String USERNAME_FIELD = "username";
     public static final String PASSWORD_FIELD = "password";
+    
+    public static final String AIRPORT_TABLE = "airport";
+    public static final String NAME_FIELD = "Name";
+    public static final String COUNTRY_FIELD = "Country";
+    
+    public static final String FLIGHT_TABLE = "flight";
+    public static final String AIRLINEID_FIELD = "AirlineID";
+    public static final String FLIGHTNO_FIELD = "FlightNo";
+    public static final String NOOFSEATS_FIELD = "NoOfSeats";
+    public static final String DAYSOPERATING_FIELD = "DaysOperating";
+    public static final String MINLENGTHOFSTAY_FIELD = "MinLengthOfStay";
+    public static final String MAXLENGTHOFSTAY_FIELD = "MaxLengthOfStay";
 }

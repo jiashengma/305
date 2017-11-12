@@ -6,6 +6,7 @@
 package com.ajax.service;
 
 import com.ajax.model.Flight;
+import com.ajax.model.FlightSearchForm;
 import com.ajax.persistence.FlightReservationManager;
 import java.util.Date;
 import java.util.List;
@@ -22,13 +23,13 @@ public class FlightReservationService {
     @Autowired
     FlightReservationManager flightReservationManager;
     
-    public List<Flight> searchFlight(String src, String dst, Date dep, Date ret) {
+    public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
         
         System.out.println("TODO: query database for results");
         
         //TODO: sanitize inputs/args ?
         
-        flightReservationManager.searchFlight(src, dst, dep, ret);
+        flightReservationManager.searchFlight(flightSearchForm);
         
         return null;
     }

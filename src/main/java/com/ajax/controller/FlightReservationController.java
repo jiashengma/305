@@ -1,14 +1,17 @@
 package com.ajax.controller;
 
 import com.ajax.model.Flight;
+import com.ajax.model.FlightSearchForm;
 import com.ajax.service.FlightReservationService;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,8 +45,7 @@ public class FlightReservationController {
 
     @Autowired
     FlightReservationService flightReservationService;
-    
-    
+
     /**
      *
      * @param binder
@@ -58,41 +60,47 @@ public class FlightReservationController {
     }
 
     /**
-     * 
-     * @param requestParams
-     * @return 
+     *
+     * @param flightSearchForm
+     * @param result
+     * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView handleSearchFlight(@RequestParam Map<String, String> requestParams) {
+    public ModelAndView handleSearchFlight(@ModelAttribute("flightSearchForm") FlightSearchForm flightSearchForm,
+            BindingResult result) {
+
         ModelAndView mv = new ModelAndView("result");
 
-        // TODO: use request params to do query on db
-        // FlightReservationService.searchFlight(String src, String dst, Date dep, Date ret)
-        ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(null, null, null, null);
+        if (result.hasErrors()) {
+            //TODO: display message to user instead
+            System.out.println("Flight search form has error");
+            return new ModelAndView("index");
+        }
 
+        ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
         // add a list of flights as the search result for the view/jsp to render
-        mv.addObject("result", flights);
+        mv.addObject("flightSearchResult", flights);
 
         return mv;
     }
-    
+
     @RequestMapping(value = "/bookflight", method = RequestMethod.GET)
     public ModelAndView handleBookFlight(@RequestParam Map<String, String> requestParams) {
-        
-        
+
         ModelAndView mv = new ModelAndView();
-        
+
         //TODO: pass flight to be booked to bookFlight()
-        if(flightReservationService.bookFlight(null)) {
+        if (flightReservationService.bookFlight(null)) {
             //TODO: booking flight succeeded, set view 
+            // make sure to not overbook a flight
+
             mv.setView(null);
         } else {
             // TODO: set view or display message
             // mv.setView(null);
         }
-        
-        
+
         return mv;
     }
-    
+
 }

@@ -6,6 +6,7 @@
 package com.ajax.persistence;
 
 import com.ajax.model.Flight;
+import com.ajax.model.FlightSearchForm;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,9 +24,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FlightReservationManager {
 
-    public List<Flight> searchFlight(String src, String dst, Date dep, Date ret) {
+    public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
 
-        String query = "SELECT ";
+        String query = "SELECT "
+                + "F." + DBConstants.AIRLINEID_FIELD + ", "
+                + "F." + DBConstants.FLIGHTNO_FIELD + ", "
+                // TODO: add leg info
+                + " FROM " + DBConstants.FLIGHT_TABLE + " F, "
+                
+                ;
 
         try {
             Connection conn = MySQLConnection.connect();
