@@ -64,7 +64,6 @@ public class FlightReservationController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ModelAndView handleSearchFlight(@RequestParam Map<String, String> requestParams) {
-
         ModelAndView mv = new ModelAndView("result");
 
         // TODO: use request params to do query on db
