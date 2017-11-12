@@ -60,15 +60,11 @@ public class FlightReservationController {
 
         ModelAndView mv = new ModelAndView("result");
         
-        
-        System.out.println("\n*****"+result.toString()+"***\n");
         if(result.hasErrors()) {
             //TODO: display message to user instead
             System.out.println("Flight search form has error");
             return new ModelAndView("index");
         }
-        //DEBUG
-        System.out.println(flightSearchForm.toString());
         
         ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
         // add a list of flights as the search result for the view/jsp to render

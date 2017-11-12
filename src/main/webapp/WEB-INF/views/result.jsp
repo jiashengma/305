@@ -12,6 +12,7 @@
 <c:choose>
     <c:when test="${empty flights}"> 
         <!-- TODO: display message to indicate no such result-->
+        <p>No search results</p>
     </c:when>
 
     <c:otherwise>
