@@ -33,8 +33,7 @@ public class FlightReservationController {
 
     @Autowired
     FlightReservationService flightReservationService;
-    
-    
+
     /**
      *
      * @param binder
@@ -49,47 +48,47 @@ public class FlightReservationController {
     }
 
     /**
-     * 
+     *
      * @param flightSearchForm
      * @param result
-     * @return 
+     * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView handleSearchFlight(@ModelAttribute("flightSearchForm") FlightSearchForm flightSearchForm,  
+    public ModelAndView handleSearchFlight(@ModelAttribute("flightSearchForm") FlightSearchForm flightSearchForm,
             BindingResult result) {
 
         ModelAndView mv = new ModelAndView("result");
-        
-        if(result.hasErrors()) {
+
+        if (result.hasErrors()) {
             //TODO: display message to user instead
             System.out.println("Flight search form has error");
             return new ModelAndView("index");
         }
-        
+
         ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
         // add a list of flights as the search result for the view/jsp to render
-        mv.addObject("result", flights);
+        mv.addObject("flightSearchResult", flights);
 
         return mv;
     }
-    
+
     @RequestMapping(value = "/bookflight", method = RequestMethod.GET)
     public ModelAndView handleBookFlight(@RequestParam Map<String, String> requestParams) {
-        
-        
+
         ModelAndView mv = new ModelAndView();
-        
+
         //TODO: pass flight to be booked to bookFlight()
-        if(flightReservationService.bookFlight(null)) {
+        if (flightReservationService.bookFlight(null)) {
             //TODO: booking flight succeeded, set view 
+            // make sure to not overbook a flight
+
             mv.setView(null);
         } else {
             // TODO: set view or display message
             // mv.setView(null);
         }
-        
-        
+
         return mv;
     }
-    
+
 }
