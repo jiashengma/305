@@ -15,10 +15,10 @@ public class MySQLConnection {
     public static Connection connect() {
         try {
             connection = getMySQLConnection(
-                    DBConstants.HOSTNAME,
-                    DBConstants.DBNAME,
-                    DBConstants.USERNAME,
-                    DBConstants.PASSWORD
+                    Constants.HOSTNAME,
+                    Constants.DBNAME,
+                    Constants.USERNAME,
+                    Constants.PASSWORD
             );
 
             connection.setAutoCommit(false);

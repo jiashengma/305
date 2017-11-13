@@ -27,12 +27,10 @@ public class FlightReservationManager {
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
 
         String query = "SELECT "
-                + "F." + DBConstants.AIRLINEID_FIELD + ", "
-                + "F." + DBConstants.FLIGHTNO_FIELD + ", "
+                + "F." + Constants.AIRLINEID_FIELD + ", "
+                + "F." + Constants.FLIGHTNO_FIELD + ", "
                 // TODO: add leg info
-                + " FROM " + DBConstants.FLIGHT_TABLE + " F, "
-                
-                ;
+                + " FROM " + Constants.FLIGHT_TABLE + " F, ";
 
         try {
             Connection conn = MySQLConnection.connect();

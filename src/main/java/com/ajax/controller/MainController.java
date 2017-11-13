@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ajax.model.Customer;
 import com.ajax.model.Person;
 import com.ajax.model.State;
-import com.ajax.persistence.DBConstants;
+import com.ajax.persistence.Constants;
 import com.ajax.service.LoginService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
@@ -125,15 +125,15 @@ public class MainController {
          *		show an popup to indicate username and password mismatch
          */
         // get/validate user
-        Person person = loginService.login(requestParams.get(DBConstants.USERNAME_FIELD),
-                requestParams.get(DBConstants.PASSWORD_FIELD));
+        Person person = loginService.login(requestParams.get(Constants.USERNAME_FIELD),
+                requestParams.get(Constants.PASSWORD_FIELD));
 
         if (person == null) {
             //TODO: show an popup to indicate username and password mismatch
             redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
         } else {
             // add user to session            
-            request.getSession().setAttribute("person", person);
+            request.getSession().setAttribute(Constants.PERSON, person);
         }
         return modelAndView;
     }
