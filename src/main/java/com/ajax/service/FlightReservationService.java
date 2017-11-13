@@ -10,6 +10,7 @@ import com.ajax.model.FlightSearchForm;
 import com.ajax.persistence.FlightReservationManager;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,11 @@ public class FlightReservationService {
     
     public boolean bookFlight(Flight flight) {
         return flightReservationManager.bookFlight(flight);
+    }
+
+    public boolean handleBid(Map<String, String> requestParams) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //TODO:set up some return status: 0 low bid, 1 success, -1:ERROR
     }
     
 }

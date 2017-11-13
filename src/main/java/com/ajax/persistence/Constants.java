@@ -4,7 +4,9 @@ package com.ajax.persistence;
  *
  * @author majiasheng
  */
-public class DBConstants {
+public class Constants {
+    
+    public static final String PERSON = "person";
 
     // mysql connection
     public static final String HOSTNAME = "localhost";

@@ -24,5 +24,6 @@
 	 </bean>
 	 <mvc:annotation-driven />
 	 <mvc:resources mapping="/resources/**" location="/resources/" />
-	 
+	 <mvc:resources mapping="/favicon.ico" location="/resources/image/favicon.ico" />
+
  </beans>

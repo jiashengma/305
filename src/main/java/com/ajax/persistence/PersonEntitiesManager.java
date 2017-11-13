@@ -42,13 +42,13 @@ public class PersonEntitiesManager {
 
         try {
             String query = "INSERT INTO "
-                    + DBConstants.CUSTOMER_TABLE
+                    + Constants.CUSTOMER_TABLE
                     + " ("
-                    + DBConstants.ID_FIELD + ", "
-                    + DBConstants.ACCOUNTNO_FIELD + ", "
-                    + DBConstants.CREDITCARDNO_FIELD + ", "
-                    + DBConstants.EMAIL_FIELD + ", "
-                    + DBConstants.RATING_FIELD
+                    + Constants.ID_FIELD + ", "
+                    + Constants.ACCOUNTNO_FIELD + ", "
+                    + Constants.CREDITCARDNO_FIELD + ", "
+                    + Constants.EMAIL_FIELD + ", "
+                    + Constants.RATING_FIELD
                     + " ) "
                     + " VALUES (?,?,?,?,?)";
 
@@ -96,7 +96,7 @@ public class PersonEntitiesManager {
 
         try {
             String query = "INSERT INTO "
-                    + DBConstants.PERSON_TABLE
+                    + Constants.PERSON_TABLE
                     + " VALUES (?,?,?,?,?,?,?,?)";
 
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -127,7 +127,7 @@ public class PersonEntitiesManager {
     public int addLoginForCustomer(Customer customer) {
         Connection conn = MySQLConnection.connect();
         String query = "INSERT INTO "
-                + DBConstants.LOGIN_TABLE
+                + Constants.LOGIN_TABLE
                 + " VALUES (?,?,?)";
         int ret = ReturnValue.ERROR;
         try {
@@ -159,27 +159,27 @@ public class PersonEntitiesManager {
 
             // get customer from customer and person table
             String query = "SELECT "
-                    + " P." + DBConstants.FIRSTNAME_FILED + ", "
-                    + " P." + DBConstants.LASTNAME_FILED + ", "
-                    + " P." + DBConstants.STREET_FILED + ", "
-                    + " P." + DBConstants.CITY_FILED + ", "
-                    + " P." + DBConstants.STATE_FILED + ", "
-                    + " P." + DBConstants.ZIPCODE_FILED + ", "
-                    + " P." + DBConstants.PHONE_FILED + ", "
-                    + " C." + DBConstants.ACCOUNTNO_FIELD + ", "
-                    + " C." + DBConstants.CREDITCARDNO_FIELD + ", "
-                    + " C." + DBConstants.EMAIL_FIELD + ", "
-                    + " C." + DBConstants.RATING_FIELD
+                    + " P." + Constants.FIRSTNAME_FILED + ", "
+                    + " P." + Constants.LASTNAME_FILED + ", "
+                    + " P." + Constants.STREET_FILED + ", "
+                    + " P." + Constants.CITY_FILED + ", "
+                    + " P." + Constants.STATE_FILED + ", "
+                    + " P." + Constants.ZIPCODE_FILED + ", "
+                    + " P." + Constants.PHONE_FILED + ", "
+                    + " C." + Constants.ACCOUNTNO_FIELD + ", "
+                    + " C." + Constants.CREDITCARDNO_FIELD + ", "
+                    + " C." + Constants.EMAIL_FIELD + ", "
+                    + " C." + Constants.RATING_FIELD
                     + " FROM "
-                    + DBConstants.CUSTOMER_TABLE + " C, "
-                    + DBConstants.PERSON_TABLE + " P"
+                    + Constants.CUSTOMER_TABLE + " C, "
+                    + Constants.PERSON_TABLE + " P"
                     + " WHERE "
-                    + " P." + DBConstants.ID_FIELD
+                    + " P." + Constants.ID_FIELD
                     + " = ? "
                     + "AND "
-                    + " C." + DBConstants.ID_FIELD
+                    + " C." + Constants.ID_FIELD
                     + " =  "
-                    + " P." + DBConstants.ID_FIELD
+                    + " P." + Constants.ID_FIELD
                     + " LIMIT 1;";
 
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -191,17 +191,17 @@ public class PersonEntitiesManager {
 
             while (rs.next()) {
                 // get all the fields
-                String firstname = rs.getString(DBConstants.FIRSTNAME_FILED);
-                String lastname = rs.getString(DBConstants.LASTNAME_FILED);
-                String street = rs.getString(DBConstants.STREET_FILED);
-                String city = rs.getString(DBConstants.CITY_FILED);
-                String state = rs.getString(DBConstants.STATE_FILED);
-                int zipCode = rs.getInt(DBConstants.ZIPCODE_FILED);
-                long phone = rs.getLong(DBConstants.PHONE_FILED);
-                int acc = rs.getInt(DBConstants.ACCOUNTNO_FIELD);
-                long creditCard = rs.getLong(DBConstants.CREDITCARDNO_FIELD);
-                String email = rs.getString(DBConstants.EMAIL_FIELD);
-                int rating = rs.getInt(DBConstants.RATING_FIELD);
+                String firstname = rs.getString(Constants.FIRSTNAME_FILED);
+                String lastname = rs.getString(Constants.LASTNAME_FILED);
+                String street = rs.getString(Constants.STREET_FILED);
+                String city = rs.getString(Constants.CITY_FILED);
+                String state = rs.getString(Constants.STATE_FILED);
+                int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
+                long phone = rs.getLong(Constants.PHONE_FILED);
+                int acc = rs.getInt(Constants.ACCOUNTNO_FIELD);
+                long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
+                String email = rs.getString(Constants.EMAIL_FIELD);
+                int rating = rs.getInt(Constants.RATING_FIELD);
 
                 System.out.println(
                         "\nfrist name: " + firstname + "\n"
@@ -254,11 +254,11 @@ public class PersonEntitiesManager {
          different login portal */
         Person person = null;
         Connection conn = MySQLConnection.connect();
-        String query = "SELECT * FROM " + DBConstants.LOGIN_TABLE
+        String query = "SELECT * FROM " + Constants.LOGIN_TABLE
                 + " WHERE "
-                + DBConstants.USERNAME_FIELD
+                + Constants.USERNAME_FIELD
                 + " = ? AND "
-                + DBConstants.PASSWORD_FIELD
+                + Constants.PASSWORD_FIELD
                 + " = ? LIMIT 1;";
 
         try {

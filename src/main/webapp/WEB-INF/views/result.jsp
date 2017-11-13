@@ -25,6 +25,8 @@
                 on the right:
                     - button/form for booking 
                     - button/form for auction
+                    (the forms should contain hidden input type with names and 
+                     value pairs, see the auctionForm below)
             
             NOTE: check if users has logged in before allowing them to book/bid
                     use js to check, onClick: 
@@ -35,9 +37,14 @@
             
             
             <form name="auctionForm" action="/auction">
-                <input type="hidden" value="${flight}">
+                <input type="hidden" name="airline" value="${flight.airline}">
+                <input type="hidden" name="flightNo" value="${flight.flightNo}">
+                <input type="hidden" name="hiddenFare" value="${flight.hiddenFare}">
+
                 <!--TODO: check if users has logged in before allowing them to bid-->
+                
                 <input type="submit" value="Bid For This Flight" />
+                
             </form>
         </c:forEach>
     </c:otherwise>
