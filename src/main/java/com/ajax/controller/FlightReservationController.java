@@ -52,14 +52,12 @@ public class FlightReservationController {
             BindingResult result) {
 
         ModelAndView mv = new ModelAndView("result");
-
         if (result.hasErrors()) {
             //TODO: display message to user instead
             System.out.println("Flight search form has error");
             return new ModelAndView("index");
         }
 
-        
         ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
 
         // TEST

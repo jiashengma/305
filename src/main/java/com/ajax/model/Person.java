@@ -24,8 +24,11 @@ public class Person {
         id = count++;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Person (String fname, String lname, long phone, Address addr) {
+    	this.firstName = fname;
+    	this.lastName = lname;
+    	this.phone = phone;
+    	this.address = addr;
     }
 
     public int getId() {
