@@ -23,26 +23,6 @@ import java.util.Map;
 @Controller
 @ControllerAdvice
 public class FlightReservationController {
-//    @RequestMapping(value = "/search", method = RequestMethod.GET)
-//    public ModelAndView searchFlight(HttpServletRequest request) {
-//        // TODO: please add view(URL)
-//        ModelAndView mv = new ModelAndView("/SearchResult");
-//
-//        for (Enumeration s = request.getParameterNames(); request.getParameterNames().hasMoreElements();)
-//	        System.out.println(s.nextElement());
-//
-////	    for (Map.Entry : request.getParameterMap())
-//
-////	    try {
-////		    request.getReader().lines().forEach(System.out::println);
-////
-////	    } catch (IOException e) {
-////		    e.printStackTrace();
-////	    }
-//
-//	    return mv;
-//=======
-
     @Autowired
     FlightReservationService flightReservationService;
 
