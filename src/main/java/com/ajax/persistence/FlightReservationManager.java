@@ -5,8 +5,7 @@
  */
 package com.ajax.persistence;
 
-import com.ajax.model.Flight;
-import com.ajax.model.FlightSearchForm;
+import com.ajax.model.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -26,7 +25,7 @@ public class FlightReservationManager {
 
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
 
-        String query = "SELECT "
+        String query = "SELECT * FROM person;"
                 + "F." + Constants.AIRLINEID_FIELD + ", "
                 + "F." + Constants.FLIGHTNO_FIELD + ", "
                 // TODO: add leg info
@@ -35,14 +34,29 @@ public class FlightReservationManager {
         try {
             Connection conn = MySQLConnection.connect();
             PreparedStatement stmt = conn.prepareStatement(query);
+	        stmt.executeQuery();
 
             //TODO: query data base for result
             //TODO: if user is not logged in when trying to book, pop up login
         } catch (SQLException ex) {
-            Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);
         }
 
         return null;
+    }
+
+    public List<Airport> getAirports() {
+	    try {
+		    Connection conn = MySQLConnection.connect();
+		    PreparedStatement stmt =
+			    conn.prepareStatement("SELECT * FROM " + Constants.AIRPORT_TABLE + ";");
+		    stmt.executeQuery();
+		    conn.close();
+	    } catch (SQLException ex) {
+		    Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);
+	    }
+
+    	return null;
     }
 
     public boolean bookFlight(Flight flight) {

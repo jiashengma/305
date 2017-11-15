@@ -56,11 +56,10 @@ public class PersonEntitiesManager {
              * registering customer
              * return immediately if error occurred
              */
-            if (addLoginForCustomer(customer) != ReturnValue.ERROR && addPerson(customer) != ReturnValue.ERROR) {
+            if (addLoginForCustomer(customer, conn) != ReturnValue.ERROR && addPerson(customer, conn) != ReturnValue.ERROR) {
                 //FIXME: how to rollback the transactions above if anyone of the transactions failed
 
                 PreparedStatement stmt = conn.prepareStatement(query);
-                conn.prepareStatement(query);
 
                 stmt.setInt(1, customer.getId());
                 stmt.setInt(2, customer.getAccNum());
@@ -90,10 +89,8 @@ public class PersonEntitiesManager {
      * @param person
      * @return
      */
-    public int addPerson(Person person) {
+    public int addPerson(Person person, Connection conn) {
         int ret = ReturnValue.ERROR;
-        Connection conn = MySQLConnection.connect();
-
         try {
             String query = "INSERT INTO "
                     + Constants.PERSON_TABLE
@@ -111,7 +108,6 @@ public class PersonEntitiesManager {
             stmt.setLong(8, person.getPhone());
 
             ret = stmt.executeUpdate();
-            conn.commit();
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -124,8 +120,7 @@ public class PersonEntitiesManager {
      * @param customer
      * @return
      */
-    public int addLoginForCustomer(Customer customer) {
-        Connection conn = MySQLConnection.connect();
+    public int addLoginForCustomer(Customer customer, Connection conn) {
         String query = "INSERT INTO "
                 + Constants.LOGIN_TABLE
                 + " VALUES (?,?,?)";
@@ -138,15 +133,8 @@ public class PersonEntitiesManager {
             stmt.setString(3, customer.getPassword());
 
             ret = stmt.executeUpdate();
-            conn.commit();
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 
         return ret;
@@ -212,22 +200,11 @@ public class PersonEntitiesManager {
                                 + "phone: " + phone + "\n"
                 );
 
-                // set all the fields in customer 
-                customer = new Customer();
-                customer.setFirstName(firstname);
-                customer.setLastName(lastname);
-                Address address = new Address();
-                address.setStreet(street);
-                address.setCity(city);
-                address.setState(state);
-                address.setZipCode(zipCode);
-                customer.setAddress(address);
-                customer.setPhone(zipCode);
-                customer.setCreditCard(creditCard);
-                customer.setEmail(email);
-                customer.setRating(rating);
-
-                // limit 1 customer
+                // set fields in customer
+                customer = new Customer(firstname, lastname, phone,
+                        new Address(street, city, state, zipCode),
+		                creditCard, email);
+//                customer.setRating(rating);
                 break;
             }
 

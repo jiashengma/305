@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ajax.controller;
 
 import com.ajax.model.Flight;
@@ -11,7 +6,6 @@ import com.ajax.model.Person;
 import com.ajax.persistence.Constants;
 import com.ajax.service.FlightReservationService;
 import java.util.ArrayList;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,14 +19,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- *
- * @author majiasheng
- */
+import java.util.Enumeration;
+import java.util.Map;
+
 @Controller
 @ControllerAdvice
 public class FlightReservationController {
-
     @Autowired
     FlightReservationService flightReservationService;
 
@@ -60,14 +52,12 @@ public class FlightReservationController {
             BindingResult result) {
 
         ModelAndView mv = new ModelAndView("result");
-
         if (result.hasErrors()) {
             //TODO: display message to user instead
             System.out.println("Flight search form has error");
             return new ModelAndView("index");
         }
 
-        
         ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
 
         // TEST

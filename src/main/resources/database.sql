@@ -8,7 +8,7 @@ CREATE TABLE airline (
     UNIQUE (name, longName);
 );
 
-CREATE TABLE airport (
+CREATE TABLE airport(
     id      INTEGER,                    -- Airport ID for query reference
     name    CHAR(3)  NOT NULL,          -- 3Letter name >> UNIQUE per airline ONLY >> display purpose
     longName VARCHAR(64) NOT NULL,      -- Full Name of this airport

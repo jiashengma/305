@@ -52,7 +52,7 @@ public class MainController {
      * PRG - G
      *
      * @return
-     * @see handleRegistration
+     * //@see handleRegistration
      */
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     private ModelAndView redirectRegistration() {
@@ -87,9 +87,12 @@ public class MainController {
         System.out.println("*******");
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("msg",
-                    "Error in registration form");
+            redirectAttributes.addFlashAttribute("msg","Error in registration form");
         } else {
+                    // update users password to a hash for security
+//            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
+
+            //TODO: add user to database
             // set state (the enum type)
             customer.getAddress().setState(formValues.get("state"));
 

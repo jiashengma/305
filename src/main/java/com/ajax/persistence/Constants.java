@@ -9,14 +9,12 @@ public class Constants {
     public static final String PERSON = "person";
 
     // mysql connection
-    public static final String HOSTNAME = "localhost";
-    public static final String DBNAME = "ajax305";
-    public static final String USERNAME = "ajaxadmin";
-    public static final String PASSWORD = "passwordajax305";
+    static final String HOSTNAME = "localhost";
+    static final String DBNAME = "ajax305";
+    static final String USERNAME = "ajaxadmin";
+    static final String PASSWORD = "passwordajax305";
 
-    // table and filed names
-    
-
+    // table and respective column names
     public static final String PERSON_TABLE = "person";
     public static final String ID_FIELD = "Id";
     public static final String FIRSTNAME_FILED = "FirstName";
