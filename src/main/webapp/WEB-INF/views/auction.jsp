@@ -6,6 +6,13 @@
 
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
 
+<c:choose>
+    <!--prohibit unlogged in user to get to this page-->
+    <c:when test="${empty person}">
+        <c:redirect url=""/>
+    </c:when>
+</c:choose>
+
 <!-- body -->
 <div>
     <!--TODO:display flight info maybe?-->
