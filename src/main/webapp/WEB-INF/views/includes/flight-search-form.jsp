@@ -5,7 +5,7 @@
             <div class="col-md-3">Flying To</div>
         </div>
         <div class="row">
-            <div class="col-md-3"><input type="text" name="flyingFrom" placeholder="City or airport"></div>
+            <div class="col-md-3"><input type="text" name="flyingFrom" placeholder="From search"></div>
             <div class="col-md-3"><input type="text" name="flyingTo" placeholder="City or airport"></div>
         </div>
 

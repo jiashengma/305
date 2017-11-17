@@ -5,6 +5,7 @@
  */
 package com.ajax.service;
 
+import com.ajax.model.Auction;
 import com.ajax.model.Flight;
 import com.ajax.model.FlightSearchForm;
 import com.ajax.model.Status;
@@ -38,28 +39,6 @@ public class FlightReservationService {
     
     public boolean bookFlight(Flight flight) {
         return flightReservationManager.bookFlight(flight);
-    }
-
-    /**
-     * Handles users bid on the flight, records the bidding to auction history 
-     * (and reservations if bid succeeded)
-     * @param bidderId
-     * @param bid
-     * @param hiddenFare
-     * @return SUCCESS on success, 
-     *      FAILURE on failure (lower bid than hidden fare), or
-     *      ERROR on error while bidding
-     */
-    public int handleBid(int bidderId, double bid, double hiddenFare) {
-        //TODO: record this bid to bid history
-        
-        if (bid >= hiddenFare) {
-            // TODO: do reservation/book, should have a unique 
-            
-            return Status.SUCCESS;
-        }
-        return Status.FAILURE;
-        
     }
     
 }

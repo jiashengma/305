@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ajax.persistence;
 
 import com.ajax.model.*;
@@ -63,6 +58,10 @@ public class FlightReservationManager {
 
         //TODO: do book flight
         return false;
+    }
+
+    public void saveAuction(Auction auction) {
+        //TODO:
     }
 
 }
