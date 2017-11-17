@@ -10,3 +10,32 @@ $(".reservationFormGroup").submit(function(e) {
     }
 });
 
+/**
+ * send ajax post when user bids
+ */
+$("#biddingform").submit(function(e) {
+    // prevent form from submitting
+    e.preventDefault();
+    
+    var bid = $(this).find("input[name='bid']").val();
+    var bidderId = $(this).find("input[name='bidderId']").val();
+    var hiddenFare = $(this).find("input[name='hiddenFare']").val();
+    var airline = $(this).find("input[name='airline']").val();
+    var flightNo = $(this).find("input[name='flightNo']").val();
+    var url = $(this).attr("action");
+    
+    $.ajax({
+        url: url,
+        type: "POST",
+        contentType: "application/json",
+        data: {"bid":bid, "bidderId":bidderId, "hiddenFare":hiddenFare,"airline":airline,"flightNo":flightNo},
+        dataType: "json",
+        success: function (response, status, xhr) {
+            //TODO: redirect to a page?            
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            //TODO: notify user of low bid
+        }
+    });
+});
+

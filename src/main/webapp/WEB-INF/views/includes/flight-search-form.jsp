@@ -9,7 +9,7 @@
                 <input list="airportNames" name="flyingFrom" placeholder="From airport">
                 <datalist id="airportNames">
                     <c:forEach var="airport" items="${s_airports}">
-                        <option name="${airport.name}" value="${airport.shortName}">
+                        <option value="${airport.name}" name="${airport.shortName}">
                     </c:forEach>
                 </datalist>
             </div>
