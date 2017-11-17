@@ -8,7 +8,7 @@ public class Airport {
 
     public Airport() {}
 
-	public Airport(String name, String shortName, String city, String country) {
+	public Airport(String shortName, String name, String city, String country) {
 		this.name = name;
 		this.shortName = shortName;
 		City = city;
