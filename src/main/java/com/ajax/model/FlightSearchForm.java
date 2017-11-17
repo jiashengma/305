@@ -1,17 +1,11 @@
 package com.ajax.model;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author majiasheng
- */
 public class FlightSearchForm {
-
     private String flyingFrom;  // city or airport, case insensitive
     private String flyingTo;  // city or airport, case insensitive
     private Date depDate;

@@ -1,14 +1,4 @@
-<%-- 
-    Document   : flight-search-result.jsp
-    Created on : Nov 9, 2017, 10:12:26 PM
-    Author     : majiasheng
---%>
-
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
-
-<!-- body -->
-
-<!-- end body -->
 <c:choose>
     <c:when test="${empty flightSearchResult}"> 
         <!-- TODO: display message to indicate no such result-->

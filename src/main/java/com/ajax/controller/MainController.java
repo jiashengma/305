@@ -1,5 +1,4 @@
 package com.ajax.controller;
-
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +22,6 @@ import com.ajax.service.LoginService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
 
-/**
- * Created by majiasheng on 7/14/17.
- */
 @Controller
 @ControllerAdvice
 public class MainController {
@@ -36,9 +32,17 @@ public class MainController {
     @Autowired
     private LoginService loginService;
 
+    @ModelAttribute
+    public void init(HttpServletRequest request) {
+
+//    	request.getSession()
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private ModelAndView home() {
-        return new ModelAndView("index");
+        ModelAndView mv =  new ModelAndView("index");
+//        mv.addObject("airports", flightReservationService.getAirports());
+        return mv;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -89,7 +93,7 @@ public class MainController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg","Error in registration form");
         } else {
-                    // update users password to a hash for security
+            // update users password to a hash for security
 //            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
 
             //TODO: add user to database

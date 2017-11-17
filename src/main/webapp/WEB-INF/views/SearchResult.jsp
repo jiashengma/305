@@ -1,20 +1,20 @@
 <div id="resrForm" >
     <table border="1">
         <tr>
-            <th>Festival Name:</th>
-            <th>Location:</th>
-            <th>Start Date:</th>
-            <th>End Date:</th>
-            <th>URL:</th>
+            <th>Origin Airport</th>
+            <th>Destination Airport</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Class</th>
         </tr>
-        <% for(int i = 0; i < allFestivals.size(); i+=1) { %>
+        <c:forEach var="airport" items="${airports}">
             <tr>
-                <td>${allFestivals.get(i).getFestivalName()}</td>
-                <td>${allFestivals.get(i).getLocation()}</td>
-                <td>${allFestivals.get(i).getStartDate()}</td>
-                <td>${allFestivals.get(i).getEndDate()}</td>
-                <td>${allFestivals.get(i).getURL()}</td>
+                <td>Some Airport</td>
+                <td>Another Airport</td>
+                <td>Start Date</td>
+                <td>Another Date</td>
+                <td>Class</td>
             </tr>
-        <% } %>
+        </c:forEach>
     </table>
 </div>

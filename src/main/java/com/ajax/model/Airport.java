@@ -1,16 +1,21 @@
 package com.ajax.model;
 
-/**
- *
- * @author majiasheng
- */
 public class Airport {
     private String name;
     private String shortName;
     private String City;
     private String Country;
 
-    public String getName() {
+    public Airport() {}
+
+	public Airport(String shortName, String name, String city, String country) {
+		this.name = name;
+		this.shortName = shortName;
+		City = city;
+		Country = country;
+	}
+
+	public String getName() {
         return name;
     }
 
@@ -41,6 +46,14 @@ public class Airport {
     public void setCountry(String Country) {
         this.Country = Country;
     }
-    
-    
+
+	@Override
+	public String toString() {
+		return "Airport{" +
+				"name='" + name + '\'' +
+				", shortName='" + shortName + '\'' +
+				", City='" + City + '\'' +
+				", Country='" + Country + '\'' +
+				'}';
+	}
 }

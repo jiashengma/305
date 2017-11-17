@@ -45,3 +45,9 @@ form submission: get session, check if session("user")==null)
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+ # logining into db
+ 	mysql -u ajaxadmin -P ajax305
+ 	password: passwordajax305
+
+ 	verify tables with 'show tables;'

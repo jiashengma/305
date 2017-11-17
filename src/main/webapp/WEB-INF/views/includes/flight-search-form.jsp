@@ -5,8 +5,15 @@
             <div class="col-md-3">Flying To</div>
         </div>
         <div class="row">
-            <div class="col-md-3"><input type="text" name="flyingFrom" placeholder="From search"></div>
-            <div class="col-md-3"><input type="text" name="flyingTo" placeholder="City or airport"></div>
+            <div class="col-md-3">
+                <input list="airportNames" name="flyingFrom" placeholder="From airport">
+                <datalist id="airportNames">
+                    <c:forEach var="airport" items="${s_airports}">
+                        <option value="${airport.name}" name="${airport.shortName}">
+                    </c:forEach>
+                </datalist>
+            </div>
+            <div class="col-md-3"><input list="airportNames" name="flyingTo" placeholder="To airport"></div>
         </div>
 
         <div class="row">
