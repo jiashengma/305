@@ -56,21 +56,21 @@ public class PersonEntitiesManager {
              * registering customer
              * return immediately if error occurred
              */
-            if (addLoginForCustomer(customer, conn) != ReturnValue.ERROR && addPerson(customer, conn) != ReturnValue.ERROR) {
-                //FIXME: how to rollback the transactions above if anyone of the transactions failed
+            if (addLoginForCustomer(customer, conn) == ReturnValue.ERROR || addPerson(customer, conn) == ReturnValue.ERROR) {
+	            //FIXME: how to rollback the transactions above if anyone of the transactions failed
+	            conn.rollback();
+            } else {
+	            PreparedStatement stmt = conn.prepareStatement(query);
 
-                PreparedStatement stmt = conn.prepareStatement(query);
+	            stmt.setInt(1, customer.getId());
+	            stmt.setInt(2, customer.getAccNum());
+	            stmt.setLong(3, customer.getCreditCard());
+	            stmt.setString(4, customer.getEmail());
+	            stmt.setInt(5, customer.getRating());
 
-                stmt.setInt(1, customer.getId());
-                stmt.setInt(2, customer.getAccNum());
-                stmt.setLong(3, customer.getCreditCard());
-                stmt.setString(4, customer.getEmail());
-                stmt.setInt(5, customer.getRating());
-
-                ret = stmt.executeUpdate();
-                conn.commit();
+	            ret = stmt.executeUpdate();
+	            conn.commit();
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -195,19 +195,18 @@ public class PersonEntitiesManager {
                         "\nfrist name: " + firstname + "\n"
                         + "last name: " + lastname + "\n"
                         + "street: " + street + "\n"
-                                + "city: " + city + "\n"
-                                + "state: " + state + "\n"
-                                + "phone: " + phone + "\n"
+                        + "city: " + city + "\n"
+                        + "state: " + state + "\n"
+                        + "phone: " + phone + "\n"
                 );
 
                 // set fields in customer
                 customer = new Customer(firstname, lastname, phone,
                         new Address(street, city, state, zipCode),
 		                creditCard, email);
-//                customer.setRating(rating);
+//                customer.setRating(rating);       // set rating later?
                 break;
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

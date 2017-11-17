@@ -5,7 +5,12 @@
             <div class="col-md-3">Flying To</div>
         </div>
         <div class="row">
-            <div class="col-md-3"><input type="text" name="flyingFrom" placeholder="City or airport"></div>
+            <input list="airportNames" name="flyingFrom">
+            <datalist id="airportNames">
+                <c: forEach var="airport" items="${airports}">
+                    <option name="${airport.name}" value="${airport.shortName}">
+                </c: forEach>
+            </datalist>
             <div class="col-md-3"><input type="text" name="flyingTo" placeholder="City or airport"></div>
         </div>
 

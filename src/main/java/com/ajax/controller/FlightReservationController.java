@@ -60,10 +60,6 @@ public class FlightReservationController {
 
         ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
 
-        // TEST
-        // ArrayList<Flight> flights = new ArrayList<Flight>();
-        // flights.add(new Flight());
-        
         // add a list of flights as the search result for the view/jsp to render
         mv.addObject("flightSearchResult", flights);
 
