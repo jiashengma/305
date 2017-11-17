@@ -24,12 +24,13 @@ public class FlightReservationManager {
 			        Constants.FLIGHT_TABLE +" F;");
 	        ResultSet rs = stmt.executeQuery();
 
+	        conn.close();
+
             //TODO: query data base for result
             //TODO: if user is not logged in when trying to book, pop up login
         } catch (SQLException ex) {
             Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);
         }
-
         return null;
     }
 
@@ -44,7 +45,7 @@ public class FlightReservationManager {
 		    	airports.add(new Airport(rs.getString(Constants.AIRPORT_ID), rs.getString(Constants.AIRPORT_NAME),
 					    rs.getString(Constants.AIRPORT_CITY), rs.getString(Constants.AIRPORT_COUNTRY)));
 
-		    airports.forEach(System.out::println);
+//		    airports.forEach(System.out::println);
 		    conn.close();
 	    } catch (SQLException ex) {
 		    Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);

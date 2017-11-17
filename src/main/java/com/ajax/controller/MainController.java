@@ -25,12 +25,9 @@ import com.ajax.service.ReturnValue;
 @Controller
 @ControllerAdvice
 public class MainController {
-
     State state;
-    @Autowired
-    private RegitrationService regitrationService;
-    @Autowired
-    private LoginService loginService;
+    @Autowired private RegitrationService regitrationService;
+    @Autowired private LoginService loginService;
 
     @ModelAttribute
     public void init(HttpServletRequest request) {
