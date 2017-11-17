@@ -7,6 +7,7 @@ package com.ajax.service;
 
 import com.ajax.model.Flight;
 import com.ajax.model.FlightSearchForm;
+import com.ajax.model.Status;
 import com.ajax.persistence.FlightReservationManager;
 import java.util.Date;
 import java.util.List;
@@ -39,9 +40,26 @@ public class FlightReservationService {
         return flightReservationManager.bookFlight(flight);
     }
 
-    public boolean handleBid(Map<String, String> requestParams) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //TODO:set up some return status: 0 low bid, 1 success, -1:ERROR
+    /**
+     * Handles users bid on the flight, records the bidding to auction history 
+     * (and reservations if bid succeeded)
+     * @param bidderId
+     * @param bid
+     * @param hiddenFare
+     * @return SUCCESS on success, 
+     *      FAILURE on failure (lower bid than hidden fare), or
+     *      ERROR on error while bidding
+     */
+    public int handleBid(int bidderId, double bid, double hiddenFare) {
+        //TODO: record this bid to bid history
+        
+        if (bid >= hiddenFare) {
+            // TODO: do reservation/book, should have a unique 
+            
+            return Status.SUCCESS;
+        }
+        return Status.FAILURE;
+        
     }
     
 }

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Enumeration;
 import java.util.Map;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @ControllerAdvice
@@ -122,13 +123,20 @@ public class FlightReservationController {
         return mv;
     }
     
-    @RequestMapping(value = "/bid", method = RequestMethod.POST)
-    public ModelAndView handleBid(@RequestParam Map<String, String> requestParams) {
+    @RequestMapping(value = "/bid", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public int handleBid(@RequestParam Map<String, String> requestParams) {
         
-        boolean status = flightReservationService.handleBid(requestParams);
+        //TODO: do not show flights that are full in the search result (Andrew)
         
-        //TODO:
-        return null;
+        int bidderId = Integer.parseInt(requestParams.get("bidderId"));
+        double bid = Double.parseDouble(requestParams.get("bid"));
+        double hiddenFare = Double.parseDouble(requestParams.get("hiddenFare"));
+        
+        // try to bid
+        int bidStatus = flightReservationService.handleBid(bidderId, bid, hiddenFare);
+        
+        return bidStatus;
     }
 
 }
