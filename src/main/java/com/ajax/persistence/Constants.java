@@ -47,8 +47,14 @@ public class Constants {
     public static final String MINLENGTHOFSTAY_FIELD = "MinLengthOfStay";
     public static final String MAXLENGTHOFSTAY_FIELD = "MaxLengthOfStay";
 
-	public static final int AIRPORT_ID         = 1;
-	public static final int AIRPORT_NAME       = 2;
-	public static final int AIRPORT_CITY       = 3;
-	public static final int AIRPORT_COUNTRY    = 4;
+    public static final int AIRPORT_ID = 1;
+    public static final int AIRPORT_NAME = 2;
+    public static final int AIRPORT_CITY = 3;
+    public static final int AIRPORT_COUNTRY = 4;
+    
+    public static final String EMPLOYEE_TABLE = "employee";
+    public static final String EMPLOYEE_ISMANAGER_FIELD = "IsManager";
+    public static final String EMPLOYEE_SSN_FIELD = "SSN";
+    public static final String EMPLOYEE_START_DATE_FIELD = "StartDate";
+    public static final String EMPLOYEE_HOURLY_RATE_FIELD = "HourlyRate";
 }
