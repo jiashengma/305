@@ -46,4 +46,9 @@ public class Constants {
     public static final String DAYSOPERATING_FIELD = "DaysOperating";
     public static final String MINLENGTHOFSTAY_FIELD = "MinLengthOfStay";
     public static final String MAXLENGTHOFSTAY_FIELD = "MaxLengthOfStay";
+
+	public static final int AIRPORT_ID         = 1;
+	public static final int AIRPORT_NAME       = 2;
+	public static final int AIRPORT_CITY       = 3;
+	public static final int AIRPORT_COUNTRY    = 4;
 }

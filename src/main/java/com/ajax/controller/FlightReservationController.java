@@ -1,5 +1,5 @@
 package com.ajax.controller;
-
+import com.ajax.model.Airport;
 import com.ajax.model.Flight;
 import com.ajax.model.FlightSearchForm;
 import com.ajax.model.Person;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -41,6 +42,12 @@ public class FlightReservationController {
         //binder.registerCustomEditor(Date.class, "dateAcquired" ,new CustomDateEditor(simpleDateFormat, false));
     }
 
+	@ModelAttribute
+	public void init(HttpServletRequest request) {
+		List<Airport> airports = flightReservationService.getAirports();
+    	request.getSession().setAttribute("s_airports", airports);
+	}
+
     /**
      *
      * @param flightSearchForm
@@ -58,11 +65,10 @@ public class FlightReservationController {
             return new ModelAndView("index");
         }
 
-        ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
+	    ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
 
         // add a list of flights as the search result for the view/jsp to render
         mv.addObject("flightSearchResult", flights);
-
         return mv;
     }
 

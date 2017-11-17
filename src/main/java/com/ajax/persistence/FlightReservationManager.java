@@ -21,7 +21,7 @@ public class FlightReservationManager {
 	        PreparedStatement stmt =
 		        conn.prepareStatement("SELECT F." + Constants.AIRLINEID_FIELD +
 			        ", F." + Constants.FLIGHTNO_FIELD + " FROM " +
-			        Constants.FLIGHT_TABLE +"F;");
+			        Constants.FLIGHT_TABLE +" F;");
 	        ResultSet rs = stmt.executeQuery();
 
             //TODO: query data base for result
@@ -40,15 +40,15 @@ public class FlightReservationManager {
 		    PreparedStatement stmt =
 			    conn.prepareStatement("SELECT * FROM " + Constants.AIRPORT_TABLE + ";");
 		    ResultSet rs = stmt.executeQuery();
+		    while(rs.next())
+		    	airports.add(new Airport(rs.getString(Constants.AIRPORT_ID), rs.getString(Constants.AIRPORT_NAME),
+					    rs.getString(Constants.AIRPORT_CITY), rs.getString(Constants.AIRPORT_COUNTRY)));
 
-		    for (int i = 0; rs.next(); i++)
-		    	airports.add((Airport) rs.getObject(i));
-
+		    airports.forEach(System.out::println);
 		    conn.close();
 	    } catch (SQLException ex) {
 		    Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);
 	    }
-
     	return airports;
     }
 
