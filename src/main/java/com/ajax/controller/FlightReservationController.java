@@ -90,6 +90,11 @@ public class FlightReservationController {
     }
     
     @RequestMapping(value = "/auction", method = RequestMethod.GET)
+    public ModelAndView prepareAuction() {
+        return new ModelAndView("auction");
+    }
+
+    @RequestMapping(value = "/prepareAuction", method = RequestMethod.POST)
     public ModelAndView prepareAuction(@RequestParam Map<String, String> requestParams,
             HttpServletRequest request) {
         
@@ -103,7 +108,7 @@ public class FlightReservationController {
             return new ModelAndView("redirect:"+request.getRequestURI());
         }
         
-        ModelAndView mv = new ModelAndView("auction");
+        ModelAndView mv = new ModelAndView("redirect:auction");
         String airline = requestParams.get("airline");
         String flightNo = requestParams.get("flightNo");
         double hiddenFare = Double.parseDouble(requestParams.get("hiddenFare"));
