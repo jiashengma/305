@@ -59,4 +59,8 @@ public class FlightReservationManager {
         return false;
     }
 
+    public void saveAuction(Auction auction) {
+        //TODO:
+    }
+
 }

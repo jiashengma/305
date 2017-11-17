@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FlightReservationService {
+
 	@Autowired
 	FlightReservationManager flightReservationManager;
 
@@ -38,24 +39,4 @@ public class FlightReservationService {
 		return flightReservationManager.getAirports();
 	}
 
-	/**
-	 * Handles users bid on the flight, records the bidding to auction history
-	 * (and reservations if bid succeeded)
-	 *
-	 * @param bidderId
-	 * @param bid
-	 * @param hiddenFare
-	 * @return SUCCESS on success,
-	 * FAILURE on failure (lower bid than hidden fare), or
-	 * ERROR on error while bidding
-	 */
-	public int handleBid(int bidderId, double bid, double hiddenFare) {
-		//TODO: record this bid to bid history
-		if (bid >= hiddenFare) {
-			// TODO: do reservation/book, should have a unique
-
-			return Status.SUCCESS;
-		}
-		return Status.FAILURE;
-	}
 }
