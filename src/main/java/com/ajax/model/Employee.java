@@ -12,6 +12,16 @@ public class Employee extends Person {
     private Date startDate;
     private double hourlyRate;
 
+    public Employee(){
+        super();
+    }
+    public Employee(int ssn, Date startDate, double hourlyRate, String fname, String lname, long phone, Address addr) {
+        super(fname, lname, phone, addr);
+        this.ssn = ssn;
+        this.startDate = startDate;
+        this.hourlyRate = hourlyRate;
+    }
+
     public int getSsn() {
         return ssn;
     }

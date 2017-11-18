@@ -12,8 +12,11 @@ public class Customer extends Person {
 
     public Customer() {
         // rating is default as 0
+        super();
         accNum = count++;
         rating = 0;
+        this.address = new Address();
+        this.accessControl = AccessControl.CUSTOMER;
     }
 
     public Customer(String fname, String lname, long phone, Address addr, long creditCard, String email) {

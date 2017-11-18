@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
+<jsp:useBean id="address" class="com.ajax.model.Address" />
 <h2 id="h">Sign Me Up</h2>
 <div id="regform">
     <form method="POST" action="/register">
