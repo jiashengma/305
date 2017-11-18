@@ -19,16 +19,17 @@ public class Person {
     protected Address address;
     protected String userName;
     protected String password;
+    protected AccessControl accessControl;
 
     public Person() {
         id = count++;
     }
-
-    public Person (String fname, String lname, long phone, Address addr) {
-    	this.firstName = fname;
-    	this.lastName = lname;
-    	this.phone = phone;
-    	this.address = addr;
+    
+    public Person(String fname, String lname, long phone, Address addr) {
+        this.firstName = fname;
+        this.lastName = lname;
+        this.phone = phone;
+        this.address = addr;
     }
 
     public int getId() {
@@ -83,4 +84,11 @@ public class Person {
         this.password = password;
     }
 
+    public AccessControl getAccessControl() {
+        return accessControl;
+    }
+
+    public void setAccessControl(AccessControl accessControl) {
+        this.accessControl = accessControl;
+    }
 }
