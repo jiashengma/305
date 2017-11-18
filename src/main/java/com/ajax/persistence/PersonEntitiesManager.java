@@ -73,13 +73,13 @@ public class PersonEntitiesManager {
                 ResultSet rs = stmt.getGeneratedKeys();
                 rs.next();
                 // set key (id) 
-                int accNo = rs.getInt(1);
-                System.out.println("\n\nDEBUG: auto generated customer account number: " + accNo + "\n\n");
-                customer.setAccNum(accNo); // TODO: is it 1 or 2?
+                customer.setAccNum(rs.getInt(1));
 
                 // rollback all three transactions if error occurred
                 if (ret == ReturnValue.ERROR) {
-                    conn.rollback();
+                    /* FIXME: is it necessary since we use a same 
+                        connection for all these three transactions? */
+                    conn.rollback(); 
                 } else {
                     conn.commit();
                 }
@@ -134,9 +134,7 @@ public class PersonEntitiesManager {
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
             // set key (id) 
-            int id = rs.getInt(1);
-            System.out.println("\n\nDEBUG: auto generated person id: " + id + "\n\n");
-            person.setId(id);
+            person.setId(rs.getInt(1));
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         }

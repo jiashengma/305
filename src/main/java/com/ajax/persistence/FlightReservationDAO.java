@@ -26,7 +26,10 @@ public class FlightReservationDAO {
 	        ResultSet rs = stmt.executeQuery();
             conn.commit();
             //TODO: query data base for result
-            //TODO: if user is not logged in when trying to book, pop up login
+            
+            //TODO: do not show flights that are full in the search result (Andrew)
+        
+            
         } catch (SQLException ex) {
             Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
         } finally {

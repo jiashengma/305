@@ -59,7 +59,6 @@ public class AuctionController {
     @ResponseBody
     public int handleBid(@RequestParam Map<String, String> requestParams) {
 
-        //TODO: do not show flights that are full in the search result (Andrew)
         int bidderAccNo = Integer.parseInt(requestParams.get("bidderAccNo"));
         double bid = Double.parseDouble(requestParams.get("bid"));
         double hiddenFare = Double.parseDouble(requestParams.get("hiddenFare"));

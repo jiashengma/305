@@ -6,8 +6,8 @@ package com.ajax.model;
  */
 public enum FlightClass {
 
-    FIRST,
-    ECONOMY,
-    BUSINESS;
+    First,
+    Economy,
+    Business;
 
 }

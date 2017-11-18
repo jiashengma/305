@@ -2,10 +2,8 @@ package com.ajax.controller;
 
 import com.ajax.model.Airport;
 import com.ajax.model.Flight;
+import com.ajax.model.FlightClass;
 import com.ajax.model.FlightSearchForm;
-import com.ajax.model.Person;
-import com.ajax.persistence.Constants;
-import com.ajax.service.AuctionService;
 import com.ajax.service.FlightReservationService;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +48,7 @@ public class FlightReservationController {
         if (request.getSession().getAttribute("s_airports") == null) {
             List<Airport> airports = flightReservationService.getAirports();
             request.getSession().setAttribute("s_airports", airports);
+            request.getSession().setAttribute("classes", FlightClass.values());
         }
 
     }

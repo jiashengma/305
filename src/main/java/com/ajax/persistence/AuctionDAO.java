@@ -18,7 +18,10 @@ public class AuctionDAO {
 
     public int saveAuction(Auction auction) {
         //TODO:add class field to auction and flight
-        String query = "INSERT INTO "
+        int ret = ReturnValue.ERROR;
+        Connection conn = MySQLConnection.connect();
+        try {
+            String query = "INSERT INTO "
                 + Constants.AUCTIONS_TABLE
                 + " ("
                 + Constants.ACCOUNTNO_FIELD + ", "
@@ -27,9 +30,6 @@ public class AuctionDAO {
                 + Constants.CLASS_FIELD + ", "
                 + Constants.NYOP_FIELD
                 + ") VALUES (?,?,?,?)";
-        int ret = ReturnValue.ERROR;
-        Connection conn = MySQLConnection.connect();
-        try {
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setInt(1, auction.getPersonAccNo());
