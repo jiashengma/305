@@ -8,7 +8,7 @@ package com.ajax.model;
 public class Person {
 
     // count for person id (used in creations)
-    public static int count = 0;
+//    public static int count = 0;
 
     protected int id;
 //    @Pattern(regexp="\c+")
@@ -22,7 +22,7 @@ public class Person {
     protected AccessControl accessControl;
 
     public Person() {
-        id = count++;
+//        id = count++;
     }
     
     public Person(String fname, String lname, long phone, Address addr) {
@@ -34,6 +34,10 @@ public class Person {
 
     public int getId() {
         return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {

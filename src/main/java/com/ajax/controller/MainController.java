@@ -79,19 +79,10 @@ public class MainController {
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:register");
 
-        // DEBUG
-        System.out.println("*******");
-        customer.getAddress().setState(formValues.get("state"));
-        System.out.println("customer:" + customer + "\n\n result tostring: " + result.toString());
-        System.out.println("*******");
-
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg", "Error in registration form");
         } else {
-            // update users password to a hash for security
-//            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
 
-            //TODO: add user to database
             // set state (the enum type)
             customer.getAddress().setState(formValues.get("state"));
 
@@ -135,10 +126,11 @@ public class MainController {
             redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
         } else {
             // add user to session
-            if(person instanceof Customer)
-                request.getSession().setAttribute(Constants.PERSON, (Customer)person);
-            else 
-                request.getSession().setAttribute(Constants.PERSON, (Employee)person);
+            if (person instanceof Customer) {
+                request.getSession().setAttribute(Constants.PERSON, (Customer) person);
+            } else {
+                request.getSession().setAttribute(Constants.PERSON, (Employee) person);
+            }
         }
         return modelAndView;
     }
