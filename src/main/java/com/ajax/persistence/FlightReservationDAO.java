@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class FlightReservationManager {
+public class FlightReservationDAO {
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
         try {
             Connection conn = MySQLConnection.connect();
@@ -27,7 +27,7 @@ public class FlightReservationManager {
             //TODO: query data base for result
             //TODO: if user is not logged in when trying to book, pop up login
         } catch (SQLException ex) {
-            Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);
+            Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
         }
 
         return null;
@@ -47,7 +47,7 @@ public class FlightReservationManager {
 //		    airports.forEach(System.out::println);
 		    conn.close();
 	    } catch (SQLException ex) {
-		    Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);
+		    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
 	    }
     	return airports;
     }
@@ -56,10 +56,6 @@ public class FlightReservationManager {
 
         //TODO: do book flight
         return false;
-    }
-
-    public void saveAuction(Auction auction) {
-        //TODO:
     }
 
 }

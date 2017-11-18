@@ -51,4 +51,8 @@ public class Constants {
 	public static final int AIRPORT_NAME       = 2;
 	public static final int AIRPORT_CITY       = 3;
 	public static final int AIRPORT_COUNTRY    = 4;
+    
+    // action
+    public static final String AUCTIONS_TABLE = "auctions";
+    
 }

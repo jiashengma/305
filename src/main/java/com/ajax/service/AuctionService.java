@@ -2,7 +2,8 @@ package com.ajax.service;
 
 import com.ajax.model.Auction;
 import com.ajax.model.Status;
-import com.ajax.persistence.FlightReservationManager;
+import com.ajax.persistence.AuctionDAO;
+import com.ajax.persistence.FlightReservationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class AuctionService {
 
     @Autowired
-    FlightReservationManager flightReservationManager;
+    AuctionDAO auctionDAO;
 
     /**
      * Handles users bid on the flight, records the bidding to auction history
@@ -30,7 +31,7 @@ public class AuctionService {
      */
     public int handleBid(int bidderId, double bid, double hiddenFare, String airline, int flightNo) {
         // record this bid to bid history
-        flightReservationManager.saveAuction(new Auction(bidderId, bid, airline, flightNo));
+        auctionDAO.saveAuction(new Auction(bidderId, bid, airline, flightNo));
         /*TODO: maybe add bid accepted to the auction table as well 
          since we have the straight answer? */
 
