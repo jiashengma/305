@@ -21,7 +21,7 @@ public class AuctionService {
      * Handles users bid on the flight, records the bidding to auction history
      * (and reservations if bid succeeded)
      *
-     * @param bidderId
+     * @param bidderAccNo
      * @param bid
      * @param hiddenFare
      * @param airline
@@ -29,14 +29,14 @@ public class AuctionService {
      * @return SUCCESS on success, FAILURE on failure (lower bid than hidden
      * fare), or ERROR on error while bidding
      */
-    public int handleBid(int bidderId, double bid, double hiddenFare, String airline, int flightNo) {
+    public int handleBid(int bidderAccNo, double bid, double hiddenFare, String airline, int flightNo) {
         // record this bid to bid history
-        auctionDAO.saveAuction(new Auction(bidderId, bid, airline, flightNo));
+        auctionDAO.saveAuction(new Auction(bidderAccNo, bid, airline, flightNo));
         /*TODO: maybe add bid accepted to the auction table as well 
          since we have the straight answer? */
 
         if (bid >= hiddenFare) {
-            // TODO: do reservation/book, should show the winner bid price 
+            // TODO: do reservation/book, should use the winner bid price 
 
             return Status.SUCCESS;
         }

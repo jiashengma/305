@@ -7,7 +7,8 @@ public class Flight {
 	private List<Leg> legs;
 	private double fare;
 	private double hiddenFare;
-
+    //TODO: add fare restrictions
+    
 	public String getAirline() {
 		return airline;
 	}

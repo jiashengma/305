@@ -60,15 +60,14 @@ public class AuctionController {
     public int handleBid(@RequestParam Map<String, String> requestParams) {
 
         //TODO: do not show flights that are full in the search result (Andrew)
-        int bidderId = Integer.parseInt(requestParams.get("bidderId"));
+        int bidderAccNo = Integer.parseInt(requestParams.get("bidderAccNo"));
         double bid = Double.parseDouble(requestParams.get("bid"));
         double hiddenFare = Double.parseDouble(requestParams.get("hiddenFare"));
         String airline = requestParams.get("airline");
         int flightNo = Integer.parseInt(requestParams.get("flightNo"));
 
         // try to bid
-        //FIXME: user person accound number instead of id
-        int bidStatus = auctionService.handleBid(bidderId, bid, hiddenFare, airline, flightNo);
+        int bidStatus = auctionService.handleBid(bidderAccNo, bid, hiddenFare, airline, flightNo);
 
         return bidStatus;
     }

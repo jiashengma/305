@@ -15,19 +15,26 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FlightReservationDAO {
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
+        Connection conn = MySQLConnection.connect();
         try {
-            Connection conn = MySQLConnection.connect();
+            
 	        // TODO: add leg info
 	        PreparedStatement stmt =
 		        conn.prepareStatement("SELECT F." + Constants.AIRLINEID_FIELD +
 			        ", F." + Constants.FLIGHTNO_FIELD + " FROM " +
 			        Constants.FLIGHT_TABLE +" F;");
 	        ResultSet rs = stmt.executeQuery();
-
+            conn.commit();
             //TODO: query data base for result
             //TODO: if user is not logged in when trying to book, pop up login
         } catch (SQLException ex) {
             Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return null;

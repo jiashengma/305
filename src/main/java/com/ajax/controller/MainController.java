@@ -1,4 +1,5 @@
 package com.ajax.controller;
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ajax.model.Customer;
+import com.ajax.model.Employee;
 import com.ajax.model.Person;
 import com.ajax.model.State;
 import com.ajax.persistence.Constants;
@@ -32,15 +34,9 @@ public class MainController {
     @Autowired
     private LoginService loginService;
 
-    @ModelAttribute
-    public void init(HttpServletRequest request) {
-
-//    	request.getSession()
-    }
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private ModelAndView home() {
-        ModelAndView mv =  new ModelAndView("index");
+        ModelAndView mv = new ModelAndView("index");
 //        mv.addObject("airports", flightReservationService.getAirports());
         return mv;
     }
@@ -55,8 +51,7 @@ public class MainController {
     /**
      * PRG - G
      *
-     * @return
-     * //@see handleRegistration
+     * @return //@see handleRegistration
      */
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     private ModelAndView redirectRegistration() {
@@ -91,7 +86,7 @@ public class MainController {
         System.out.println("*******");
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("msg","Error in registration form");
+            redirectAttributes.addFlashAttribute("msg", "Error in registration form");
         } else {
             // update users password to a hash for security
 //            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
@@ -139,8 +134,11 @@ public class MainController {
             //TODO: show an popup to indicate username and password mismatch
             redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
         } else {
-            // add user to session            
-            request.getSession().setAttribute(Constants.PERSON, person);
+            // add user to session
+            if(person instanceof Customer)
+                request.getSession().setAttribute(Constants.PERSON, (Customer)person);
+            else 
+                request.getSession().setAttribute(Constants.PERSON, (Employee)person);
         }
         return modelAndView;
     }
