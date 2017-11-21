@@ -37,7 +37,7 @@ public class FlightSearchForm {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             this.depDate = format.parse(depDate);
         } catch (ParseException ex) {
-            Logger.getLogger(FlightSearchForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FlightSearchForm.class.getName()).log(Level.SEVERE, "Invalid Date format", ex);
         }
     }
 
@@ -50,7 +50,7 @@ public class FlightSearchForm {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             this.retDate = format.parse(retDate);
         } catch (ParseException ex) {
-            Logger.getLogger(FlightSearchForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FlightSearchForm.class.getName()).log(Level.SEVERE, "Invalid Date format", ex);
         }
     }
 

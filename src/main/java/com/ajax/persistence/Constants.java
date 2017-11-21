@@ -42,13 +42,14 @@ public class Constants {
     public static final String FLIGHT_TABLE = "flight";
     public static final String AIRLINEID_FIELD = "AirlineID";
     public static final String FLIGHTNO_FIELD = "FlightNo";
-    public static final String NOOFSEATS_FIELD = "NoOfSeats";
+    public static final String NUMSEATS_FIELD = "NoOfSeats";
     public static final String DAYSOPERATING_FIELD = "DaysOperating";
     public static final String MINLENGTHOFSTAY_FIELD = "MinLengthOfStay";
     public static final String MAXLENGTHOFSTAY_FIELD = "MaxLengthOfStay";
 
-	public static final int AIRPORT_ID         = 1;
-	public static final int AIRPORT_NAME       = 2;
-	public static final int AIRPORT_CITY       = 3;
-	public static final int AIRPORT_COUNTRY    = 4;
+	static final int AIRPORT_ID                 = 1;
+	static final int AIRPORT_NAME               = 2;
+	static final int AIRPORT_CITY               = 3;
+	static final int AIRPORT_COUNTRY            = 4;
+	static final String AIRPORT_NAME_FIELD      = "Name";
 }

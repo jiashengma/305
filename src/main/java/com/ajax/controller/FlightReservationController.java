@@ -76,7 +76,6 @@ public class FlightReservationController {
 
     @RequestMapping(value = "/bookflight", method = RequestMethod.GET)
     public ModelAndView handleBookFlight(@RequestParam Map<String, String> requestParams) {
-
         ModelAndView mv = new ModelAndView();
 
         //TODO: pass flight to be booked to bookFlight()

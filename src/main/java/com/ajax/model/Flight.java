@@ -8,6 +8,16 @@ public class Flight {
 	private double fare;
 	private double hiddenFare;
 
+	public Flight() {}
+
+	public Flight(String airline, int flightNo, List<Leg> legs, double fare, double hiddenFare) {
+		this.airline = airline;
+		this.flightNo = flightNo;
+		this.legs = legs;
+		this.fare = fare;
+		this.hiddenFare = hiddenFare;
+	}
+
 	public String getAirline() {
 		return airline;
 	}

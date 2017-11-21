@@ -29,17 +29,9 @@ public class MainController {
     @Autowired private RegitrationService regitrationService;
     @Autowired private LoginService loginService;
 
-    @ModelAttribute
-    public void init(HttpServletRequest request) {
-
-//    	request.getSession()
-    }
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private ModelAndView home() {
-        ModelAndView mv =  new ModelAndView("index");
-//        mv.addObject("airports", flightReservationService.getAirports());
-        return mv;
+        return new ModelAndView("index");
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
