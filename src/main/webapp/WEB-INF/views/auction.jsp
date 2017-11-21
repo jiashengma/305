@@ -19,7 +19,7 @@
     Please enter your bid for ${airline} No.${flightNo}
     <form id="biddingform" action="/bid" method="POST">
         <input type="number" name="bid" placeholder="Your bid in $"/><br>
-        <input type="hidden" name="bidderId" value="${person.id}"/>
+        <input type="hidden" name="bidderAccNo" value="${person.accNum}"/>
         <input type="hidden" name="airline" value="${airline}">
         <input type="hidden" name="flightNo" value="${flightNo}">
         <input type="hidden" name="hiddenFare" value="${hiddenFare}"/>

@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="searchform">
     <form action="/search" method="GET">
         <div class="row">
@@ -10,7 +12,7 @@
                 <datalist id="airportNames">
                     <c:forEach var="airport" items="${s_airports}">
                         <option value="${airport.name}" name="${airport.shortName}">
-                    </c:forEach>
+                        </c:forEach>
                 </datalist>
             </div>
             <div class="col-md-3"><input list="airportNames" name="flyingTo" placeholder="To airport"></div>
@@ -50,9 +52,9 @@
 
             <div class="col-md-1">
                 <select name="prefClass">
-                    <option value="firstClass">First Class</option>
-                    <option value="economy">Economy</option>
-                    <option value="business">Business</option>
+                    <c:forEach var="prefClass" items="${classes}">
+                        <option name="${prefClass}">${prefClass}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>

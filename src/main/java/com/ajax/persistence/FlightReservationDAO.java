@@ -13,11 +13,12 @@ import java.util.logging.Logger;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class FlightReservationManager {
+public class FlightReservationDAO {
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
     	List<Flight> flights = new ArrayList<>();
+        Connection conn = MySQLConnection.connect();
         try {
-            Connection conn = MySQLConnection.connect();
+            
 	        // TODO: add leg info
 	        PreparedStatement stmt =
 		        conn.prepareStatement("SELECT F." + Constants.AIRLINEID_FIELD +
@@ -28,12 +29,18 @@ public class FlightReservationManager {
 	        while (rs.next())
 		        flights.add(new Flight());
 
-	        conn.close();
-
+            conn.commit();
             //TODO: query data base for result
-            //TODO: if user is not logged in when trying to book, pop up login
+            //TODO: do not show flights that are full in the search result (Andrew)
+
         } catch (SQLException ex) {
-            Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);
+            Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return flights;
     }
@@ -53,7 +60,7 @@ public class FlightReservationManager {
 //		    airports.forEach(System.out::println);
 		    conn.close();
 	    } catch (SQLException ex) {
-		    Logger.getLogger(FlightReservationManager.class.getName()).log(Level.SEVERE, "SQL Error", ex);
+		    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
 	    }
     	return airports;
     }
@@ -61,10 +68,6 @@ public class FlightReservationManager {
     public boolean bookFlight(Flight flight) {
         //TODO: do book flight
         return false;
-    }
-
-    public void saveAuction(Auction auction) {
-        //TODO:
     }
 
 }

@@ -1,4 +1,5 @@
 package com.ajax.controller;
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ajax.model.Customer;
+import com.ajax.model.Employee;
 import com.ajax.model.Person;
 import com.ajax.model.State;
 import com.ajax.persistence.Constants;
@@ -44,8 +46,7 @@ public class MainController {
     /**
      * PRG - G
      *
-     * @return
-     * //@see handleRegistration
+     * @return //@see handleRegistration
      */
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     private ModelAndView redirectRegistration() {
@@ -73,19 +74,10 @@ public class MainController {
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:register");
 
-        // DEBUG
-        System.out.println("*******");
-        customer.getAddress().setState(formValues.get("state"));
-        System.out.println("customer:" + customer + "\n\n result tostring: " + result.toString());
-        System.out.println("*******");
-
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("msg","Error in registration form");
+            redirectAttributes.addFlashAttribute("msg", "Error in registration form");
         } else {
-            // update users password to a hash for security
-//            customer.setPassword(passwordUtility.getSecuredPassword(customer.getPassword()));
 
-            //TODO: add user to database
             // set state (the enum type)
             customer.getAddress().setState(formValues.get("state"));
 
@@ -128,8 +120,12 @@ public class MainController {
             //TODO: show an popup to indicate username and password mismatch
             redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
         } else {
-            // add user to session            
-            request.getSession().setAttribute(Constants.PERSON, person);
+            // add user to session
+            if (person instanceof Customer) {
+                request.getSession().setAttribute(Constants.PERSON, (Customer) person);
+            } else {
+                request.getSession().setAttribute(Constants.PERSON, (Employee) person);
+            }
         }
         return modelAndView;
     }
@@ -145,5 +141,4 @@ public class MainController {
         request.getSession(false).invalidate();
         return new ModelAndView("index");
     }
-
 }

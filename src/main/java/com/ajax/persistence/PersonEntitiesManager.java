@@ -1,5 +1,6 @@
 package com.ajax.persistence;
 
+import com.ajax.model.AccessControl;
 import com.ajax.model.Address;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ajax.model.Customer;
+import com.ajax.model.Employee;
 import com.ajax.model.Person;
 import com.ajax.service.ReturnValue;
+import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,31 +48,41 @@ public class PersonEntitiesManager {
                     + Constants.CUSTOMER_TABLE
                     + " ("
                     + Constants.ID_FIELD + ", "
-                    + Constants.ACCOUNTNO_FIELD + ", "
                     + Constants.CREDITCARDNO_FIELD + ", "
                     + Constants.EMAIL_FIELD + ", "
                     + Constants.RATING_FIELD
                     + " ) "
-                    + " VALUES (?,?,?,?,?)";
+                    + " VALUES (?,?,?,?)";
 
             /* try to add login information and add person record for 
              * registering customer
              * return immediately if error occurred
              */
-            if (addLoginForCustomer(customer, conn) == ReturnValue.ERROR || addPerson(customer, conn) == ReturnValue.ERROR) {
-	            //FIXME: how to rollback the transactions above if anyone of the transactions failed
-	            conn.rollback();
-            } else {
-	            PreparedStatement stmt = conn.prepareStatement(query);
+            if (addPerson(customer, conn) != ReturnValue.ERROR && addLoginForCustomer(customer, conn) != ReturnValue.ERROR) {
 
-	            stmt.setInt(1, customer.getId());
-	            stmt.setInt(2, customer.getAccNum());
-	            stmt.setLong(3, customer.getCreditCard());
-	            stmt.setString(4, customer.getEmail());
-	            stmt.setInt(5, customer.getRating());
+                PreparedStatement stmt = conn.prepareStatement(query);
 
-	            ret = stmt.executeUpdate();
-	            conn.commit();
+                stmt.setInt(1, customer.getId());
+                stmt.setLong(2, customer.getCreditCard());
+                stmt.setString(3, customer.getEmail());
+                stmt.setInt(4, customer.getRating());
+
+                ret = stmt.executeUpdate();
+
+                // retrieve auto increment key
+                ResultSet rs = stmt.getGeneratedKeys();
+                rs.next();
+                // set key (id) 
+                customer.setAccNum(rs.getInt(1));
+
+                // rollback all three transactions if error occurred
+                if (ret == ReturnValue.ERROR) {
+                    /* FIXME: is it necessary since we use a same 
+                        connection for all these three transactions? */
+                    conn.rollback(); 
+                } else {
+                    conn.commit();
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,20 +107,34 @@ public class PersonEntitiesManager {
         try {
             String query = "INSERT INTO "
                     + Constants.PERSON_TABLE
-                    + " VALUES (?,?,?,?,?,?,?,?)";
+                    + "("
+                    + Constants.FIRSTNAME_FILED + ", "
+                    + Constants.LASTNAME_FILED + ", "
+                    + Constants.STREET_FILED + ", "
+                    + Constants.CITY_FILED + ", "
+                    + Constants.STATE_FILED + ", "
+                    + Constants.ZIPCODE_FILED + ", "
+                    + Constants.PHONE_FILED
+                    + ")"
+                    + " VALUES (?,?,?,?,?,?,?)";
 
             PreparedStatement stmt = conn.prepareStatement(query);
 
-            stmt.setInt(1, person.getId());
-            stmt.setString(2, person.getFirstName());
-            stmt.setString(3, person.getLastName());
-            stmt.setString(4, person.getAddress().getStreet());
-            stmt.setString(5, person.getAddress().getCity());
-            stmt.setString(6, person.getAddress().getState().name());
-            stmt.setInt(7, person.getAddress().getZipCode());
-            stmt.setLong(8, person.getPhone());
+            // stmt.setInt(1, person.getId());
+            stmt.setString(1, person.getFirstName());
+            stmt.setString(2, person.getLastName());
+            stmt.setString(3, person.getAddress().getStreet());
+            stmt.setString(4, person.getAddress().getCity());
+            stmt.setString(5, person.getAddress().getState().name());
+            stmt.setInt(6, person.getAddress().getZipCode());
+            stmt.setLong(7, person.getPhone());
 
             ret = stmt.executeUpdate();
+            // retrieve auto increment key
+            ResultSet rs = stmt.getGeneratedKeys();
+            rs.next();
+            // set key (id) 
+            person.setId(rs.getInt(1));
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -121,11 +148,12 @@ public class PersonEntitiesManager {
      * @return
      */
     public int addLoginForCustomer(Customer customer, Connection conn) {
-        String query = "INSERT INTO "
-                + Constants.LOGIN_TABLE
-                + " VALUES (?,?,?)";
+
         int ret = ReturnValue.ERROR;
         try {
+            String query = "INSERT INTO "
+                    + Constants.LOGIN_TABLE
+                    + " VALUES (?,?,?)";
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setInt(1, customer.getId());
@@ -203,7 +231,8 @@ public class PersonEntitiesManager {
                 // set fields in customer
                 customer = new Customer(firstname, lastname, phone,
                         new Address(street, city, state, zipCode),
-		                creditCard, email);
+                        creditCard, email);
+                customer.setAccessControl(AccessControl.CUSTOMER);
 //                customer.setRating(rating);       // set rating later?
                 break;
             }
@@ -217,6 +246,68 @@ public class PersonEntitiesManager {
             }
         }
         return customer;
+    }
+
+    public Employee getEmployeeById(int id, AccessControl ac) {
+        Employee employee = null;
+        Connection conn = MySQLConnection.connect();
+        try {
+            String query = "SELECT "
+                    + " P." + Constants.FIRSTNAME_FILED + ", "
+                    + " P." + Constants.LASTNAME_FILED + ", "
+                    + " P." + Constants.STREET_FILED + ", "
+                    + " P." + Constants.CITY_FILED + ", "
+                    + " P." + Constants.STATE_FILED + ", "
+                    + " P." + Constants.ZIPCODE_FILED + ", "
+                    + " P." + Constants.PHONE_FILED + ", "
+                    + " E." + Constants.EMPLOYEE_SSN_FIELD + ", "
+                    + " E." + Constants.EMPLOYEE_START_DATE_FIELD + ", "
+                    + " E." + Constants.EMPLOYEE_HOURLY_RATE_FIELD
+                    + " FROM "
+                    + Constants.EMPLOYEE_TABLE + " E, "
+                    + Constants.PERSON_TABLE + " P"
+                    + " WHERE "
+                    + " P." + Constants.ID_FIELD
+                    + " = ? "
+                    + "AND "
+                    + " E." + Constants.ID_FIELD
+                    + " =  "
+                    + " P." + Constants.ID_FIELD
+                    + " LIMIT 1;";
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+            conn.commit();
+
+            if (rs.next()) {
+                String firstname = rs.getString(Constants.FIRSTNAME_FILED);
+                String lastname = rs.getString(Constants.LASTNAME_FILED);
+                String street = rs.getString(Constants.STREET_FILED);
+                String city = rs.getString(Constants.CITY_FILED);
+                String state = rs.getString(Constants.STATE_FILED);
+                long phone = rs.getLong(Constants.PHONE_FILED);
+                int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
+                int ssn = rs.getInt(Constants.EMPLOYEE_SSN_FIELD);
+                Date startDate = rs.getDate(Constants.EMPLOYEE_START_DATE_FIELD);
+                double hourlyRate = rs.getDouble(Constants.EMPLOYEE_HOURLY_RATE_FIELD);
+                employee = new Employee(ssn, startDate, hourlyRate, firstname, lastname, phone,
+                        new Address(street, city, state, zipCode));
+
+                employee.setAccessControl(ac);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return employee;
     }
 
     /**
@@ -252,7 +343,12 @@ public class PersonEntitiesManager {
                 int personId = rs.getInt("id");
 
                 // query db to construct person object
-                person = getCustomerById(personId);
+                AccessControl accessControl = getAccessControl(personId);
+                if (accessControl == AccessControl.CUSTOMER) {
+                    person = getCustomerById(personId);
+                } else {
+                    person = getEmployeeById(personId, accessControl);
+                }
                 // limit 1
                 break;
             }
@@ -270,4 +366,33 @@ public class PersonEntitiesManager {
         return person;
     }
 
+    public AccessControl getAccessControl(int id) {
+        Connection conn = MySQLConnection.connect();
+        String query = "SELECT * FROM " + Constants.EMPLOYEE_TABLE
+                + " WHERE "
+                + Constants.ID_FIELD
+                + " = ? LIMIT 1";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            conn.commit();
+            if (!rs.next()) {
+                return AccessControl.CUSTOMER;
+            } else if (rs.getBoolean(Constants.EMPLOYEE_ISMANAGER_FIELD)) {
+                return AccessControl.MANAGER;
+            } else {
+                return AccessControl.CUSTOMER_REPRESENTATIVE;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+        return AccessControl.ERROR;
+    }
 }

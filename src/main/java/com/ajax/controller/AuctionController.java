@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @ControllerAdvice
 public class AuctionController {
+
     @Autowired
     AuctionService auctionService;
 
@@ -28,20 +29,21 @@ public class AuctionController {
     public ModelAndView prepareAuction() {
         return new ModelAndView("auction");
     }
+
     @RequestMapping(value = "/prepareAuction", method = RequestMethod.POST)
     public ModelAndView prepareAuction(@RequestParam Map<String, String> requestParams,
             HttpServletRequest request) {
-        
+
         /* person should not be null here, 
-           it should be checked before coming into here
-           But, check anyways
-        */
-        Person person = (Person)request.getSession().getAttribute(Constants.PERSON);
-        if(person==null) {
+         it should be checked before coming into here
+         But, check anyways
+         */
+        Person person = (Person) request.getSession().getAttribute(Constants.PERSON);
+        if (person == null) {
             //TODO: test this and test request.getRequestURL()
-            return new ModelAndView("redirect:"+request.getRequestURI());
+            return new ModelAndView("redirect:" + request.getRequestURI());
         }
-        
+
         ModelAndView mv = new ModelAndView("redirect:auction");
         String airline = requestParams.get("airline");
         String flightNo = requestParams.get("flightNo");
@@ -52,22 +54,20 @@ public class AuctionController {
 
         return mv;
     }
-    
+
     @RequestMapping(value = "/bid", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public int handleBid(@RequestParam Map<String, String> requestParams) {
-        
-        //TODO: do not show flights that are full in the search result (Andrew)
-        
-        int bidderId = Integer.parseInt(requestParams.get("bidderId"));
+
+        int bidderAccNo = Integer.parseInt(requestParams.get("bidderAccNo"));
         double bid = Double.parseDouble(requestParams.get("bid"));
         double hiddenFare = Double.parseDouble(requestParams.get("hiddenFare"));
         String airline = requestParams.get("airline");
         int flightNo = Integer.parseInt(requestParams.get("flightNo"));
-        
+
         // try to bid
-        int bidStatus = auctionService.handleBid(bidderId, bid, hiddenFare, airline, flightNo);
-        
+        int bidStatus = auctionService.handleBid(bidderAccNo, bid, hiddenFare, airline, flightNo);
+
         return bidStatus;
     }
 }

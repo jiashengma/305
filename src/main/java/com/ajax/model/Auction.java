@@ -6,7 +6,7 @@ package com.ajax.model;
  */
 public class Auction {
 
-    private int personId;
+    private int personAccNo;
     private double NYOP; // bid price
     private String airline;
     private int flightNo;
@@ -15,19 +15,19 @@ public class Auction {
     public Auction() {
     }
 
-    public Auction(int personId, double NYOP, String airline, int flightNo) {
-        this.personId = personId;
+    public Auction(int personAccNo, double NYOP, String airline, int flightNo) {
+        this.personAccNo = personAccNo;
         this.NYOP = NYOP;
         this.airline = airline;
         this.flightNo = flightNo;
     }
 
-    public int getPersonId() {
-        return personId;
+    public int getPersonAccNo() {
+        return personAccNo;
     }
 
-    public void setPersonId(int personId) {
-        this.personId = personId;
+    public void setPersonAccNo(int personAccNo) {
+        this.personAccNo = personAccNo;
     }
 
     public double getNYOP() {

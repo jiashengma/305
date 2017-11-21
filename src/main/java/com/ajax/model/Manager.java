@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author majiasheng
  */
-public class Manager {
+public class Manager extends Employee {
 
     List<Employee> subordinates;
 

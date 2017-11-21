@@ -3,25 +3,27 @@ package com.ajax.model;
 public class Customer extends Person {
 
     // counter for account number
-    private static int count = 0;
-
+    // private static int count = 0;
     protected String email;
     private long creditCard;
     private int rating;
-    private final int accNum;
+    private int accNum;
 
     public Customer() {
         // rating is default as 0
-        accNum = count++;
+        super();
+        // accNum = count++;
         rating = 0;
+        this.address = new Address();
+        this.accessControl = AccessControl.CUSTOMER;
     }
 
     public Customer(String fname, String lname, long phone, Address addr, long creditCard, String email) {
-    	super(fname, lname, phone, addr);
-	    accNum = count++;
-	    rating = 0;
-	    this.creditCard = creditCard;
-	    this.email = email;
+        super(fname, lname, phone, addr);
+        // accNum = count++;
+        rating = 0;
+        this.creditCard = creditCard;
+        this.email = email;
     }
 
     public String getEmail() {
@@ -36,9 +38,10 @@ public class Customer extends Person {
         return accNum;
     }
 
-//    public void setAccNum(int accNum) {
-//        this.accNum = accNum;
-//    }
+    public void setAccNum(int accNum) {
+        this.accNum = accNum;
+    }
+
     public long getCreditCard() {
         return creditCard;
     }

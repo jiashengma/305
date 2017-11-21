@@ -17,7 +17,7 @@ public class Flight {
 		this.fare = fare;
 		this.hiddenFare = hiddenFare;
 	}
-
+	//TODO: add fare restrictions
 	public String getAirline() {
 		return airline;
 	}
