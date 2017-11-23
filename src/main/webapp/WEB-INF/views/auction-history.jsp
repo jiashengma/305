@@ -21,7 +21,8 @@
             <th>Airline</th>
             <th>FlightNo</th>
             <th>Class</th>
-            <th>Bid</th>
+            <th>Bid ($)</th>
+            <th>Date</th>
             <th>Accepted?</th>
         </tr>
         <c:forEach var="auction" items="${auctions}">
@@ -30,7 +31,7 @@
                 <td>${auction.flightNo}</td>
                 <td>${auction.flightClass}</td>
                 <td>${auction.NYOP}</td>
-                <td></td>
+                <td>${auction.date}</td>
             </tr>
         </c:forEach>
     </table>

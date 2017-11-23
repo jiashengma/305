@@ -4,9 +4,11 @@ import com.ajax.model.Auction;
 import com.ajax.model.FlightClass;
 import com.ajax.service.ReturnValue;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,10 +44,10 @@ public class AuctionDAOImpl implements AuctionDAO {
             stmt.setInt(3, auction.getFlightNo());
             stmt.setString(4, auction.getFlightClass().name());
             stmt.setDouble(5, auction.getNYOP());
-            
+
             ret = stmt.executeUpdate();
             conn.commit();
-            
+
         } catch (SQLException ex) {
             System.err.println("Error occurred while trying to insert record into auctions table.");
         } finally {
@@ -66,30 +68,30 @@ public class AuctionDAOImpl implements AuctionDAO {
 
         //TODO: get auction history
         // List<Auction> auctions = null;
-
         Connection conn = MySQLConnection.connect();
         try {
             String query = "SELECT * "
-                    + "FROM " + Constants.AUCTIONS_TABLE 
+                    + "FROM " + Constants.AUCTIONS_TABLE
                     + " WHERE " + Constants.ACCOUNTNO_FIELD + " = ? ";
-                    
+
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setInt(1,customerAccNo);
-            
+            stmt.setInt(1, customerAccNo);
+
             ResultSet rs = stmt.executeQuery();
             conn.commit();
-            
+
             auctions = new ArrayList<>();
             while (rs.next()) {
                 String airlineId = rs.getString(Constants.AIRLINEID_FIELD);
                 int flightNo = rs.getInt(Constants.FLIGHTNO_FIELD);
                 String flightClass = rs.getString(Constants.CLASS_FIELD);
                 //TODO: Date date
+                Timestamp timestamp = rs.getTimestamp(Constants.DATE_FIELD);
                 double NYOP = rs.getDouble(Constants.NYOP_FIELD);
-                
-                Auction auction = new Auction(customerAccNo, NYOP, airlineId, flightNo, flightClass);
+
+                Auction auction = new Auction(customerAccNo, NYOP, airlineId, flightNo, flightClass, timestamp);
                 auctions.add(auction);
-                
+
             }
 
         } catch (SQLException ex) {
@@ -101,7 +103,7 @@ public class AuctionDAOImpl implements AuctionDAO {
                 Logger.getLogger(AuctionDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return auctions;
     }
 
@@ -126,7 +128,7 @@ public class AuctionDAOImpl implements AuctionDAO {
             PreparedStatement stmt = conn.prepareStatement(query);
 
             //TODO: set params
-            stmt.setInt(1,customerAccNo);
+            stmt.setInt(1, customerAccNo);
             stmt.setString(2, airline);
             stmt.setInt(3, flightNo);
             //TODO: need to add flight class to auction ? or retrieve it from auction

@@ -1,6 +1,6 @@
 package com.ajax.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -14,19 +14,20 @@ public class Auction {
     private int flightNo;
     private FlightClass flightClass;
 
-    private Date date;
+    private Timestamp time;
     private boolean accepted;
 
     public Auction() {
     }
 
-    public Auction(int personAccNo, double NYOP, String airline, int flightNo, String flightClass) {
+    public Auction(int personAccNo, double NYOP, String airline, int flightNo, String flightClass, Timestamp date/*, boolean accepted*/) {
         this.personAccNo = personAccNo;
         this.NYOP = NYOP;
         this.airline = airline;
         this.flightNo = flightNo;
         this.flightClass = FlightClass.valueOf(flightClass);
-        
+        this.time = date;
+//        this.accepted = accepted;
     }
 
     // <editor-fold defaultstate="collapsed" desc=" getters and setters ">
@@ -70,14 +71,14 @@ public class Auction {
         this.flightClass = flightClass;
     }
 
-    public Date getDate() {
-        return date;
+    public Timestamp getDate() {
+        return time;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(Timestamp date) {
+        this.time = date;
     }
-    
+
     public boolean isAccepted() {
         return accepted;
     }
@@ -86,7 +87,7 @@ public class Auction {
         this.accepted = accepted;
     }
     // </editor-fold>
-    
+
     @Override
     public String toString() {
         return "Account: " + personAccNo + "\n"
@@ -94,7 +95,7 @@ public class Auction {
                 + "Flight: " + flightNo + "\n"
                 + "Class: " + flightClass.name() + "\n"
                 + "NYOP: " + NYOP + "\n"
-                + "Date: " + date.toString();
+                + "Date: " + time.toString();
     }
 
 }
