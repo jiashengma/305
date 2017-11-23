@@ -1,8 +1,11 @@
 package com.ajax.controller;
 
+import com.ajax.model.Auction;
+import com.ajax.model.Customer;
 import com.ajax.model.Person;
 import com.ajax.persistence.Constants;
 import com.ajax.service.AuctionService;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +72,20 @@ public class AuctionController {
         int bidStatus = auctionService.handleBid(bidderAccNo, bid, hiddenFare, airline, flightNo);
 
         return bidStatus;
+    }
+    
+    @RequestMapping(value ="/auction-history", method = RequestMethod.GET)
+    public ModelAndView showAuctionHistory(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("auction-history");
+        //Customer c = (Customer)(request.getSession().getAttribute(Constants.PERSON));
+        //List<Auction> auctions = auctionService.getAllAuctionHistory(c.getAccNum());
+        List<Auction> auctions = auctionService.getAllAuctionHistory(2);
+        if (auctions==null){
+            mv.setViewName(request.getRequestURI());
+            return mv;
+        } 
+        mv.addObject("auctions", auctions);
+        
+        return mv;
     }
 }

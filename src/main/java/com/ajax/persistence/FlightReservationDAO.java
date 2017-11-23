@@ -62,10 +62,21 @@ public class FlightReservationDAO {
     	return airports;
     }
 
-    public boolean bookFlight(Flight flight) {
+    public boolean reserveFlight(Flight flight) {
 
-        //TODO: do book flight
+        //TODO: do reserve flight
         return false;
+    }
+
+    /**
+     * Reserves a flight from a successfully auction
+     * @param auction 
+     */
+    public void reserveFlightFromAuction(Auction auction) {
+        /*TODO: use the info in the auction to do reservation
+         this method may call the reserveFlight() method above */
+        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -32,7 +32,7 @@ public class FlightReservationService {
     }
 
     public boolean bookFlight(Flight flight) {
-        return flightReservationManager.bookFlight(flight);
+        return flightReservationManager.reserveFlight(flight);
     }
 
     public List<Airport> getAirports() {

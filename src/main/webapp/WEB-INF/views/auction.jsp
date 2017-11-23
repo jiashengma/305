@@ -12,7 +12,8 @@
         <c:redirect url=""/>
     </c:when>
 </c:choose>
-
+<h2>Auction</h2>
+<hr>
 <!-- body -->
 <div>
     <!--TODO:display flight info maybe?-->
