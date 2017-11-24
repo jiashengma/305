@@ -77,9 +77,10 @@ public class AuctionController {
     @RequestMapping(value ="/auction-history", method = RequestMethod.GET)
     public ModelAndView showAuctionHistory(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("auction-history");
-        //FIXME: check access control
-        //Customer c = (Customer)(request.getSession().getAttribute(Constants.PERSON));
-        //List<Auction> auctions = auctionService.getAllAuctionHistory(c.getAccNum());
+        //Person person = (Person)(request.getSession().getAttribute(Constants.PERSON));
+        // TODO: get person(customer)'s account number 
+        // int accNo = 
+        //List<Auction> auctions = auctionService.getAllAuctionHistory(accNo);
         List<Auction> auctions = auctionService.getAllAuctionHistory(2);
         if (auctions==null){
             mv.setViewName(request.getRequestURI());
