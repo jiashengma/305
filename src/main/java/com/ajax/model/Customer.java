@@ -1,26 +1,32 @@
 package com.ajax.model;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.CreditCardNumber;
+import org.hibernate.validator.constraints.Email;
+
 public class Customer extends Person {
 
-    // counter for account number
-    // private static int count = 0;
+    final int CRED_CARD_LENGTH = 16;
+    //@Pattern(regexp = "")
+    @Email
     protected String email;
-    private long creditCard;
+    //@Size(min = CRED_CARD_LENGTH, max = CRED_CARD_LENGTH, message = "Credit card length has to to 16")
+//    @CreditCardNumber
+    private String creditCard;
     private int rating;
     private int accNum;
 
     public Customer() {
-        // rating is default as 0
         super();
-        // accNum = count++;
+        // rating is default as 0
         rating = 0;
         this.address = new Address();
         this.accessControl = AccessControl.CUSTOMER;
     }
 
-    public Customer(String fname, String lname, long phone, Address addr, long creditCard, String email) {
+    public Customer(String fname, String lname, String phone, Address addr, String creditCard, String email) {
         super(fname, lname, phone, addr);
-        // accNum = count++;
         rating = 0;
         this.creditCard = creditCard;
         this.email = email;
@@ -42,11 +48,11 @@ public class Customer extends Person {
         this.accNum = accNum;
     }
 
-    public long getCreditCard() {
+    public String getCreditCard() {
         return creditCard;
     }
 
-    public void setCreditCard(long creditCard) {
+    public void setCreditCard(String creditCard) {
         this.creditCard = creditCard;
     }
 
