@@ -1,7 +1,8 @@
 # 305
 #TODO
-[] notify user to login when they try to book a flight (in handler for booking
+[x] notify user to login when they try to book a flight (in handler for booking
 form submission: get session, check if session("user")==null)
+[] add registration validation (use javax validation + hibernate validator)
 
 # Setup (Accurate as of November 13)
 - Download maven and place the bin directory into the environment variables

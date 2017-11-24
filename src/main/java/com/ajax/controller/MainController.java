@@ -15,12 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ajax.model.Customer;
-import com.ajax.model.Employee;
-import com.ajax.model.Person;
+import com.ajax.model.Customer;;
 import com.ajax.model.State;
-import com.ajax.persistence.Constants;
-import com.ajax.service.LoginService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
 

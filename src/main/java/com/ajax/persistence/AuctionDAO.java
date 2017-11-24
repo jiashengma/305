@@ -13,6 +13,6 @@ public interface AuctionDAO {
 
     public List<Auction> getAllAuctionHistory(int customerAccNo);
 
-    public List<Auction> getAuctionHistoryByFlight(int customerAccNo, String airline, int flightNo);
+    public List<Auction> getAuctionHistoryByFlight(int customerAccNo, String airline, int flightNo, String flightClass);
 
 }

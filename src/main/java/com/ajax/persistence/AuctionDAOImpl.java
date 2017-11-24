@@ -70,10 +70,16 @@ public class AuctionDAOImpl implements AuctionDAO {
         // List<Auction> auctions = null;
         Connection conn = MySQLConnection.connect();
         try {
-            String query = "SELECT * "
-                    + "FROM " + Constants.AUCTIONS_TABLE
-                    + " WHERE " + Constants.ACCOUNTNO_FIELD + " = ? ";
-
+//            String query = "SELECT * "
+//                    + "FROM " + Constants.AUCTIONS_TABLE
+//                    + " WHERE " + Constants.ACCOUNTNO_FIELD + " = ? ";
+            String query = "SELECT A.* , IF(A.NYOP >= F.Fare, 'Yes', 'No') AS 'Accepted?' "
+                    + "FROM auctions A, fare F "
+                    + "WHERE F.FareType='hidden' "
+                    + "AND A.AirlineID=F.AirlineID "
+                    + "AND A.FlightNo=F.FlightNo "
+                    + "AND " + Constants.ACCOUNTNO_FIELD + " = ? ";
+            
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, customerAccNo);
 
@@ -85,11 +91,11 @@ public class AuctionDAOImpl implements AuctionDAO {
                 String airlineId = rs.getString(Constants.AIRLINEID_FIELD);
                 int flightNo = rs.getInt(Constants.FLIGHTNO_FIELD);
                 String flightClass = rs.getString(Constants.CLASS_FIELD);
-                //TODO: Date date
                 Timestamp timestamp = rs.getTimestamp(Constants.DATE_FIELD);
                 double NYOP = rs.getDouble(Constants.NYOP_FIELD);
+                String accepted = rs.getString("Accepted?");
 
-                Auction auction = new Auction(customerAccNo, NYOP, airlineId, flightNo, flightClass, timestamp);
+                Auction auction = new Auction(customerAccNo, NYOP, airlineId, flightNo, flightClass, timestamp, accepted.equals("Yes"));
                 auctions.add(auction);
 
             }
@@ -107,7 +113,7 @@ public class AuctionDAOImpl implements AuctionDAO {
         return auctions;
     }
 
-    public List<Auction> getAuctionHistoryByFlight(int customerAccNo, String airline, int flightNo) {
+    public List<Auction> getAuctionHistoryByFlight(int customerAccNo, String airline, int flightNo, String flightClass) {
         List<Auction> auctions = null;
 
         Connection conn = MySQLConnection.connect();

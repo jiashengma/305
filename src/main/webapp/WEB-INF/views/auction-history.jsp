@@ -15,7 +15,7 @@
 <h2>Auction History</h2>
 <hr>
 <!-- body -->
-<div>
+<div id="auctionHistory">
     <table>
         <tr>
             <th>Airline</th>
@@ -32,6 +32,16 @@
                 <td>${auction.flightClass}</td>
                 <td>${auction.NYOP}</td>
                 <td>${auction.date}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${auction.accepted}">
+                            Yes
+                        </c:when>
+                        <c:otherwise>
+                            No
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </c:forEach>
     </table>

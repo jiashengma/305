@@ -59,8 +59,8 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<Auction> getAuctionHistoryByFlight(int customerAccNo, String airline, int flightNo) {
-        return auctionDAO.getAuctionHistoryByFlight(customerAccNo, airline, flightNo);
+    public List<Auction> getAuctionHistoryByFlight(int customerAccNo, String airline, int flightNo, String flightClass) {
+        return auctionDAO.getAuctionHistoryByFlight(customerAccNo, airline, flightNo, flightClass);
     }
 
 }

@@ -20,14 +20,14 @@ public class Auction {
     public Auction() {
     }
 
-    public Auction(int personAccNo, double NYOP, String airline, int flightNo, String flightClass, Timestamp date/*, boolean accepted*/) {
+    public Auction(int personAccNo, double NYOP, String airline, int flightNo, String flightClass, Timestamp date, boolean accepted) {
         this.personAccNo = personAccNo;
         this.NYOP = NYOP;
         this.airline = airline;
         this.flightNo = flightNo;
         this.flightClass = FlightClass.valueOf(flightClass);
         this.time = date;
-//        this.accepted = accepted;
+        this.accepted = accepted;
     }
 
     // <editor-fold defaultstate="collapsed" desc=" getters and setters ">
