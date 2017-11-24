@@ -77,7 +77,6 @@ public class MainController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg", "Error in registration form");
         } else {
-
             // set state (the enum type)
             customer.getAddress().setState(formValues.get("state"));
 

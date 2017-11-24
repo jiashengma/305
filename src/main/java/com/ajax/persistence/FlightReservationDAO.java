@@ -18,7 +18,6 @@ public class FlightReservationDAO {
     	List<Flight> flights = new ArrayList<>();
         Connection conn = MySQLConnection.connect();
         try {
-            
 	        // TODO: add leg info
 	        PreparedStatement stmt =
 		        conn.prepareStatement("SELECT F." + Constants.AIRLINEID_FIELD +
@@ -69,5 +68,4 @@ public class FlightReservationDAO {
         //TODO: do book flight
         return false;
     }
-
 }
