@@ -233,7 +233,7 @@ public class PersonEntitiesManager {
                         new Address(street, city, state, zipCode),
                         creditCard, email);
                 customer.setAccessControl(AccessControl.CUSTOMER);
-//                customer.setRating(rating);       // set rating later?
+                // customer.setRating(rating);       //TODO: set rating later?
                 break;
             }
         } catch (SQLException ex) {
