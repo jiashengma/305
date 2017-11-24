@@ -63,4 +63,10 @@ public class Constants {
     public static final String AUCTIONS_TABLE = "auctions";
     public static final String NYOP_FIELD = "NYOP";
     public static final String CLASS_FIELD = "Class";
+    public static final String DATE_FIELD = "Date";
+
+    // fare
+    public static final String FARE_TABLE = "fare";
+    public static final String FARE_TYPE_FIELD = "FareType";
+    public static final String FARE_FIELD = "Fare";
 }
