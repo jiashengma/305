@@ -63,7 +63,8 @@ public class PersonEntitiesManager {
                 PreparedStatement stmt = conn.prepareStatement(query);
 
                 stmt.setInt(1, customer.getId());
-                stmt.setLong(2, customer.getCreditCard());
+                //stmt.setLong(2, customer.getCreditCard());
+                stmt.setString(2, customer.getCreditCard());
                 stmt.setString(3, customer.getEmail());
                 stmt.setInt(4, customer.getRating());
 
@@ -127,7 +128,8 @@ public class PersonEntitiesManager {
             stmt.setString(4, person.getAddress().getCity());
             stmt.setString(5, person.getAddress().getState().name());
             stmt.setInt(6, person.getAddress().getZipCode());
-            stmt.setLong(7, person.getPhone());
+            //stmt.setLong(7, person.getPhone());
+            stmt.setString(7, person.getPhone());
 
             ret = stmt.executeUpdate();
             // retrieve auto increment key
@@ -213,9 +215,11 @@ public class PersonEntitiesManager {
                 String city = rs.getString(Constants.CITY_FILED);
                 String state = rs.getString(Constants.STATE_FILED);
                 int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
-                long phone = rs.getLong(Constants.PHONE_FILED);
+                //long phone = rs.getLong(Constants.PHONE_FILED);
+                String phone = rs.getString(Constants.PHONE_FILED);
                 int acc = rs.getInt(Constants.ACCOUNTNO_FIELD);
-                long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
+                //long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
+                String creditCard = rs.getString(Constants.CREDITCARDNO_FIELD);
                 String email = rs.getString(Constants.EMAIL_FIELD);
                 int rating = rs.getInt(Constants.RATING_FIELD);
 
@@ -233,7 +237,7 @@ public class PersonEntitiesManager {
                         new Address(street, city, state, zipCode),
                         creditCard, email);
                 customer.setAccessControl(AccessControl.CUSTOMER);
-//                customer.setRating(rating);       // set rating later?
+                // customer.setRating(rating);       //TODO: set rating later?
                 break;
             }
         } catch (SQLException ex) {
@@ -288,7 +292,8 @@ public class PersonEntitiesManager {
                 String street = rs.getString(Constants.STREET_FILED);
                 String city = rs.getString(Constants.CITY_FILED);
                 String state = rs.getString(Constants.STATE_FILED);
-                long phone = rs.getLong(Constants.PHONE_FILED);
+                //long phone = rs.getLong(Constants.PHONE_FILED);
+                String phone = rs.getString(Constants.PHONE_FILED);
                 int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
                 int ssn = rs.getInt(Constants.EMPLOYEE_SSN_FIELD);
                 Date startDate = rs.getDate(Constants.EMPLOYEE_START_DATE_FIELD);

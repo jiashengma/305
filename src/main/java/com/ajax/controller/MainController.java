@@ -19,6 +19,7 @@ import com.ajax.model.Customer;;
 import com.ajax.model.State;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
+import javax.validation.Valid;
 
 @Controller
 @ControllerAdvice
@@ -60,7 +61,7 @@ public class MainController {
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView handleRegistration(
-            @ModelAttribute("customer") Customer customer,
+            @Valid @ModelAttribute("customer") Customer customer,
             BindingResult result,
             @RequestParam Map<String, String> formValues,
             HttpServletRequest request,
@@ -70,7 +71,8 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView("redirect:register");
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("msg", "Error in registration form");
+            //redirectAttributes.addFlashAttribute("msg", "Error in registration form");
+            modelAndView.setViewName("/registration");
         } else {
             // set state (the enum type)
             customer.getAddress().setState(formValues.get("state"));

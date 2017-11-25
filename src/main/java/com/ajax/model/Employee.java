@@ -15,7 +15,7 @@ public class Employee extends Person {
     public Employee(){
         super();
     }
-    public Employee(int ssn, Date startDate, double hourlyRate, String fname, String lname, long phone, Address addr) {
+    public Employee(int ssn, Date startDate, double hourlyRate, String fname, String lname, String phone, Address addr) {
         super(fname, lname, phone, addr);
         this.ssn = ssn;
         this.startDate = startDate;
