@@ -31,7 +31,7 @@ public class FlightReservationDAO {
 
             conn.commit();
             //TODO: query data base for result
-            //TODO: do not show flights that are full in the search result (Andrew)
+            //TODO: do not show flights that are null in the search result
 
         } catch (SQLException ex) {
             Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
