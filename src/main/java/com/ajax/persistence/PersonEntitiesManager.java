@@ -1,5 +1,6 @@
 package com.ajax.persistence;
 
+import com.ajax.model.Constants;
 import com.ajax.model.AccessControl;
 import com.ajax.model.Address;
 import java.sql.Connection;
@@ -346,7 +347,7 @@ public class PersonEntitiesManager {
             while (rs.next()) {
 
                 int personId = rs.getInt("id");
-
+                
                 // query db to construct person object
                 AccessControl accessControl = getAccessControl(personId);
                 if (accessControl == AccessControl.CUSTOMER) {
@@ -354,6 +355,8 @@ public class PersonEntitiesManager {
                 } else {
                     person = getEmployeeById(personId, accessControl);
                 }
+                person.setUserName(username);
+                person.setPassword(password);
                 // limit 1
                 break;
             }

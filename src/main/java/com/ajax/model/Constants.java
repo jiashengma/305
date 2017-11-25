@@ -1,4 +1,4 @@
-package com.ajax.persistence;
+package com.ajax.model;
 
 /**
  *
@@ -6,13 +6,15 @@ package com.ajax.persistence;
  */
 public class Constants {
 
+    // request/response/session attributes
     public static final String PERSON = "person";
+    public static final String FLIGHT = "flight";
 
     // mysql connection
-    static final String HOSTNAME = "localhost";
-    static final String DBNAME = "ajax305";
-    static final String USERNAME = "ajaxadmin";
-    static final String PASSWORD = "passwordajax305";
+    public static final String HOSTNAME = "localhost";
+    public static final String DBNAME = "ajax305";
+    public static final String USERNAME = "ajaxadmin";
+    public static final String PASSWORD = "passwordajax305";
 
     // table and respective column names
     public static final String PERSON_TABLE = "person";
@@ -63,7 +65,6 @@ public class Constants {
     public static final String NYOP_FIELD = "NYOP";
     public static final String CLASS_FIELD = "Class";
     public static final String DATE_FIELD = "Date";
-    
     
     // fare
     public static final String FARE_TABLE = "fare";

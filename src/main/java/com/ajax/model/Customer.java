@@ -1,8 +1,6 @@
 package com.ajax.model;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.CreditCardNumber;
 import org.hibernate.validator.constraints.Email;
 
 public class Customer extends Person {
@@ -11,8 +9,7 @@ public class Customer extends Person {
     //@Pattern(regexp = "")
     @Email
     protected String email;
-    //@Size(min = CRED_CARD_LENGTH, max = CRED_CARD_LENGTH, message = "Credit card length has to to 16")
-//    @CreditCardNumber
+    @Pattern(regexp = "[0-9]{16}", message = "Credit card has to be a 16-digit number")
     private String creditCard;
     private int rating;
     private int accNum;

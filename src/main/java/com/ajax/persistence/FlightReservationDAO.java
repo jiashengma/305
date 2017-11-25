@@ -1,5 +1,6 @@
 package com.ajax.persistence;
 
+import com.ajax.model.Constants;
 import com.ajax.model.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
