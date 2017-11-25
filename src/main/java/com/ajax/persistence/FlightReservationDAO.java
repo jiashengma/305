@@ -25,6 +25,7 @@ public class FlightReservationDAO {
 			        Constants.FLIGHT_TABLE + " F;");
 	        ResultSet rs = stmt.executeQuery();
 
+	        // am I potentially skipping one?
 	        while (rs.next())
 		        flights.add(new Flight());
 
