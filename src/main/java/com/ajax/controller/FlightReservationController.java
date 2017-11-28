@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+import javax.servlet.ServletContext;
 
 @Controller
 @ControllerAdvice
@@ -28,6 +29,8 @@ public class FlightReservationController {
 
     @Autowired
     FlightReservationService flightReservationService;
+    @Autowired
+    ServletContext context;
 
     /**
      *
@@ -45,12 +48,11 @@ public class FlightReservationController {
     @ModelAttribute
     public void init(HttpServletRequest request) {
         // load airports only when it is not stored in session 
-        if (request.getSession().getAttribute("s_airports") == null) {
+        if (context.getAttribute("s_airports") == null) {
             List<Airport> airports = flightReservationService.getAirports();
-            request.getSession().setAttribute("s_airports", airports);
-            request.getSession().setAttribute("classes", FlightClass.values());
+            context.setAttribute("s_airports", airports);
+            context.setAttribute("classes", FlightClass.values());
         }
-
     }
 
     /**

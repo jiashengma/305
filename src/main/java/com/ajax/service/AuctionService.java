@@ -13,15 +13,12 @@ public interface AuctionService {
      * Handles users bid on the flight, records the bidding to auction history
      * (and reservations if bid succeeded)
      *
-     * @param bidderAccNo
-     * @param bid
+     * @param auction
      * @param hiddenFare
-     * @param airline
-     * @param flightNo
      * @return SUCCESS on success, FAILURE on failure (lower bid than hidden
      * fare), or ERROR on error while bidding
      */
-    public int handleBid(int bidderAccNo, double bid, double hiddenFare, String airline, int flightNo);
+    public int handleBid(Auction auction, double hiddenFare);
     
     public int saveAuction(Auction auction);
 

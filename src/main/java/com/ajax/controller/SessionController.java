@@ -3,7 +3,7 @@ package com.ajax.controller;
 import com.ajax.model.Customer;
 import com.ajax.model.Employee;
 import com.ajax.model.Person;
-import com.ajax.persistence.Constants;
+import com.ajax.model.Constants;
 import com.ajax.service.LoginService;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;

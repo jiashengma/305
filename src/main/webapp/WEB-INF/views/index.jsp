@@ -7,7 +7,7 @@
         <%@include file="/WEB-INF/views/includes/flight-search-form.jsp" %>
     </c:when>
     <c:otherwise>
-        <h1>TODO: Add employee/manager info</h1>
+        <%@include file="/WEB-INF/views/includes/admin.jsp" %>
     </c:otherwise>
 </c:choose>
 <!-- end body -->

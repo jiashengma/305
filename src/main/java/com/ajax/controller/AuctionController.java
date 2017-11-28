@@ -2,8 +2,9 @@ package com.ajax.controller;
 
 import com.ajax.model.Auction;
 import com.ajax.model.Customer;
+import com.ajax.model.Flight;
 import com.ajax.model.Person;
-import com.ajax.persistence.Constants;
+import com.ajax.model.Constants;
 import com.ajax.service.AuctionService;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,13 +31,16 @@ public class AuctionController {
     AuctionService auctionService;
 
     @RequestMapping(value = "/auction", method = RequestMethod.GET)
-    public ModelAndView prepareAuction() {
+    public ModelAndView redirectToAuction() {
         return new ModelAndView("auction");
     }
 
-    @RequestMapping(value = "/prepareAuction", method = RequestMethod.POST)
+    //@RequestMapping(value = "/prepareAuction", method = RequestMethod.POST)
     public ModelAndView prepareAuction(@RequestParam Map<String, String> requestParams,
             HttpServletRequest request) {
+        /*TODO: on flight search result, 
+            put all info of a flight into hidden inputs, 
+            and use ModelAttribute to map it here*/
 
         /* person should not be null here, 
          it should be checked before coming into here
@@ -57,19 +62,24 @@ public class AuctionController {
 
         return mv;
     }
+    
+    @RequestMapping(value = "/prepareAuction", method = RequestMethod.POST)
+    public ModelAndView prepareAuction(@ModelAttribute("flight") Flight flight,
+            HttpServletRequest request) {
+        
+        ModelAndView mv = new ModelAndView("redirect:auction");
+        //TODO: use redirect attribute if redirection loses this
+        mv.addObject(Constants.FLIGHT, flight);
+
+        return mv;
+    }
 
     @RequestMapping(value = "/bid", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public int handleBid(@RequestParam Map<String, String> requestParams) {
-
-        int bidderAccNo = Integer.parseInt(requestParams.get("bidderAccNo"));
-        double bid = Double.parseDouble(requestParams.get("bid"));
-        double hiddenFare = Double.parseDouble(requestParams.get("hiddenFare"));
-        String airline = requestParams.get("airline");
-        int flightNo = Integer.parseInt(requestParams.get("flightNo"));
+    public int handleBid(@ModelAttribute("auction") Auction auction, @RequestParam("hiddenFare") double hiddenFare) {
 
         // try to bid
-        int bidStatus = auctionService.handleBid(bidderAccNo, bid, hiddenFare, airline, flightNo);
+        int bidStatus = auctionService.handleBid(auction, hiddenFare);
 
         return bidStatus;
     }
@@ -77,12 +87,9 @@ public class AuctionController {
     @RequestMapping(value ="/auction-history", method = RequestMethod.GET)
     public ModelAndView showAuctionHistory(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("auction-history");
-        //Person person = (Person)(request.getSession().getAttribute(Constants.PERSON));
-        // TODO: get person(customer)'s account number 
-        // int accNo = 
-        //List<Auction> auctions = auctionService.getAllAuctionHistory(accNo);
-        List<Auction> auctions = auctionService.getAllAuctionHistory(2);
-        if (auctions==null){
+        Customer customer = (Customer)(request.getSession().getAttribute(Constants.PERSON));
+        List<Auction> auctions = auctionService.getAllAuctionHistory(customer.getAccNum());
+        if (auctions==null || auctions.size()==0){
             mv.setViewName(request.getRequestURI());
             return mv;
         } 

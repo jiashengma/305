@@ -10,9 +10,6 @@ import javax.validation.constraints.Pattern;
  */
 public class Person {
 
-    // count for person id (used in creations)
-//    public static int count = 0;
-
     protected int id;
     @Pattern(regexp="\\w+", message = "First name must just have letters")
     protected String firstName;
@@ -28,7 +25,6 @@ public class Person {
     protected AccessControl accessControl;
 
     public Person() {
-//        id = count++;
     }
     
     public Person(String fname, String lname, String phone, Address addr) {

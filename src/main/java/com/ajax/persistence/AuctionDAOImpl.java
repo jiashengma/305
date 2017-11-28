@@ -1,5 +1,6 @@
 package com.ajax.persistence;
 
+import com.ajax.model.Constants;
 import com.ajax.model.Auction;
 import com.ajax.model.FlightClass;
 import com.ajax.service.ReturnValue;
@@ -24,7 +25,6 @@ public class AuctionDAOImpl implements AuctionDAO {
 
     @Override
     public int saveAuction(Auction auction) {
-        //TODO:add class field to auction and flight
         int ret = ReturnValue.ERROR;
         Connection conn = MySQLConnection.connect();
         try {
@@ -103,7 +103,7 @@ public class AuctionDAOImpl implements AuctionDAO {
                 Logger.getLogger(AuctionDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        
         return auctions;
     }
 

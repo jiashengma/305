@@ -24,26 +24,20 @@ public class AuctionServiceImpl implements AuctionService {
      * Handles users bid on the flight, records the bidding to auction history
      * (and reservations if bid succeeded)
      *
-     * @param bidderAccNo
-     * @param bid
+     * @param auction
      * @param hiddenFare
-     * @param airline
-     * @param flightNo
      * @return SUCCESS on success, FAILURE on failure (lower bid than hidden
      * fare), or ERROR on error while bidding
      */
-    public int handleBid(int bidderAccNo, double bid, double hiddenFare, String airline, int flightNo) {
-        // record this bid to bid history
-//        Auction auction = new Auction(bidderAccNo, bid, airline, flightNo);
-//        auctionDAO.saveAuction(auction);
-//        /*TODO: maybe add bid accepted to the auction table as well 
-//         since we have the straight answer? */
-//
-//        if (bid >= hiddenFare) {
-//            // TODO: do reservation/book, should use the winner bid price 
-//            flightReservationDAO.reserveFlightFromAuction(auction);
-//            return Status.SUCCESS;
-//        }
+    public int handleBid(Auction auction, double hiddenFare) {
+        
+        auctionDAO.saveAuction(auction);
+
+        if (auction.getNYOP() >= hiddenFare) {
+            // TODO: do reservation/book, should use the winner bid price 
+            flightReservationDAO.reserveFlightFromAuction(auction);
+            return Status.SUCCESS;
+        }
         return Status.FAILURE;
 
     }

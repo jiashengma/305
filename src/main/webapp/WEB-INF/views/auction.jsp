@@ -17,12 +17,13 @@
 <!-- body -->
 <div>
     <!--TODO:display flight info maybe?-->
-    Please enter your bid for ${airline} No.${flightNo}
+    Please enter your bid for ${flight.airline} No.${flight.flightNo}
     <form id="biddingform" action="/bid" method="POST">
-        <input type="number" name="bid" placeholder="Your bid in $"/><br>
-        <input type="hidden" name="bidderAccNo" value="${person.accNum}"/>
-        <input type="hidden" name="airline" value="${airline}">
-        <input type="hidden" name="flightNo" value="${flightNo}">
+        <input type="number" name="NYOP" placeholder="Your bid in $"/><br>
+        <input type="hidden" name="personAccNo" value="${person.accNum}"/>
+        <input type="hidden" name="airline" value="${airline}"/>
+        <input type="hidden" name="flightNo" value="${flightNo}"/>
+        <input type="hidden" name="flightClass" value="${flightClass}"/>
         <input type="hidden" name="hiddenFare" value="${hiddenFare}"/>
         <input type="submit" value="Bid" />
     </form>
