@@ -47,6 +47,12 @@ public class Constants {
     public static final String MINLENGTHOFSTAY_FIELD = "MinLengthOfStay";
     public static final String MAXLENGTHOFSTAY_FIELD = "MaxLengthOfStay";
 
+	static final String LEG_TABLE = "leg";
+	static final String LEGNO = "LegNo";
+	static final String DEPATURE_AIRPORT_ID = "DepAirportId";
+	static final String ARRIVAL_AIRPORT_ID = "ArrAirportId";
+
+
 	static final int AIRPORT_ID                 = 1;
 	static final int AIRPORT_NAME               = 2;
 	static final int AIRPORT_CITY               = 3;

@@ -8,16 +8,22 @@ import java.time.LocalTime;
  */
 public class Leg {
     private int number;
-    Airport depAirport;
-    LocalTime arrTime;
-    LocalTime depTime;
-    Airport arrAirport;
+	private Airport depAirport;
+	private LocalTime arrTime;
+	private LocalTime depTime;
+	private Airport arrAirport;
 
-    public Leg() {
-        
-    }
-    
-    public int getNumber() {
+    public Leg() {}
+
+	public Leg(int number, Airport depAirport, LocalTime arrTime, LocalTime depTime, Airport arrAirport) {
+		this.number = number;
+		this.depAirport = depAirport;
+		this.arrTime = arrTime;
+		this.depTime = depTime;
+		this.arrAirport = arrAirport;
+	}
+
+	public int getNumber() {
         return number;
     }
 
