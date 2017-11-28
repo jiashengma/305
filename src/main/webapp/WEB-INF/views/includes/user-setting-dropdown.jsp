@@ -4,7 +4,7 @@
 
 
 <ul class="dropdown-menu">
-    <li><a href="">Account</a></li>
+    <li><a href="/account">Account</a></li>
     <c:choose> 
         <c:when test="${person.accessControl ne 'CUSTOMER_REPRESENTATIVE' and person.accessControl ne 'MANAGER'}">
             <li><a href="/reservation-history">Reservation History</a></li>
