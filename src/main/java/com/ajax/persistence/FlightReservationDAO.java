@@ -93,19 +93,30 @@ public class FlightReservationDAO {
 					}
 
 		        query.setLength(0);
-				// select L.LegNo, L.DepAirportId, L.ArrTime, L.DepTime, L.ArrAirportId from leg L where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1;
+				// select L.LegNo, AP1.Name, L.ArrTime, L.DepTime, AP2.Name from leg L, airport AP1, airport AP2
+		        //  where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1 and AP1.Id=L.DepAirportId and AP2.Id=L.ArrAirportId;
 				query.append("SELECT L.").append(Constants.LEGNO)
-						.append(", L.").append(Constants.DEPATURE_AIRPORT_ID)
+						.append(", AP1.").append(Constants.NAME_FIELD)
 						.append(", L.").append(Constants.ARRIVAL_TIME)
 						.append(", L.").append(Constants.DEPATURE_TIME)
-						.append(", L.").append(Constants.ARRIVAL_AIRPORT_ID)
+						.append(", AP2.").append(Constants.NAME_FIELD)
 						.append(" FROM ").append(Constants.LEG_TABLE)
-						.append(" L WHERE L.").append(Constants.AIRLINEID_FIELD)
+						.append(" L, ").append(Constants.AIRPORT_TABLE)
+						.append(" AP1, ").append(Constants.AIRPORT_TABLE)
+						.append(" AP2 WHERE L.").append(Constants.AIRLINEID_FIELD)
 						.append("=\"%s\" and L.").append(Constants.FLIGHTNO_FIELD)
-						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d;");
+						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d")
+						.append(" and AP1.").append(Constants.ID_FIELD)
+						.append("=L.").append(Constants.DEPATURE_AIRPORT_ID)
+						.append(" and AP2.").append(Constants.ID_FIELD)
+						.append("=L.").append(Constants.ARRIVAL_AIRPORT_ID);
 
 		        stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i)));
 		        rs = stmt.executeQuery();
+
+		        while (rs.next())
+			        flights.add(new Flight());
+
 	        }
 
             conn.commit();
