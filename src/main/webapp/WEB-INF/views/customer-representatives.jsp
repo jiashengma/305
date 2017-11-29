@@ -12,7 +12,7 @@
             <th>Start Date</th>
             <c:if test="${person.accessControl eq 'MANAGER'}"><th>Hourly Rate</th></c:if>
             <th>Phone Number</th>
-            <th>Username</th>
+            <!--<th>Username</th>-->
             <th>Street</th>
             <th>City</th>
             <th>State</th>
@@ -25,7 +25,7 @@
                 <td>${cr.startDate}</td>
                 <c:if test="${person.accessControl eq 'MANAGER'}"><td>${cr.hourlyRate}</td></c:if>
                 <td>${cr.phone}</td>
-                <td>${cr.userName}</td>
+                <!--<td>${cr.userName}</td>-->
                 <td>${cr.address.street}</td>
                 <td>${cr.address.city}</td>
                 <td>${cr.address.state}</td>

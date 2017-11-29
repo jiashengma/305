@@ -7,8 +7,6 @@ form submission: get session, check if session("user")==null)
 registraion handler, and set the priviledge bit manually in db 
 [] check email and password using jquery in front end
 [] on reserve, +1 to customer's rating
-[] show all customer representative doesnt show username, probably forgot to
-add or load
 
 # Setup (Accurate as of November 13)
 - Download maven and place the bin directory into the environment variables
