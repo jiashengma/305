@@ -1,8 +1,8 @@
--- MySQL dump 10.14  Distrib 5.5.56-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
 --
--- Host: mysql2.cs.stonybrook.edu    Database: jiama
+-- Host: localhost    Database: ajax305
 -- ------------------------------------------------------
--- Server version	5.5.25
+-- Server version	5.7.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,9 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Current Database: `ajax305`
 --
 
-USE ajax305;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ajax305` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `ajax305`;
+
 --
 -- Table structure for table `advpurchasediscount`
 --
@@ -107,12 +111,12 @@ CREATE TABLE `auctions` (
   `AirlineID` char(2) NOT NULL,
   `FlightNo` int(11) NOT NULL,
   `Class` varchar(20) NOT NULL,
-  `Date` datetime NOT NULL,
+  `Date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `NYOP` decimal(10,2) NOT NULL,
   PRIMARY KEY (`AccountNo`,`AirlineID`,`FlightNo`,`Class`,`Date`),
   KEY `AirlineID` (`AirlineID`,`FlightNo`),
-  CONSTRAINT `auctions_ibfk_1` FOREIGN KEY (`AccountNo`) REFERENCES `customer` (`AccountNo`),
-  CONSTRAINT `auctions_ibfk_2` FOREIGN KEY (`AirlineID`, `FlightNo`) REFERENCES `flight` (`AirlineID`, `FlightNo`)
+  CONSTRAINT `auctions_ibfk_1` FOREIGN KEY (`AccountNo`) REFERENCES `customer` (`AccountNo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `auctions_ibfk_2` FOREIGN KEY (`AirlineID`, `FlightNo`) REFERENCES `flight` (`AirlineID`, `FlightNo`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,7 +126,6 @@ CREATE TABLE `auctions` (
 
 LOCK TABLES `auctions` WRITE;
 /*!40000 ALTER TABLE `auctions` DISABLE KEYS */;
-INSERT INTO `auctions` VALUES (2,'AA',111,'Economy','2011-01-05 11:00:00',400.00),(2,'AA',111,'Economy','2011-01-05 11:22:39',991.00),(5213,'AJ',23,'Economy','2009-06-20 00:00:00',900.00);
 /*!40000 ALTER TABLE `auctions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,14 +139,14 @@ DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
   `Id` int(11) NOT NULL,
   `AccountNo` int(11) NOT NULL AUTO_INCREMENT,
-  `CreditCardNo` char(16) DEFAULT NULL,
+  `CreditCardNo` mediumtext,
   `Email` varchar(50) DEFAULT NULL,
-  `CreationDate` datetime NOT NULL,
+  `CreationDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Rating` int(11) DEFAULT NULL,
   PRIMARY KEY (`AccountNo`),
   KEY `Id` (`Id`),
-  CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`Id`) REFERENCES `person` (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5214 DEFAULT CHARSET=utf8;
+  CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`Id`) REFERENCES `person` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +155,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,1,'1234567890123456','awesomejane@ftw.com','2011-01-01 00:00:00',0),(2,2,'2345678901234567','jdoe@woot.com','2011-01-01 00:00:00',0),(3,3,'3456789012345678','rickroller@rolld.com','2011-01-01 00:00:00',0),(4,4,'1020304050607081','Emily@google.us','1990-09-22 00:00:00',5),(5,5213,'9878654532127319','tiffany@del.icio.us','2000-05-22 00:00:00',7);
+INSERT INTO `customer` VALUES (4,4,'1234567890123456','user1@email.com','2017-11-24 12:08:46',0),(5,5,'111','user2@email.com','2017-11-24 12:46:41',0);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +170,7 @@ CREATE TABLE `customerpreferences` (
   `AccountNo` int(11) NOT NULL,
   `Preference` varchar(50) NOT NULL,
   PRIMARY KEY (`AccountNo`,`Preference`),
-  CONSTRAINT `customerpreferences_ibfk_1` FOREIGN KEY (`AccountNo`) REFERENCES `customer` (`AccountNo`)
+  CONSTRAINT `customerpreferences_ibfk_1` FOREIGN KEY (`AccountNo`) REFERENCES `customer` (`AccountNo`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -177,7 +180,6 @@ CREATE TABLE `customerpreferences` (
 
 LOCK TABLES `customerpreferences` WRITE;
 /*!40000 ALTER TABLE `customerpreferences` DISABLE KEYS */;
-INSERT INTO `customerpreferences` VALUES (1,'Lox'),(5213,'Lots of sushi?'),(5213,'More Sushi?'),(5213,'Sushi'),(5213,'sushi buffet');
 /*!40000 ALTER TABLE `customerpreferences` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,13 +192,13 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employee` (
   `Id` int(11) NOT NULL,
-  `SSN` int(11) NOT NULL,
-  `IsManager` tinyint(1) NOT NULL,
+  `SSN` char(9) NOT NULL,
+  `IsManager` tinyint(1) NOT NULL DEFAULT '0',
   `StartDate` date NOT NULL,
   `HourlyRate` decimal(10,2) NOT NULL,
   PRIMARY KEY (`SSN`),
   UNIQUE KEY `Id` (`Id`),
-  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`Id`) REFERENCES `person` (`Id`)
+  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`Id`) REFERENCES `person` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -206,7 +208,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (0,0,1,'1980-12-31',9999.99),(2,136923687,1,'2016-01-14',1.00),(3,236542365,0,'2010-11-30',24.00),(1,670369138,0,'2017-10-23',10.00);
+INSERT INTO `employee` VALUES (0,'0',1,'1980-12-31',9999.99),(10,'121212120',0,'2017-11-28',11.00),(2,'136923687',1,'2016-01-14',1.00),(3,'236542365',0,'2010-11-30',24.00),(1,'670369138',1,'2017-10-23',10.00);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -282,8 +284,8 @@ CREATE TABLE `includes` (
   `DepDate` datetime DEFAULT NULL,
   PRIMARY KEY (`ResrNo`,`AirlineID`,`FlightNo`,`LegNo`),
   KEY `AirlineID` (`AirlineID`,`FlightNo`,`LegNo`),
-  CONSTRAINT `includes_ibfk_1` FOREIGN KEY (`ResrNo`) REFERENCES `reservation` (`ResrNo`),
-  CONSTRAINT `includes_ibfk_2` FOREIGN KEY (`AirlineID`, `FlightNo`, `LegNo`) REFERENCES `leg` (`AirlineID`, `FlightNo`, `LegNo`)
+  CONSTRAINT `includes_ibfk_1` FOREIGN KEY (`ResrNo`) REFERENCES `reservation` (`ResrNo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `includes_ibfk_2` FOREIGN KEY (`AirlineID`, `FlightNo`, `LegNo`) REFERENCES `leg` (`AirlineID`, `FlightNo`, `LegNo`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -293,7 +295,6 @@ CREATE TABLE `includes` (
 
 LOCK TABLES `includes` WRITE;
 /*!40000 ALTER TABLE `includes` DISABLE KEYS */;
-INSERT INTO `includes` VALUES (111,'AA',111,1,'2011-01-05 11:00:00'),(111,'AA',111,2,'2011-01-05 19:00:00'),(222,'JA',111,1,'2011-01-14 22:30:00'),(333,'AM',1337,1,'2011-01-13 07:00:00'),(334,'AA',111,1,'2011-01-05 13:20:01');
 /*!40000 ALTER TABLE `includes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,6 +334,31 @@ INSERT INTO `leg` VALUES ('AA',111,1,'LGA','2011-01-05 09:00:00','2011-01-05 11:
 UNLOCK TABLES;
 
 --
+-- Table structure for table `login`
+--
+
+DROP TABLE IF EXISTS `login`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `login` (
+  `id` int(11) NOT NULL,
+  `username` varchar(24) NOT NULL,
+  `password` char(64) NOT NULL,
+  PRIMARY KEY (`id`,`username`,`password`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `login`
+--
+
+LOCK TABLES `login` WRITE;
+/*!40000 ALTER TABLE `login` DISABLE KEYS */;
+INSERT INTO `login` VALUES (0,'andlam','a990f12d738d0df16ea4ad6c40abc86053a8dab0f3022fda65b215399948dfd0'),(1,'aaliberti','a990f12d738d0df16ea4ad6c40abc86053a8dab0f3022fda65b215399948dfd0'),(2,'jiama','a990f12d738d0df16ea4ad6c40abc86053a8dab0f3022fda65b215399948dfd0'),(3,'sas','a990f12d738d0df16ea4ad6c40abc86053a8dab0f3022fda65b215399948dfd0'),(4,'user1','a990f12d738d0df16ea4ad6c40abc86053a8dab0f3022fda65b215399948dfd0'),(5,'user2','a990f12d738d0df16ea4ad6c40abc86053a8dab0f3022fda65b215399948dfd0'),(10,'emp1','a990f12d738d0df16ea4ad6c40abc86053a8dab0f3022fda65b215399948dfd0');
+/*!40000 ALTER TABLE `login` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `passenger`
 --
 
@@ -344,8 +370,8 @@ CREATE TABLE `passenger` (
   `AccountNo` int(11) NOT NULL,
   PRIMARY KEY (`Id`,`AccountNo`),
   KEY `AccountNo` (`AccountNo`),
-  CONSTRAINT `passenger_ibfk_1` FOREIGN KEY (`Id`) REFERENCES `person` (`Id`),
-  CONSTRAINT `passenger_ibfk_2` FOREIGN KEY (`AccountNo`) REFERENCES `customer` (`AccountNo`)
+  CONSTRAINT `passenger_ibfk_1` FOREIGN KEY (`Id`) REFERENCES `person` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `passenger_ibfk_2` FOREIGN KEY (`AccountNo`) REFERENCES `customer` (`AccountNo`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -355,7 +381,6 @@ CREATE TABLE `passenger` (
 
 LOCK TABLES `passenger` WRITE;
 /*!40000 ALTER TABLE `passenger` DISABLE KEYS */;
-INSERT INTO `passenger` VALUES (1,1),(2,2),(3,3);
 /*!40000 ALTER TABLE `passenger` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -370,13 +395,13 @@ CREATE TABLE `person` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `FirstName` varchar(50) NOT NULL,
   `LastName` varchar(50) NOT NULL,
-  `Address` varchar(100) NOT NULL,
+  `Street` varchar(52) NOT NULL,
   `City` varchar(50) NOT NULL,
   `State` varchar(50) NOT NULL,
   `ZipCode` int(11) NOT NULL,
-  `Phone` varchar(10) DEFAULT NULL,
+  `Phone` mediumtext,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -385,7 +410,7 @@ CREATE TABLE `person` (
 
 LOCK TABLES `person` WRITE;
 /*!40000 ALTER TABLE `person` DISABLE KEYS */;
-INSERT INTO `person` VALUES (0,'SegFault','CoreDumped','503 Memory Lane','Silicon Valley','Frozen',94027,'8005984637'),(1,'Jane','Smith','100 Nicolls Rd','Stony Brook','New York',17790,'5555555555'),(2,'John','Doe','123 N Fake Street','New York','New York',10001,'1231231234'),(3,'Rick','Astley','1337 Internet Lane','Los Angeles','California',90001,'3141592653'),(4,'Emma','Smith','1600 Penn Ave','Washington DC','DC',20500,'2024561111'),(5,'Olivia','Murphy','11 Wall Street','New York City','New York',10005,'8005687625'),(6,'Ava','Martin','350 Fifth Avenue','New York','New York',10118,'2123326868'),(7,'Isabella','Brown','221 B Baker St','London','England',63715,'2072243688'),(8,'Isabella','Roy','Tour Eiffel Champ de Mars','Paris','France',75004,'892701239'),(9,'Charlotte','Tremblay','4059 Mt Lee Dr. Hollywood','Hollywood','California',33004,'3238488850'),(10,'Scarlett','Wilson','Statue of Liberty','Liberty Island','New York',10004,'2123633200'),(11,'Lily','Lavoie','Manager Square','Bethlehem','West Bank',70729,'8008102301'),(12,'Grace','Diaz','2 Macquarie Street','West Bank','Australia',2019,'794605008'),(13,'Noraa','Sánchez','10 Downing Street','BestPlace','United Kingdom',65217,'853641898'),(14,'Queen','Elizabeth II','Buckingham Palace','London','England',1,'1216272000');
+INSERT INTO `person` VALUES (0,'Andrew','Lam','503 Memory Lane','Silicon Valley','NY',94027,'8005984637'),(1,'Antonio','Aliberti','100 Nicolls Rd','Stony Brook','NY',17790,'5555555555'),(2,'Jia Sheng','Ma','123 N Fake Street','New York','NY',10001,'1231231234'),(3,'Scott','Smolka','1337 Internet Lane','Los Angeles','CA',90001,'3141592653'),(4,'User','One','333 N','Phenix','AR',99912,'1234567890'),(5,'User','Two','123 main','BROOKLYN','NY',11222,'0987654321'),(10,'Employee','One','1 Nicols Rd','Stony Brook','NY',11790,'9170000000');
 /*!40000 ALTER TABLE `person` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -401,14 +426,14 @@ CREATE TABLE `reservation` (
   `ResrDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `BookingFee` decimal(10,2) NOT NULL,
   `TotalFare` decimal(10,2) NOT NULL,
-  `RepSSN` int(11) DEFAULT NULL,
+  `RepSSN` char(9) NOT NULL,
   `AccountNo` int(11) NOT NULL,
   PRIMARY KEY (`ResrNo`),
   KEY `RepSSN` (`RepSSN`),
   KEY `AccountNo` (`AccountNo`),
-  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`RepSSN`) REFERENCES `employee` (`SSN`),
-  CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`AccountNo`) REFERENCES `customer` (`AccountNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=335 DEFAULT CHARSET=utf8;
+  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`RepSSN`) REFERENCES `employee` (`SSN`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`AccountNo`) REFERENCES `customer` (`AccountNo`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -417,7 +442,6 @@ CREATE TABLE `reservation` (
 
 LOCK TABLES `reservation` WRITE;
 /*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES (111,'2011-01-01 06:00:00',1200.00,1200.00,236542365,2),(222,'2011-01-01 06:05:00',500.00,500.00,236542365,1),(333,'2011-01-01 07:00:00',3333.33,3333.33,236542365,3),(334,'2017-10-25 02:20:50',20.00,1000.00,236542365,2);
 /*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -437,8 +461,8 @@ CREATE TABLE `reservationpassenger` (
   `Meal` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ResrNo`,`Id`,`AccountNo`),
   KEY `Id` (`Id`,`AccountNo`),
-  CONSTRAINT `reservationpassenger_ibfk_1` FOREIGN KEY (`ResrNo`) REFERENCES `reservation` (`ResrNo`),
-  CONSTRAINT `reservationpassenger_ibfk_2` FOREIGN KEY (`Id`, `AccountNo`) REFERENCES `passenger` (`Id`, `AccountNo`)
+  CONSTRAINT `reservationpassenger_ibfk_1` FOREIGN KEY (`ResrNo`) REFERENCES `reservation` (`ResrNo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reservationpassenger_ibfk_2` FOREIGN KEY (`Id`, `AccountNo`) REFERENCES `passenger` (`Id`, `AccountNo`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -448,7 +472,6 @@ CREATE TABLE `reservationpassenger` (
 
 LOCK TABLES `reservationpassenger` WRITE;
 /*!40000 ALTER TABLE `reservationpassenger` DISABLE KEYS */;
-INSERT INTO `reservationpassenger` VALUES (111,2,2,'33F','Economy','Chips'),(222,1,1,'13A','First','Fish and Chips'),(333,3,3,'1A','First','Sushi');
 /*!40000 ALTER TABLE `reservationpassenger` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -493,4 +516,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-24 22:58:48
+-- Dump completed on 2017-11-28 23:43:12
