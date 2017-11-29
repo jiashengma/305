@@ -51,3 +51,13 @@ table, th, td {
 .error {
     color: red;
 }
+
+#employeeBody, #cusRep {
+    background: rgba(217, 217, 217, .8);
+    padding: 1em;
+    width: 100%;
+}
+
+#employeeBody > ul > * {
+    padding: 0.25em;
+}

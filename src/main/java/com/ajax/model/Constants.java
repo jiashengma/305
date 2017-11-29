@@ -9,6 +9,7 @@ public class Constants {
     // request/response/session attributes
     public static final String PERSON = "person";
     public static final String FLIGHT = "flight";
+    public static final String CUSTOMER_REPRESENTATIVES = "customerRepresentatives";
 
     // mysql connection
     public static final String HOSTNAME = "localhost";
