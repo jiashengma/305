@@ -4,20 +4,62 @@
     Author     : majiasheng
 --%>
 
-<%@include file="/WEB-INF/views/include/header.jsp" %>
+<%@include file="/WEB-INF/views/includes/header.jsp" %>
 
 <!--send home if user is empty-->
-<c:if test="${empty user}">
+<c:if test="${empty person}">
     <c:redirect url="/"/>
 </c:if>
-<h2>User Setting</h2>
+<h2>Account Setting</h2>
 <hr>
 ${msg}
-<form name="userInfoForm" action="/confirmEdit" method="POST">
-    <input type="hidden" name="username" value="${user.username}">
-    First Name: <input type="text" name="firstname" value="${person.firstName}"><br>
-    Last Name: <input type="text"  name="lastname" value="${person.lastName}"><br>
-    <input type="submit" value="Eidt">
-</form>
+<div id="mask">
+    <form name="userInfoForm" action="/confirmEdit" method="POST">
+        <input type="hidden" name="username" value="${person.userName}">
+        <table class="accSettingTable">
 
-<%@include file="/WEB-INF/views/include/footer.jsp" %>
+            <tr>
+                <td>First Name</td>
+                <td><input type="text" name="firstname" value="${person.firstName}"></td>
+            </tr>
+
+            <tr>
+                <td>Last Name</td>
+                <td><input type="text"  name="lastname" value="${person.lastName}"></td>
+            </tr>
+
+            <tr>
+                <td>Tel</td>
+                <td><input type="text" name="phone" value="${person.phone}"></td>
+            </tr>
+
+            <tr>
+                <td>Address</td>
+                <td>
+                    <input type="text" name="address.street" value="${person.address.street}" required>
+                    <input type="text" name="address.city" value="${person.address.city}" required>
+                    <select name="state">
+                        <option name="${person.address.state}" selected="selected">"${person.address.state}"</option>>
+                        <c:forEach var="state" items="${states}">
+                            <option name="${state}">${state}</option>
+                        </c:forEach>
+                    </select>
+                    <input type="text" name="address.zipCode" value="${person.address.zipCode}" required>
+                <td>
+            </tr>
+            <c:if test="${person.accessControl eq 'CUSTOMER'}">
+                <tr>
+                    <td>Credit Card Number</td>
+                    <td><input type="text" name="creditCard" value="${person.creditCard}"></td>
+                </tr>
+            </c:if>
+
+        </table>
+
+
+
+        <input type="submit" value="Update">
+    </form>
+</div>
+
+<%@include file="/WEB-INF/views/includes/footer.jsp" %>

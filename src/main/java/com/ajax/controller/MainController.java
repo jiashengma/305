@@ -86,7 +86,7 @@ public class MainController {
         return modelAndView;
     }
     
-    @RequestMapping(value = "/account", method = RequestMethod.GET)
+    @RequestMapping(value = "/account-setting", method = RequestMethod.GET)
     public ModelAndView manageAccountSettings() {
         ModelAndView mv = new ModelAndView("account-setting");
         return mv;

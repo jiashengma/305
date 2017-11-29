@@ -17,7 +17,7 @@
 	[]	customer's rating should reflect how active a ticket buyer he or she is (+1 to customer's rating)
 
 3.1 Manager Transactions
-	[]	Add, Edit and Delete information for an employee
+	[\]	Add, Edit and Delete information for an employee
 	[]	Obtain a sales report for a particular month
 	[]	Produce a comprehensive listing of all flights
 	[]	Produce a list of reservations by flight number or by customer name
@@ -50,12 +50,12 @@
 	[]	Personalized flight suggestion list 
 
 4 User Access Control
-	[]	Customer Representatives cannot perform manager-level transactions, but can read employee info except pay rate.
+	[x]	Customer Representatives cannot perform manager-level transactions, but can read employee info except pay rate.
 	[]	Customer Representatives should be able to record the receipt of an order from a customer.
-	[]	A customer cannot access to other customers' account information, or to any employee information. 
+	[x]	A customer cannot access to other customers' account information, or to any employee information. 
 
 5 Utilities
-	[]	Allowing the manager to add and delete users
+	[x]	Allowing the manager to add and delete users
 	[]	Backing up the database files
 	[]	A comprehensive Help facility, including a topic-driven pull-down Help menu 
 
