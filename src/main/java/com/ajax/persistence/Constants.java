@@ -64,7 +64,7 @@ public class Constants {
     public static final String EMPLOYEE_SSN_FIELD = "SSN";
     public static final String EMPLOYEE_START_DATE_FIELD = "StartDate";
     public static final String EMPLOYEE_HOURLY_RATE_FIELD = "HourlyRate";
-    
+
     // auction
     public static final String AUCTIONS_TABLE = "auctions";
     public static final String NYOP_FIELD = "NYOP";
@@ -75,4 +75,6 @@ public class Constants {
     public static final String FARE_TABLE = "fare";
     public static final String FARE_TYPE_FIELD = "FareType";
     public static final String FARE_FIELD = "Fare";
+    public static final String HIDDEN_FARE_FIELD = "Hidden";
+    public static final String REGULAR_FARE_FIELD = "Regular";
 }

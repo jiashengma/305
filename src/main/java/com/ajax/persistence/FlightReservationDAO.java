@@ -51,8 +51,10 @@ public class FlightReservationDAO {
 				        .append(Constants.ARRIVAL_AIRPORT_ID).append(" and L1.");
 
 	        PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo ?
-			        String.format(query.toString(), hasFlightFrom ? flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo()) :
-			        String.format(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingFrom()));
+			        String.format(query.append(";").toString(),
+					        hasFlightFrom ? flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo()) :
+			        String.format(query.append(";").toString(),
+					        flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingFrom()));
 	        ResultSet rs = stmt.executeQuery();
 
 	        ArrayList<String> airlineIDs = new ArrayList<>();
@@ -62,17 +64,38 @@ public class FlightReservationDAO {
 				airlineIDs.add(rs.getString(1));
 				flightNums.add(rs.getInt(2));
 				legNums.add(rs.getInt(3));
-	        }
+	        }   // hard coded numbers because I chose order in select statement above
+
+	        for (int i = 0; i < airlineIDs.size(); i++) {
+	        	query.setLength(0);
+	        	// for this (airline, flight num) get fares
+	        	// select F.FareType, F.Fare from Fare F where F.AirlineID="AA" and F.FlightNo=111;
+		        query.append("SELECT F.").append(Constants.FARE_TYPE_FIELD)
+				        .append(", F.").append(Constants.FARE_FIELD)
+		                .append(" FROM ").append(Constants.FARE_TABLE)
+				        .append(" WHERE F.").append(Constants.AIRLINEID_FIELD)
+				        .append("=\"%s\" and F.").append(Constants.FLIGHTNO_FIELD).append("=%d;");
+		        stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i)));
+		        rs = stmt.executeQuery();
+
+		        double fare = -1;
+		        double hiddenFare = -1;
+				while (rs.next())
+					switch (rs.getString(1)) {
+						case Constants.HIDDEN_FARE_FIELD:
+							hiddenFare = rs.getInt(2);
+							break;
+						case Constants.REGULAR_FARE_FIELD:
+							fare = rs.getInt(2);
+							break;
+						default:
+							Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.WARNING, "Weird Result" + rs.getString(2));
+					}
+
+		        query.setLength(0);
+				// select L.AirlineID, L.FlightNo, L.LegNo, L.DepAirportId, L.ArrTime, L.DepTime, L.ArrAirportId from leg L where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1;
 
 
-	        /*
-			select F.AirlineID, F.FlightNo, F.FareType, F.Fare from Fare F where F.AirlineID="AA" and F.FlightNo=111;
-			select L.AirlineID, L.FlightNo, L.LegNo, L.DepAirportId, L.ArrTime, L.DepTime, L.ArrAirportId from leg L where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1;
-	         */
-
-	        while (rs.next()) {   // TODO: do not show flights that are null in the search result
-
-		        flights.add(new Flight());
 	        }
 
             conn.commit();

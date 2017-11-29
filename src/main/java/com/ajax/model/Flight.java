@@ -52,7 +52,7 @@ public class Flight {
 	}
 
 	public double getHiddenFare() {
-		return hiddenFare.orElse(-1.0);
+		return hiddenFare.orElse(fare);
 	}
 
 	public void setHiddenFare(double hiddenFare) {
