@@ -3,16 +3,16 @@ package com.ajax.model;
 public class Airport {
     private String name;
     private String shortName;
-    private String City;
-    private String Country;
+    private String city;
+    private String country;
 
     public Airport() {}
 
 	public Airport(String shortName, String name, String city, String country) {
 		this.name = name;
 		this.shortName = shortName;
-		City = city;
-		Country = country;
+		this.city = city;
+		this.country = country;
 	}
 
 	public String getName() {
@@ -32,19 +32,19 @@ public class Airport {
     }
 
     public String getCity() {
-        return City;
+        return city;
     }
 
     public void setCity(String City) {
-        this.City = City;
+        this.city = City;
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
     public void setCountry(String Country) {
-        this.Country = Country;
+        this.country = Country;
     }
 
 	@Override
@@ -52,8 +52,8 @@ public class Airport {
 		return "Airport{" +
 				"name='" + name + '\'' +
 				", shortName='" + shortName + '\'' +
-				", City='" + City + '\'' +
-				", Country='" + Country + '\'' +
+				", city='" + city + '\'' +
+				", country='" + country + '\'' +
 				'}';
 	}
 }

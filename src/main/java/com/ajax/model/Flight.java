@@ -56,7 +56,17 @@ public class Flight {
 	}
 
 	public void setHiddenFare(double hiddenFare) {
-		this.hiddenFare = Optional.ofNullable(hiddenFare);
+		this.hiddenFare = Optional.of(hiddenFare);
 	}
 
+	@Override
+	public String toString() {
+		return "Flight{" +
+				"airline='" + airline + '\'' +
+				", flightNo=" + flightNo +
+				", legs=" + legs +
+				", fare=" + fare +
+				", hiddenFare=" + hiddenFare +
+				'}';
+	}
 }

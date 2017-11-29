@@ -19,13 +19,15 @@ public class FlightReservationDAO {
 	    List<Flight> flights = new ArrayList<>();
         Connection conn = MySQLConnection.connect();
         try {
-        	if (flightSearchForm.getFlyingFrom() == null && flightSearchForm.getFlyingTo() == null) {
+	        System.out.println(flightSearchForm);
+
+	        boolean hasFlightFrom = !flightSearchForm.getFlyingFrom().equals("");
+	        boolean hasFlightTo = !flightSearchForm.getFlyingTo().equals("");
+
+	        if (!hasFlightFrom && !hasFlightTo) {
 		        Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, "Requires one+ search entry");
 		        return null;
 	        }
-
-	        boolean hasFlightFrom = flightSearchForm.getFlyingFrom() != null;
-	        boolean hasFlightTo = flightSearchForm.getFlyingTo() != null;
 
 	        /*  Example query:
 	            select L1.AirlineID, L1.FlightNo, L1.LegNo from leg L1, leg L2, airport AP1, airport AP2 where AP1.Name="LaGuardia"
@@ -41,14 +43,14 @@ public class FlightReservationDAO {
 	        query.append(Constants.AIRPORT_TABLE).append(" AP1");
 	        if (hasFlightFrom && hasFlightTo)
 		        query.append(", ").append(Constants.AIRPORT_TABLE).append(" AP2 ");
-	        query.append("WHERE AP1.").append(Constants.NAME_FIELD).append("=\"%s\" and AP1.")
+	        query.append(" WHERE AP1.").append(Constants.NAME_FIELD).append("=\"%s\" and AP1.")
 			        .append(Constants.ID_FIELD).append("=L1.");
 	        if (hasFlightFrom ^ hasFlightTo)
 	        	query.append(hasFlightFrom ? Constants.DEPATURE_AIRPORT_ID : Constants.ARRIVAL_AIRPORT_ID);
 	        else
 	        	query.append(Constants.DEPATURE_AIRPORT_ID).append(" and AP2.").append(Constants.NAME_FIELD)
 				        .append("=\"%s\" and AP2.").append(Constants.ID_FIELD).append("=L2.")
-				        .append(Constants.ARRIVAL_AIRPORT_ID).append(" and L1.");
+				        .append(Constants.ARRIVAL_AIRPORT_ID).append(" and L1.").append(Constants.ARRIVAL_AIRPORT_ID);
 
 	        PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo ?
 			        String.format(query.append(";").toString(),
@@ -73,8 +75,9 @@ public class FlightReservationDAO {
 		        query.append("SELECT F.").append(Constants.FARE_TYPE_FIELD)
 				        .append(", F.").append(Constants.FARE_FIELD)
 		                .append(" FROM ").append(Constants.FARE_TABLE)
-				        .append(" WHERE F.").append(Constants.AIRLINEID_FIELD)
+				        .append(" F WHERE F.").append(Constants.AIRLINEID_FIELD)
 				        .append("=\"%s\" and F.").append(Constants.FLIGHTNO_FIELD).append("=%d;");
+		        System.out.println(query);
 		        stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i)));
 		        rs = stmt.executeQuery();
 
@@ -91,6 +94,8 @@ public class FlightReservationDAO {
 						default:
 							Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.WARNING, "Weird Result" + rs.getString(2));
 					}
+
+		        System.out.printf("%nfare:%f%nhiddenFare:%f%n%n", fare, hiddenFare);
 
 		        query.setLength(0);
 				// select L.LegNo, AP1.Name, L.ArrTime, L.DepTime, AP2.Name from leg L, airport AP1, airport AP2
@@ -111,13 +116,19 @@ public class FlightReservationDAO {
 						.append(" and AP2.").append(Constants.ID_FIELD)
 						.append("=L.").append(Constants.ARRIVAL_AIRPORT_ID);
 
+		        System.out.println(query);
 		        stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i)));
 		        rs = stmt.executeQuery();
 
-		        while (rs.next())
-			        flights.add(new Flight());
+		        List<Leg> legs = new ArrayList<>();
+		        while (rs.next()) { // int number, Airport depAirport, LocalTime arrTime, LocalTime depTime, Airport arrAirport
+					Leg leg = new Leg();
 
+		        }
+		        flights.add(new Flight());
 	        }
+
+	        flights.forEach(System.out::println);
 
             conn.commit();
         } catch (SQLException ex) {

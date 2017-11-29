@@ -37,7 +37,8 @@ public class FlightSearchForm {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             this.depDate = format.parse(depDate);
         } catch (ParseException ex) {
-            Logger.getLogger(FlightSearchForm.class.getName()).log(Level.SEVERE, "Invalid Date format", ex);
+	        System.out.println("Error parsing depDate in FlightSearchForm");
+//            Logger.getLogger(FlightSearchForm.class.getName()).log(Level.SEVERE, "Invalid Date format", ex);
         }
     }
 
@@ -50,7 +51,8 @@ public class FlightSearchForm {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             this.retDate = format.parse(retDate);
         } catch (ParseException ex) {
-            Logger.getLogger(FlightSearchForm.class.getName()).log(Level.SEVERE, "Invalid Date format", ex);
+	        System.out.println("Error parsing retDate in FlightSearchForm");
+//            Logger.getLogger(FlightSearchForm.class.getName()).log(Level.SEVERE, "Invalid Date format", ex);
         }
     }
 
@@ -66,9 +68,9 @@ public class FlightSearchForm {
     public String toString() {
         StringBuilder res = new StringBuilder("Flight Search form:");
         if (flyingFrom != null)
-        	res.append("\nFlying From: ").append(flyingFrom);
+        	res.append("\nFlying From: <").append(flyingFrom).append(">");
         if (flyingTo != null)
-        	res.append("\nFlying to: ").append(flyingTo);
+        	res.append("\nFlying to: <").append(flyingTo).append(">");
         if (depDate != null)
         	res.append("\nDeparture date: ").append(depDate.toString());
         if (retDate != null)
