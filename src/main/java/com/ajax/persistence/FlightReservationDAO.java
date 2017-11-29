@@ -93,9 +93,19 @@ public class FlightReservationDAO {
 					}
 
 		        query.setLength(0);
-				// select L.AirlineID, L.FlightNo, L.LegNo, L.DepAirportId, L.ArrTime, L.DepTime, L.ArrAirportId from leg L where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1;
+				// select L.LegNo, L.DepAirportId, L.ArrTime, L.DepTime, L.ArrAirportId from leg L where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1;
+				query.append("SELECT L.").append(Constants.LEGNO)
+						.append(", L.").append(Constants.DEPATURE_AIRPORT_ID)
+						.append(", L.").append(Constants.ARRIVAL_TIME)
+						.append(", L.").append(Constants.DEPATURE_TIME)
+						.append(", L.").append(Constants.ARRIVAL_AIRPORT_ID)
+						.append(" FROM ").append(Constants.LEG_TABLE)
+						.append(" L WHERE L.").append(Constants.AIRLINEID_FIELD)
+						.append("=\"%s\" and L.").append(Constants.FLIGHTNO_FIELD)
+						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d;");
 
-
+		        stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i)));
+		        rs = stmt.executeQuery();
 	        }
 
             conn.commit();
