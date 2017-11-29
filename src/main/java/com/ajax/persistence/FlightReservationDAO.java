@@ -15,7 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FlightReservationDAO {
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
-    	List<Flight> flights = new ArrayList<>();
+	    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, flightSearchForm.toString());
+	    List<Flight> flights = new ArrayList<>();
         Connection conn = MySQLConnection.connect();
         try {
         	if (flightSearchForm.getFlyingFrom() == null && flightSearchForm.getFlyingTo() == null) {
@@ -23,20 +24,17 @@ public class FlightReservationDAO {
 		        return null;
 	        }
 
-	        // TODO: add leg info
-	        Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, flightSearchForm.toString());
-//	        PreparedStatement stmt = conn.prepareStatement("SELECT F." +
-//			        Constants.AIRLINEID_FIELD + ", F." + Constants.FLIGHTNO_FIELD
-//			        + " FROM " + Constants.FLIGHT_TABLE + " F;");
-
 	        boolean hasFlightFrom = flightSearchForm.getFlyingFrom() != null;
 	        boolean hasFlightTo = flightSearchForm.getFlyingTo() != null;
 
-	        //query data base for result
+	        /*  Example query:
+	            select L1.AirlineID, L1.FlightNo, L1.LegNo from leg L1, leg L2, airport AP1, airport AP2 where AP1.Name="LaGuardia"
+			//	        and AP1.Id=L1.DepAirportId and AP2.Name="Los Angeles International" and AP2.Id=L2.ArrAirportId;
+	            -> obtains AirlineID, FlightNo of all possible routes
+	        */
 	        StringBuilder query = new StringBuilder("SELECT L1.").append(Constants.AIRLINEID_FIELD)
 			        .append(", L1.").append(Constants.FLIGHTNO_FIELD).append(", L1.").append(Constants.LEGNO)
 			        .append(" FROM ").append(Constants.LEG_TABLE).append(" L1, ");
-//	        StringBuilder queryEnd = new StringBuilder();
 
 	        if (hasFlightFrom && hasFlightTo)
 		        query.append(Constants.LEG_TABLE).append(" L2, ");
@@ -50,22 +48,29 @@ public class FlightReservationDAO {
 	        else
 	        	query.append(Constants.DEPATURE_AIRPORT_ID).append(" and AP2.").append(Constants.NAME_FIELD)
 				        .append("=\"%s\" and AP2.").append(Constants.ID_FIELD).append("=L2.")
-				        .append(Constants.ARRIVAL_AIRPORT_ID);
+				        .append(Constants.ARRIVAL_AIRPORT_ID).append(" and L1.");
 
 	        PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo ?
 			        String.format(query.toString(), hasFlightFrom ? flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo()) :
 			        String.format(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingFrom()));
 	        ResultSet rs = stmt.executeQuery();
 
+	        ArrayList<String> airlineIDs = new ArrayList<>();
+	        ArrayList<Integer> flightNums = new ArrayList<>();
+	        ArrayList<Integer> legNums = new ArrayList<>();
+	        while (rs.next()) {   // obtaining L1.AirlineID, L1.FlightNo, L1.LegNo
+				airlineIDs.add(rs.getString(1));
+				flightNums.add(rs.getInt(2));
+				legNums.add(rs.getInt(3));
+	        }
+
+
 	        /*
-	        select L1.AirlineID, L1.FlightNo, L1.LegNo from leg L1, leg L2, airport AP1, airport AP2 where AP1.Name="LaGuardia"
-	            and AP1.Id=L1.DepAirportId and AP2.Name="Los Angeles International" and AP2.Id=L2.ArrAirportId;
 			select F.AirlineID, F.FlightNo, F.FareType, F.Fare from Fare F where F.AirlineID="AA" and F.FlightNo=111;
 			select L.AirlineID, L.FlightNo, L.LegNo, L.DepAirportId, L.ArrTime, L.DepTime, L.ArrAirportId from leg L where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1;
 	         */
 
-	        // am I potentially skipping one?
-	        while (rs.next()) {   //TODO: do not show flights that are null in the search result
+	        while (rs.next()) {   // TODO: do not show flights that are null in the search result
 
 		        flights.add(new Flight());
 	        }

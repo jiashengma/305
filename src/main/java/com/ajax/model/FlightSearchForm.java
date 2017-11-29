@@ -64,11 +64,16 @@ public class FlightSearchForm {
 
     @Override
     public String toString() {
-        return "Flight Search form: \nFlying From: " + flyingFrom + "\n"
-                + "Flying to: " + flyingTo + "\n"
-                + "Departure date: " + depDate.toString() + "\n"
-                + "Returning date: " + retDate.toString() + "\n";
-
+        StringBuilder res = new StringBuilder("Flight Search form:");
+        if (flyingFrom != null)
+        	res.append("\nFlying From: ").append(flyingFrom);
+        if (flyingTo != null)
+        	res.append("\nFlying to: ").append(flyingTo);
+        if (depDate != null)
+        	res.append("\nDeparture date: ").append(depDate.toString());
+        if (retDate != null)
+        	res.append("\nReturning date: ").append("retDate.toString()");
+        return res.append("\n").toString();
     }
 
 }
