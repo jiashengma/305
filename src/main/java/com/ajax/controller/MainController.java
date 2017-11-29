@@ -39,7 +39,6 @@ public class MainController {
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     private ModelAndView registration() {
         ModelAndView mv = new ModelAndView("registration");
-        mv.addObject("states", State.values());
         return mv;
     }
 
@@ -83,7 +82,7 @@ public class MainController {
             customer.getAddress().setState(formValues.get("state"));
 
             // add user to database
-            if (regitrationService.addCustomer(customer, formValues) == ReturnValue.ERROR) {
+            if (regitrationService.registerCustomer(customer, formValues) == ReturnValue.ERROR) {
                 redirectAttributes.addFlashAttribute("msg", "Error in registering: failed to add user to database");
             } else {
                 redirectAttributes.addFlashAttribute("msg", "Registration success");

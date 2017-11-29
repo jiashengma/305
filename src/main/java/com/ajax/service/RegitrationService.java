@@ -3,7 +3,9 @@ package com.ajax.service;
 import com.ajax.persistence.PasswordUtility;
 import com.ajax.persistence.PersonEntitiesManager;
 import com.ajax.model.Customer;
+import com.ajax.model.Employee;
 import com.ajax.model.Person;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,7 @@ public class RegitrationService {
      * @param formValues registration form values
      * @return
      */
-    public int addCustomer(Customer customer, Map<String,String> formValues) {
+    public int registerCustomer(Customer customer, Map<String,String> formValues) {
         //TODO: do validations here
         // if (!validateRegistration(customer)) {
         //     return ReturnValue.ERROR;
@@ -39,6 +41,12 @@ public class RegitrationService {
 
         return personEntitiesManager.addCustomer(customer);
     }
+    
+    public int registerEmployee(Employee e) {
+        e.setPassword(passwordUtility.getSecuredPassword(e.getPassword()));
+        
+        return personEntitiesManager.registerEmployee(e);
+    }
 
     private boolean validateRegistration(Customer customer, Map<String,String> formValues) {
 
@@ -46,6 +54,10 @@ public class RegitrationService {
         // formValues map has 2 password and email fields, valid them
         
         return false;
+    }
+    
+    public List<Employee> getAllCustomerRepresentatives() {
+        return personEntitiesManager.getAllCustomerRepresentatives();
     }
 
 }

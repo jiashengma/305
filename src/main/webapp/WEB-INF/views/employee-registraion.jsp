@@ -10,7 +10,7 @@
 <jsp:useBean id="address" class="com.ajax.model.Address" />
 <h2 id="h">Add Employee</h2>
 <div id="regform">
-    <form method="POST" action="/register">
+    <form method="POST" action="/register-employee">
         First Name<br>
         <input type="text" name="firstName" placeholder="First Name" required>
         <span class="error"><form:errors path="employee.firstName"/></span><br>
@@ -26,6 +26,10 @@
         Hourly Rate<br>
         <input type="number" name="hourlyRate" placeholder="Hourly Rate" required>
         <span class="error"><form:errors path="employee.hourlyRate"/></span><br>
+        
+        Start Date<br>
+        <input type="date" name="startDate" required>
+        <span class="error"><form:errors path="employee.startDate"/></span><br>
         
         Username<br>
         <input type="text" name="userName" placeholder="Username" required>

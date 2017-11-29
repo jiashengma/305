@@ -4,6 +4,7 @@ import com.ajax.model.Airport;
 import com.ajax.model.Flight;
 import com.ajax.model.FlightClass;
 import com.ajax.model.FlightSearchForm;
+import com.ajax.model.State;
 import com.ajax.service.FlightReservationService;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,10 @@ public class FlightReservationController {
             List<Airport> airports = flightReservationService.getAirports();
             context.setAttribute("s_airports", airports);
             context.setAttribute("classes", FlightClass.values());
+        }
+        
+        if(context.getAttribute("states") == null) {
+            context.setAttribute("states", State.values());
         }
     }
 

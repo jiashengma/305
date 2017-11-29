@@ -29,6 +29,7 @@
             <td>${cr.address.city}</td>
             <td>${cr.address.state}</td>
             <td>${cr.address.zipCode}</td>
+            <!--TODO:add edit and delete buttons-->
         </tr>
     </c:forEach>
 </table>
