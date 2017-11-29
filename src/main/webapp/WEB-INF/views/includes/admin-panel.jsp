@@ -1,6 +1,6 @@
 <h2>Admin</h2>
 <hr>
-<div id="adminBody">    
+<div id="employeeBody">    
     
     <ul>
 

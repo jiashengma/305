@@ -52,12 +52,12 @@ table, th, td {
     color: red;
 }
 
-#adminBody, #cusRep {
+#employeeBody, #cusRep {
     background: rgba(217, 217, 217, .8);
     padding: 1em;
     width: 100%;
 }
 
-#adminBody > ul > * {
+#employeeBody > ul > * {
     padding: 0.25em;
 }

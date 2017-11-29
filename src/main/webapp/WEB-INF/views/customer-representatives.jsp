@@ -10,7 +10,7 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Start Date</th>
-            <th>Hourly Rate</th>
+            <c:if test="${person.accessControl eq 'MANAGER'}"><th>Hourly Rate</th></c:if>
             <th>Phone Number</th>
             <th>Username</th>
             <th>Street</th>
@@ -23,14 +23,16 @@
                 <td>${cr.firstName}</td>
                 <td>${cr.lastName}</td>
                 <td>${cr.startDate}</td>
-                <td>${cr.hourlyRate}</td>
+                <c:if test="${person.accessControl eq 'MANAGER'}"><td>${cr.hourlyRate}</td></c:if>
                 <td>${cr.phone}</td>
                 <td>${cr.userName}</td>
                 <td>${cr.address.street}</td>
                 <td>${cr.address.city}</td>
                 <td>${cr.address.state}</td>
                 <td>${cr.address.zipCode}</td>
+                <c:if test="${person.accessControl eq 'MANAGER'}">
                 <!--TODO:add edit and delete buttons-->
+                </c:if>
             </tr>
         </c:forEach>
     </table>
