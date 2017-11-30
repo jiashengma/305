@@ -1,3 +1,9 @@
+const SUCCESS = 1;
+const FAILURE = 0;
+const AUCTION_ERROR = -1;
+const AUCTION_SUCCESS = 1;
+const ERROR = -1;
+const AUCTION_LOW_BID = 0;
 
 /**
  * asks users to log in before they can proceed to book or bid flights
@@ -31,7 +37,7 @@ $(".reservationFormGroup").submit(function(e) {
 //        data: {"bid":bid, "bidderId":bidderId, "hiddenFare":hiddenFare,"airline":airline,"flightNo":flightNo},
 //        dataType: "json",
 //        success: function (response, status, xhr) {
-//            //TODO: redirect to a page?            
+//            //TODO: redirect to a page? send get/post request to do reservation           
 //        },
 //        error: function (xhr, textStatus, errorThrown) {
 //            //TODO: notify user of low bid

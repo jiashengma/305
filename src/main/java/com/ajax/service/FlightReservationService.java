@@ -31,9 +31,9 @@ public class FlightReservationService {
         flightReservationManager.searchFlight(flightSearchForm);
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @return number of available seats for a given flight operating on a
      * particular date
      */
@@ -42,15 +42,26 @@ public class FlightReservationService {
     }
 
     public boolean bookFlight(Flight flight, BookingType type) {
-//        if (type == BookingType.AUCTION)
-            //TODO: reserve flight from auction
-            // return flightReservationManager.reserveFlight(flight);
-//        else if (type == BookingType.DISCOUNT)
-            //TODO: reserve flight with discount
-//        else 
-            //TODO: reserve flight 
+        if (type == BookingType.AUCTION) {
+            // reserve flight from auction
+            return bookFlightFromAuction(flight);
+        } else if (type == BookingType.DISCOUNT) {
+            // reserve flight with discount
+            return bookDiscountedFlight(flight);
+        }
+        return bookFlight(flight);
+    }
+
+    private boolean bookFlightFromAuction(Flight flight) {
         throw new UnsupportedOperationException();
-            
+    }
+
+    private boolean bookDiscountedFlight(Flight flight) {
+        throw new UnsupportedOperationException();
+    }
+
+    private boolean bookFlight(Flight flight) {
+        throw new UnsupportedOperationException();
     }
 
     public List<Airport> getAirports() {
