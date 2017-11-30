@@ -30,7 +30,7 @@
                 <input type="hidden" name="airline" value="${flight.airline}">
                 <input type="hidden" name="flightNo" value="${flight.flightNo}">
                 <input type="hidden" name="hiddenFare" value="${flight.hiddenFare}">
-                <input type="hidden" name="personId" value="${person.id}"
+                <input type="hidden" name="personId" value="${person.id}">
                 <input type="submit" value="Bid For This Flight" />
             </form>
         </c:forEach>
