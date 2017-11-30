@@ -1,5 +1,6 @@
 package com.ajax.model;
 
+import java.sql.Timestamp;
 import java.time.LocalTime;
 
 /**
@@ -9,13 +10,13 @@ import java.time.LocalTime;
 public class Leg {
     private int number;
 	private Airport depAirport;
-	private LocalTime arrTime;
-	private LocalTime depTime;
+	private Timestamp arrTime;
+	private Timestamp depTime;
 	private Airport arrAirport;
 
     public Leg() {}
 
-	public Leg(int number, Airport depAirport, LocalTime arrTime, LocalTime depTime, Airport arrAirport) {
+	public Leg(int number, Airport depAirport, Timestamp arrTime, Timestamp depTime, Airport arrAirport) {
 		this.number = number;
 		this.depAirport = depAirport;
 		this.arrTime = arrTime;
@@ -39,19 +40,19 @@ public class Leg {
         this.depAirport = depAirport;
     }
 
-    public LocalTime getArrTime() {
+    public Timestamp getArrTime() {
         return arrTime;
     }
 
-    public void setArrTime(LocalTime arrTime) {
+    public void setArrTime(Timestamp arrTime) {
         this.arrTime = arrTime;
     }
 
-    public LocalTime getDepTime() {
+    public Timestamp getDepTime() {
         return depTime;
     }
 
-    public void setDepTime(LocalTime depTime) {
+    public void setDepTime(Timestamp depTime) {
         this.depTime = depTime;
     }
 

@@ -13,7 +13,7 @@
 <h2>Account Setting</h2>
 <hr>
 ${msg}
-<div id="mask">
+<div class="mask">
     <form name="userInfoForm" action="/confirmEdit" method="POST">
         <input type="hidden" name="username" value="${person.userName}">
         <table class="accSettingTable">

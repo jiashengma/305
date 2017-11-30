@@ -7,15 +7,17 @@ public class Flight {
 	private String airline;
 	private int flightNo;
 	private List<Leg> legs;
+    private FlightClass flightClass;
 	private double fare;
 	private Optional<Double> hiddenFare;
 
 	public Flight() {}
 
-	public Flight(String airline, int flightNo, List<Leg> legs, double fare, Double hiddenFare) {
+	public Flight(String airline, int flightNo, List<Leg> legs, String flightClass, double fare, Double hiddenFare) {
 		this.airline = airline;
 		this.flightNo = flightNo;
 		this.legs = legs;
+        this.flightClass = FlightClass.valueOf(flightClass);
 		this.fare = fare;
 		this.hiddenFare = Optional.ofNullable(hiddenFare);
 	}
@@ -44,6 +46,14 @@ public class Flight {
 		this.legs = legs;
 	}
 
+    public FlightClass getFlightClass() {
+        return flightClass;
+    }
+
+    public void setFlightClass(String flightClass) {
+        this.flightClass = FlightClass.valueOf(flightClass);
+    }
+    
 	public double getFare() {
 		return fare;
 	}
