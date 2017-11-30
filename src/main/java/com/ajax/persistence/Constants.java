@@ -55,11 +55,11 @@ public class Constants {
 	static final String ARRIVAL_AIRPORT_ID = "ArrAirportId";
 
 
-	static final int AIRPORT_ID                 = 1;
-	static final int AIRPORT_NAME               = 2;
-	static final int AIRPORT_CITY               = 3;
-	static final int AIRPORT_COUNTRY            = 4;
-	static final String AIRPORT_NAME_FIELD      = "Name";
+    public static final int AIRPORT_ID                 = 1;
+    public static final int AIRPORT_NAME               = 2;
+    public static final int AIRPORT_CITY               = 3;
+    public static final int AIRPORT_COUNTRY            = 4;
+    public static final String AIRPORT_NAME_FIELD      = "Name";
 
     public static final String EMPLOYEE_TABLE = "employee";
     public static final String EMPLOYEE_ISMANAGER_FIELD = "IsManager";

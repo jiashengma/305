@@ -5,11 +5,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.springframework.format.datetime.standard.DateTimeContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -19,8 +22,6 @@ public class FlightReservationDAO {
 	    List<Flight> flights = new ArrayList<>();
         Connection conn = MySQLConnection.connect();
         try {
-	        System.out.println(flightSearchForm);
-
 	        boolean hasFlightFrom = !flightSearchForm.getFlyingFrom().equals("");
 	        boolean hasFlightTo = !flightSearchForm.getFlyingTo().equals("");
 
@@ -50,13 +51,18 @@ public class FlightReservationDAO {
 	        else
 	        	query.append(Constants.DEPATURE_AIRPORT_ID).append(" and AP2.").append(Constants.NAME_FIELD)
 				        .append("=\"%s\" and AP2.").append(Constants.ID_FIELD).append("=L2.")
-				        .append(Constants.ARRIVAL_AIRPORT_ID).append(" and L1.").append(Constants.ARRIVAL_AIRPORT_ID);
+				        .append(Constants.ARRIVAL_AIRPORT_ID);
+
+	        query.append(";");
+	        System.out.println();
+	        System.out.printf(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo());
+	        System.out.println();
 
 	        PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo ?
-			        String.format(query.append(";").toString(),
+			        String.format(query.toString(),
 					        hasFlightFrom ? flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo()) :
-			        String.format(query.append(";").toString(),
-					        flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingFrom()));
+			        String.format(query.toString(),
+					        flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo()));
 	        ResultSet rs = stmt.executeQuery();
 
 	        ArrayList<String> airlineIDs = new ArrayList<>();
@@ -68,6 +74,9 @@ public class FlightReservationDAO {
 				legNums.add(rs.getInt(3));
 	        }   // hard coded numbers because I chose order in select statement above
 
+	        System.out.println();
+	        airlineIDs.forEach(System.out::println);
+
 	        for (int i = 0; i < airlineIDs.size(); i++) {
 	        	query.setLength(0);
 	        	// for this (airline, flight num) get fares
@@ -77,7 +86,7 @@ public class FlightReservationDAO {
 		                .append(" FROM ").append(Constants.FARE_TABLE)
 				        .append(" F WHERE F.").append(Constants.AIRLINEID_FIELD)
 				        .append("=\"%s\" and F.").append(Constants.FLIGHTNO_FIELD).append("=%d;");
-		        System.out.println(query);
+		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i));
 		        stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i)));
 		        rs = stmt.executeQuery();
 
@@ -95,37 +104,53 @@ public class FlightReservationDAO {
 							Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.WARNING, "Weird Result" + rs.getString(2));
 					}
 
-		        System.out.printf("%nfare:%f%nhiddenFare:%f%n%n", fare, hiddenFare);
+				if (fare == -1 && hiddenFare > fare)
+					fare = hiddenFare;
+		        System.out.printf("%nfare:%.2f%nhiddenFare:%.2f%n%n", fare, hiddenFare);
 
 		        query.setLength(0);
 				// select L.LegNo, AP1.Name, L.ArrTime, L.DepTime, AP2.Name from leg L, airport AP1, airport AP2
 		        //  where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1 and AP1.Id=L.DepAirportId and AP2.Id=L.ArrAirportId;
 				query.append("SELECT L.").append(Constants.LEGNO)
-						.append(", AP1.").append(Constants.NAME_FIELD)
+						.append(", L.").append(Constants.DEPATURE_AIRPORT_ID)
 						.append(", L.").append(Constants.ARRIVAL_TIME)
 						.append(", L.").append(Constants.DEPATURE_TIME)
-						.append(", AP2.").append(Constants.NAME_FIELD)
+						.append(", L.").append(Constants.ARRIVAL_AIRPORT_ID)
 						.append(" FROM ").append(Constants.LEG_TABLE)
-						.append(" L, ").append(Constants.AIRPORT_TABLE)
-						.append(" AP1, ").append(Constants.AIRPORT_TABLE)
-						.append(" AP2 WHERE L.").append(Constants.AIRLINEID_FIELD)
+						.append(" L WHERE L.").append(Constants.AIRLINEID_FIELD)
 						.append("=\"%s\" and L.").append(Constants.FLIGHTNO_FIELD)
-						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d")
-						.append(" and AP1.").append(Constants.ID_FIELD)
-						.append("=L.").append(Constants.DEPATURE_AIRPORT_ID)
-						.append(" and AP2.").append(Constants.ID_FIELD)
-						.append("=L.").append(Constants.ARRIVAL_AIRPORT_ID);
+						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d");
 
-		        System.out.println(query);
+		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i));
+		        System.out.println();
 		        stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i)));
 		        rs = stmt.executeQuery();
 
 		        List<Leg> legs = new ArrayList<>();
-		        while (rs.next()) { // int number, Airport depAirport, LocalTime arrTime, LocalTime depTime, Airport arrAirport
-					Leg leg = new Leg();
+		        while (rs.next()) {
+			        System.out.println(rs.getString(3));
+			        System.out.println(rs.getString(4));
+			        System.out.println(">>");
+			        for (String s : rs.getString(3).split(" "))
+				        System.out.println("> " + s);
+			        System.out.println("<<");
 
-		        }
-		        flights.add(new Flight());
+					String[] depAirport = rs.getString(3).split(" ");
+					String[] depAirportDate = depAirport[0].split("-");
+					String[] depAirportTime = depAirport[1].split(":");
+
+			        String[] arrAirport = rs.getString(4).split(" ");
+					String[] arrAirportDate = arrAirport[0].split("-");
+					String[] arrAirportTime = arrAirport[1].split(":");
+
+					legs.add(new Leg(rs.getInt(1), Airport.getAirportByID(rs.getString(2)),
+							LocalTime.of(Integer.parseInt(depAirportTime[0]), Integer.parseInt(depAirportTime[1])),
+							LocalTime.of(Integer.parseInt(arrAirportTime[0]), Integer.parseInt(arrAirportTime[1])),
+							Airport.getAirportByID(rs.getString(5))));
+
+		        }   //String airline, int flightNo, List<Leg> legs, double fare, Double hiddenFare
+		        flights.add(new Flight(airlineIDs.get(i), flightNums.get(i), legs, fare,
+				        hiddenFare == -1 ? null : hiddenFare));
 	        }
 
 	        flights.forEach(System.out::println);

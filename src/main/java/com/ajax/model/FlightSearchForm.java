@@ -17,7 +17,7 @@ public class FlightSearchForm {
     }
 
     public void setFlyingFrom(String flyingFrom) {
-        this.flyingFrom = flyingFrom;
+        this.flyingFrom = flyingFrom.trim();
     }
 
     public String getFlyingTo() {
@@ -25,7 +25,7 @@ public class FlightSearchForm {
     }
 
     public void setFlyingTo(String flyingTo) {
-        this.flyingTo = flyingTo;
+        this.flyingTo = flyingTo.trim();
     }
 
     public Date getDepDate() {
