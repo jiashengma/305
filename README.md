@@ -59,6 +59,10 @@
 	[]	Backing up the database files
 	[]	A comprehensive Help facility, including a topic-driven pull-down Help menu 
 
+6 Other
+    [] Prompt user to select customer representative after auction (default if
+    no selection)
+
 99 Notes
 	[]	Reservation have booking fees, which is how your company makes money, and an associated customer representative
 

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class FlightReservationDAO {
+
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
 	    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, flightSearchForm.toString());
 	    List<Flight> flights = new ArrayList<>();
@@ -163,23 +164,33 @@ public class FlightReservationDAO {
     }
 
     public List<Airport> getAirports() {
-    	List<Airport> airports = new ArrayList<>();
-	    try {
-		    Connection conn = MySQLConnection.connect();
-		    PreparedStatement stmt =
-			    conn.prepareStatement("SELECT * FROM " + Constants.AIRPORT_TABLE + " ORDER BY "
-					    + Constants.NAME_FIELD + " ASC;");
-		    ResultSet rs = stmt.executeQuery();
-		    while(rs.next())
-		    	airports.add(new Airport(rs.getString(Constants.AIRPORT_ID), rs.getString(Constants.AIRPORT_NAME),
-					    rs.getString(Constants.AIRPORT_CITY), rs.getString(Constants.AIRPORT_COUNTRY)));
+        List<Airport> airports = new ArrayList<>();
+        try {
+            Connection conn = MySQLConnection.connect();
+            String query = "SELECT * FROM "
+                    + Constants.AIRPORT_TABLE
+                    + " ORDER BY "
+                    + Constants.NAME_FIELD + " ASC;";
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                airports.add(
+                        new Airport(
+                                rs.getString(Constants.AIRPORT_ID),
+                                rs.getString(Constants.AIRPORT_NAME),
+                                rs.getString(Constants.AIRPORT_CITY),
+                                rs.getString(Constants.AIRPORT_COUNTRY)
+                        )
+                );
+            }
 
 //		    airports.forEach(System.out::println);
-		    conn.close();
-	    } catch (SQLException ex) {
-		    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
-	    }
-    	return airports;
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
+        }
+        return airports;
     }
 
     public boolean reserveFlight(Flight flight) {
@@ -190,12 +201,12 @@ public class FlightReservationDAO {
 
     /**
      * Reserves a flight from a successfully auction
-     * @param auction 
+     *
+     * @param auction
      */
-    public void reserveFlightFromAuction(Auction auction) {
+    public int reserveFlightFromAuction(Auction auction) {
         /*TODO: use the info in the auction to do reservation
          this method may call the reserveFlight() method above */
-        
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -1,5 +1,7 @@
 package com.ajax.controller;
 
+import com.ajax.model.Airport;
+import com.ajax.model.Constants;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,17 +17,73 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ajax.model.Customer;;
+import com.ajax.model.Customer;
+import com.ajax.model.FlightClass;
+;
 import com.ajax.model.State;
+import com.ajax.service.FlightReservationService;
+import com.ajax.service.PersonEntitiesService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
+import java.util.List;
+import javax.servlet.ServletContext;
 import javax.validation.Valid;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+
+
 
 @Controller
 @ControllerAdvice
 public class MainController {
+
     State state;
-    @Autowired private RegitrationService regitrationService;
+    
+    @Autowired
+    private RegitrationService regitrationService;
+    
+    @Autowired
+    private PersonEntitiesService personEntitiesService;
+    
+    @Autowired
+    private FlightReservationService flightReservationService;
+    
+    @Autowired
+    private ServletContext context;
+
+    /**
+     *
+     * @param binder
+     */
+    @InitBinder
+    public void InitBinder(WebDataBinder binder) {
+
+        // can use binder.setDisallowedFields() to un-bind a property
+        // SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        // use a customized date format for "dateAcquired" request param
+        //binder.registerCustomEditor(Date.class, "dateAcquired" ,new CustomDateEditor(simpleDateFormat, false));
+    }
+
+    @ModelAttribute
+    public void init(HttpServletRequest request) {
+        // load airports for flight search
+        if (context.getAttribute("s_airports") == null) {
+            List<Airport> airports = flightReservationService.getAirports();
+            context.setAttribute("s_airports", airports);
+            context.setAttribute("classes", FlightClass.values());
+        }
+
+        // load states for registration
+        if (context.getAttribute("states") == null) {
+            context.setAttribute("states", State.values());
+        }
+
+        // load customer representatives for reservation
+        if (context.getAttribute(Constants.CUSTOMER_REPRESENTATIVES) == null) {
+            context.setAttribute(Constants.CUSTOMER_REPRESENTATIVES,personEntitiesService.getAllCustomerRepresentatives());
+        }
+
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     private ModelAndView home() {
@@ -85,7 +143,7 @@ public class MainController {
         }
         return modelAndView;
     }
-    
+
     @RequestMapping(value = "/account-setting", method = RequestMethod.GET)
     public ModelAndView manageAccountSettings() {
         ModelAndView mv = new ModelAndView("account-setting");
