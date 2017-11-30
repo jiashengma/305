@@ -11,28 +11,40 @@
             <th>Last Name</th>
             <th>Start Date</th>
             <c:if test="${person.accessControl eq 'MANAGER'}"><th>Hourly Rate</th></c:if>
-            <th>Phone Number</th>
-            <!--<th>Username</th>-->
-            <th>Street</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Zip Code</th>
-        </tr>
+                <th>Phone Number</th>
+                <!--<th>Username</th>-->
+                <th>Street</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip Code</th>
+            </tr>
         <c:forEach var="cr" items="${customerRepresentatives}">
             <tr>
-                <td>${cr.firstName}</td>
-                <td>${cr.lastName}</td>
-                <td>${cr.startDate}</td>
-                <c:if test="${person.accessControl eq 'MANAGER'}"><td>${cr.hourlyRate}</td></c:if>
-                <td>${cr.phone}</td>
-                <!--<td>${cr.userName}</td>-->
-                <td>${cr.address.street}</td>
-                <td>${cr.address.city}</td>
-                <td>${cr.address.state}</td>
-                <td>${cr.address.zipCode}</td>
-                <c:if test="${person.accessControl eq 'MANAGER'}">
-                <!--TODO:add edit and delete buttons-->
-                </c:if>
+                <c:choose>
+                    <c:when test="${person.accessControl eq 'MANAGER'}">
+                        <td><input type="text" name="firstName" value="${cr.firstName}"/></td>
+                        <td><input type="text" name="lastName" value="${cr.lastName}"/></td>
+                        <td><input type="text" name="" value="${cr.startDate}"/></td>
+                        <td><input type="text" name="hourlyRate" value="${cr.hourlyRate}"/></td>
+                        <td><input type="text" name="phone" value="${cr.phone}"/></td>
+                        <td><input type="text" name="address.street" value="${cr.address.street}"/></td>
+                        <td><input type="text" name="address.city" value="${cr.address.city}"/></td>
+                        <td><input type="text" name="address.state" value="${cr.address.state}"/></td>
+                        <td><input type="text" name="address.zipCode" value="${cr.address.zipCode}"/></td>
+                        TODO:add edit and delete buttons
+                    </c:when>
+                        
+                    <c:when test="${person.accessControl eq 'CUSTOMER_REPRESENTATIVE'}">
+                        <td>${cr.firstName}</td>
+                        <td>${cr.lastName}</td>
+                        <td>${cr.startDate}</td>
+                        <td>${cr.phone}</td>
+                        <td>${cr.address.street}</td>
+                        <td>${cr.address.city}</td>
+                        <td>${cr.address.state}</td>
+                        <td>${cr.address.zipCode}</td>
+                    </c:when>
+                </c:choose>
             </tr>
         </c:forEach>
     </table>

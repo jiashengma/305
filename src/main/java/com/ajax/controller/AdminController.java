@@ -6,6 +6,7 @@
 package com.ajax.controller;
 
 import com.ajax.model.Constants;
+import com.ajax.model.Customer;
 import com.ajax.model.Employee;
 import com.ajax.persistence.PersonEntitiesManager;
 import com.ajax.service.RegitrationService;
@@ -84,6 +85,19 @@ public class AdminController {
 
         List<Employee> cusReps = regitrationService.getAllCustomerRepresentatives();
         mv.addObject(Constants.CUSTOMER_REPRESENTATIVES, cusReps);
+
+        return mv;
+    }
+    
+    @RequestMapping(value = "/customers", method = RequestMethod.GET)
+    public ModelAndView showCustomers(HttpServletRequest request) {
+
+        ModelAndView mv = new ModelAndView("customers");
+
+        String repId = ((Employee)(request.getSession().getAttribute(Constants.PERSON))).getSsn();
+        
+        List<Customer> customers = regitrationService.getAllCustomersByRepId(repId);
+        mv.addObject(Constants.CUSTOMERS, customers);
 
         return mv;
     }

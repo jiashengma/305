@@ -10,6 +10,7 @@ public class Constants {
     public static final String PERSON = "person";
     public static final String FLIGHT = "flight";
     public static final String CUSTOMER_REPRESENTATIVES = "customerRepresentatives";
+    public static final String CUSTOMERS = "customers";
 
     // mysql connection
     public static final String HOSTNAME = "localhost";

@@ -59,5 +59,12 @@ public class RegitrationService {
     public List<Employee> getAllCustomerRepresentatives() {
         return personEntitiesManager.getAllCustomerRepresentatives();
     }
-
+    
+    public List<Customer> getAllCustomers() {
+        return personEntitiesManager.getAllCustomers();
+    }
+    
+    public List<Customer> getAllCustomersByRepId(String ssn) {
+        return personEntitiesManager.getAllCustomersByRepId(ssn);
+    }
 }

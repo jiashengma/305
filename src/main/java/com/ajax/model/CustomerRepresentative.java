@@ -7,11 +7,12 @@ import java.util.List;
  *
  * @author majiasheng
  */
-public class CustomerRepresentative {
+public class CustomerRepresentative extends Employee {
 
     private List<Customer> customers;
 
     public CustomerRepresentative() {
+        super();
         customers = new ArrayList<Customer>();
     }
 
