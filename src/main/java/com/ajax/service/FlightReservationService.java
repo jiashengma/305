@@ -1,19 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ajax.service;
 
 import com.ajax.model.Airport;
 import com.ajax.model.BookingType;
 import com.ajax.model.Flight;
 import com.ajax.model.FlightSearchForm;
-import com.ajax.model.Status;
 import com.ajax.persistence.FlightReservationDAO;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
