@@ -4,7 +4,7 @@
     
     <ul>
 
-        <li><a href="/customer-representatives">Show all subordinates</a></li>
+        <li><a href="/customer-representatives">All subordinates</a></li>
         <li><a href="/employee-registraion">Add employee</a></li>
         
         TODO:
