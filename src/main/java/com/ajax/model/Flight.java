@@ -61,12 +61,9 @@ public class Flight {
 
 	@Override
 	public String toString() {
-		return "Flight{" +
-				"airline='" + airline + '\'' +
-				", flightNo=" + flightNo +
-				", legs=" + legs +
-				", fare=" + fare +
-				", hiddenFare=" + hiddenFare +
-				'}';
+		StringBuilder sb = new StringBuilder();
+		legs.forEach(sb::append);
+		return String.format("Flight{airline='%s', flightNo=%d, legs=<%s>, fare=%.2f, hiddenFare=%.2f}",
+				airline, flightNo, sb.toString(), fare, hiddenFare.orElse(-1.0));
 	}
 }

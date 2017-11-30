@@ -17,7 +17,7 @@ public class Airport {
     private static Map<String, Airport> airportFactory;
 
 	public Airport(String shortName, String name, String city, String country) {
-		this.name = name;
+		this.name = name.trim();
 		this.shortName = shortName;
 		this.city = city;
 		this.country = country;
@@ -43,7 +43,7 @@ public class Airport {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public String getShortName() {

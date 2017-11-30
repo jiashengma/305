@@ -128,13 +128,6 @@ public class FlightReservationDAO {
 
 		        List<Leg> legs = new ArrayList<>();
 		        while (rs.next()) {
-			        System.out.println(rs.getString(3));
-			        System.out.println(rs.getString(4));
-			        System.out.println(">>");
-			        for (String s : rs.getString(3).split(" "))
-				        System.out.println("> " + s);
-			        System.out.println("<<");
-
 					String[] depAirport = rs.getString(3).split(" ");
 					String[] depAirportDate = depAirport[0].split("-");
 					String[] depAirportTime = depAirport[1].split(":");

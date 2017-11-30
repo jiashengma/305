@@ -62,7 +62,15 @@ public class Leg {
     public void setArrAirport(Airport arrAirport) {
         this.arrAirport = arrAirport;
     }
-    
-    
-    
+
+	@Override
+	public String toString() {
+		return "Leg{" +
+				"number=" + number +
+				", depAirport=" + depAirport +
+				", arrTime=" + arrTime +
+				", depTime=" + depTime +
+				", arrAirport=" + arrAirport +
+				'}';
+	}
 }
