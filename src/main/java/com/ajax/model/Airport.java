@@ -72,12 +72,7 @@ public class Airport {
 
 	@Override
 	public String toString() {
-		return "Airport{" +
-				"name='" + name + '\'' +
-				", shortName='" + shortName + '\'' +
-				", city='" + city + '\'' +
-				", country='" + country + '\'' +
-				'}';
+		return "Airport{" + name + '}';
 	}
 
 	public static Airport getAirportByID(String id) {
