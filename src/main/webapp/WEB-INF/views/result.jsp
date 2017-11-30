@@ -20,7 +20,7 @@
                     (the forms should contain hidden input type with names and 
                      value pairs, see the auctionForm below)
             -->
-                <input type="hidden" name="personId" value="${person.id}">
+                <input type="hidden" name="personId" value="${person.id}"/>
                 <input type="submit" value="Book This Flight" />
             </form>
             
