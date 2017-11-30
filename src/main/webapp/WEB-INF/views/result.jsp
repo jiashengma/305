@@ -25,6 +25,7 @@
             
             
             <form class="reservationFormGroup" name="auctionForm" action="/prepareAuction" method="POST">
+                ${flight.airline} | ${flight.flightNo} | ${flight.fare}
                 <input type="hidden" name="airline" value="${flight.airline}">
                 <input type="hidden" name="flightNo" value="${flight.flightNo}">
                 <input type="hidden" name="hiddenFare" value="${flight.hiddenFare}">

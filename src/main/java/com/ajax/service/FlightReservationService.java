@@ -28,8 +28,7 @@ public class FlightReservationService {
         System.out.println("TODO: query database for results");
 
         //TODO: sanitize inputs/args ?
-        flightReservationManager.searchFlight(flightSearchForm);
-        return null;
+        return flightReservationManager.searchFlight(flightSearchForm);
     }
     
     /**
