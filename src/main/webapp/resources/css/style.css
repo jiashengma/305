@@ -8,7 +8,7 @@ body {
 }
 
 .navbar {
-    /*background: rgba(54, 25, 25, .8);*/
+    background: rgba(217, 217, 217, .6);
 }
 
 .searchform {
@@ -23,7 +23,7 @@ body {
     margin: 0.5em;
 }
 
-#regform #auctionHistory {
+#regform {
     background: rgba(217, 217, 217, .8);
     padding: 1em;
     height: 100%;
@@ -39,10 +39,25 @@ body {
 }
 
 table, th, td {
-    padding: 1em;
+    
     border: 1px solid black;
 }
 
 #auctionHistory {
+    background: rgba(217, 217, 217, .8);
+    padding: 1em;
+}
 
+.error {
+    color: red;
+}
+
+#employeeBody, #cusRep {
+    background: rgba(217, 217, 217, .8);
+    padding: 1em;
+    width: 100%;
+}
+
+#employeeBody > ul > * {
+    padding: 0.25em;
 }

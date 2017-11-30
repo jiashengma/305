@@ -1,31 +1,43 @@
+
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
+
+<!--send back to home page if person is not manager-->
+<c:if test="${person.accessControl ne 'MANAGER'}">
+    <c:redirect url="/"/>
+</c:if>
+
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:useBean id="address" class="com.ajax.model.Address" />
-<h2 id="h">Sign Me Up</h2>
+<h2 id="h">Add Employee</h2>
 <div id="regform">
-    <form method="POST" action="/register">
+    <form method="POST" action="/register-employee">
         First Name<br>
         <input type="text" name="firstName" placeholder="First Name" required>
-        <span class="error"><form:errors path="customer.firstName"/></span><br>
+        <span class="error"><form:errors path="employee.firstName"/></span><br>
         
         Last Name<br>
         <input type="text" name="lastName" placeholder="Last Name" required>
-        <span class="error"><form:errors path="customer.lastName"/></span><br>
+        <span class="error"><form:errors path="employee.lastName"/></span><br>
         
-        Email<br>
-        <input type="text" name="email" placeholder="email" required>
-        <span class="error"><form:errors path="customer.email"/></span><br>
+        SSN<br>
+        <input type="password" name="ssn" placeholder="ssn" required>
+        <span class="error"><form:errors path="employee.ssn"/></span><br>
         
-        Re-enter email<br>
-        <input type="text" name="reemail" placeholder="Re-enter email" required><br>
+        Hourly Rate<br>
+        <input type="number" name="hourlyRate" placeholder="Hourly Rate" required>
+        <span class="error"><form:errors path="employee.hourlyRate"/></span><br>
+        
+        Start Date<br>
+        <input type="date" name="startDate" required>
+        <span class="error"><form:errors path="employee.startDate"/></span><br>
         
         Username<br>
         <input type="text" name="userName" placeholder="Username" required>
-        <span class="error"><form:errors path="customer.userName"/></span><br>
+        <span class="error"><form:errors path="employee.userName"/></span><br>
         
         Password<br>
         <input type="password" name="password" placeholder="password" required>
-        <span class="error"><form:errors path="customer.password"/></span><br>
+        <span class="error"><form:errors path="employee.password"/></span><br>
         
         Re-enter password<br>
         <input type="password" name="repassword" placeholder="Re-enter password" required><br>
@@ -33,7 +45,7 @@
         
         Tel<br>
         <input type="text" name="phone" placeholder="Phone Number" required>
-        <span class="error"><form:errors path="customer.phone"/></span><br>
+        <span class="error"><form:errors path="employee.phone"/></span><br>
         
         Address<br>
         <input type="text" name="address.street" placeholder="Street" required>
@@ -44,14 +56,11 @@
             </c:forEach>
         </select>
         <input type="text" name="address.zipCode" placeholder="Zip Code" required>
-        <span class="error"><form:errors path="customer.address.street"/></span>
-        <span class="error"><form:errors path="customer.address.city"/></span>
-        <span class="error"><form:errors path="customer.address.zipCode"/></span><br>
+        <span class="error"><form:errors path="employee.address.street"/></span>
+        <span class="error"><form:errors path="employee.address.city"/></span>
+        <span class="error"><form:errors path="employee.address.zipCode"/></span><br>
         
-        Credit Card Number<br><input type="text" name="creditCard" placeholder="Credit Card No."><br>
-        <span class="error"><form:errors path="customer.creditCard"/></span><br>
-
-        <input type="submit" name="submit" value="Sign Me Up">
+        <input type="submit" name="submit" value="Add Employee">
     </form>
 </div>
 

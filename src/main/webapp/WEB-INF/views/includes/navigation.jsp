@@ -14,8 +14,8 @@
                 <li>
                         <a href="#">Link</a>
                 </li>
-        </ul> -->
-        <!-- <form class="navbar-form navbar-left" role="search">
+        </ul>
+        <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                         <input type="text" class="form-control" placeholder="Keyword for item">
                 </div> 

@@ -8,25 +8,25 @@ import java.sql.Date;
  */
 public class Employee extends Person {
 
-    private int ssn;
+    private String ssn;
     private Date startDate;
     private double hourlyRate;
 
     public Employee(){
         super();
     }
-    public Employee(int ssn, Date startDate, double hourlyRate, String fname, String lname, long phone, Address addr) {
+    public Employee(String ssn, Date startDate, double hourlyRate, String fname, String lname, String phone, Address addr) {
         super(fname, lname, phone, addr);
         this.ssn = ssn;
         this.startDate = startDate;
         this.hourlyRate = hourlyRate;
     }
 
-    public int getSsn() {
+    public String getSsn() {
         return ssn;
     }
 
-    public void setSsn(int ssn) {
+    public void setSsn(String ssn) {
         this.ssn = ssn;
     }
 

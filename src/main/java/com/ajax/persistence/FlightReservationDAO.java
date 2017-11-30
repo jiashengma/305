@@ -1,5 +1,6 @@
 package com.ajax.persistence;
 
+import com.ajax.model.Constants;
 import com.ajax.model.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -167,7 +168,7 @@ public class FlightReservationDAO {
 		    Connection conn = MySQLConnection.connect();
 		    PreparedStatement stmt =
 			    conn.prepareStatement("SELECT * FROM " + Constants.AIRPORT_TABLE + " ORDER BY "
-					    + Constants.AIRPORT_NAME_FIELD + " ASC;");
+					    + Constants.NAME_FIELD + " ASC;");
 		    ResultSet rs = stmt.executeQuery();
 		    while(rs.next())
 		    	airports.add(new Airport(rs.getString(Constants.AIRPORT_ID), rs.getString(Constants.AIRPORT_NAME),

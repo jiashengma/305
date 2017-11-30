@@ -5,7 +5,7 @@
 --%>
 
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!--prohibit unlogged in user to get to this page-->
 <c:choose>
     <c:when test="${empty person}">
@@ -16,7 +16,12 @@
 <hr>
 <!-- body -->
 <div id="auctionHistory">
-    <table>
+    <c:choose>
+        <c:when test="${fn:length(auctions) <= 0}">
+            <h3>No Auction History</h3>
+        </c:when>
+        <c:otherwise>
+            <table>
         <tr>
             <th>Airline</th>
             <th>FlightNo</th>
@@ -45,6 +50,10 @@
             </tr>
         </c:forEach>
     </table>
+        </c:otherwise>
+    </c:choose>
+    
+    
 </div>
 <!-- end body -->
 

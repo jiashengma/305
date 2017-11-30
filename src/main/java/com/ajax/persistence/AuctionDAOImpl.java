@@ -1,5 +1,6 @@
 package com.ajax.persistence;
 
+import com.ajax.model.Constants;
 import com.ajax.model.Auction;
 import com.ajax.model.FlightClass;
 import com.ajax.service.ReturnValue;
@@ -24,7 +25,6 @@ public class AuctionDAOImpl implements AuctionDAO {
 
     @Override
     public int saveAuction(Auction auction) {
-        //TODO:add class field to auction and flight
         int ret = ReturnValue.ERROR;
         Connection conn = MySQLConnection.connect();
         try {
@@ -65,14 +65,8 @@ public class AuctionDAOImpl implements AuctionDAO {
     @Override
     public List<Auction> getAllAuctionHistory(int customerAccNo) {
         List<Auction> auctions = null;
-
-        //TODO: get auction history
-        // List<Auction> auctions = null;
         Connection conn = MySQLConnection.connect();
         try {
-//            String query = "SELECT * "
-//                    + "FROM " + Constants.AUCTIONS_TABLE
-//                    + " WHERE " + Constants.ACCOUNTNO_FIELD + " = ? ";
             String query = "SELECT A.* , IF(A.NYOP >= F.Fare, 'Yes', 'No') AS 'Accepted?' "
                     + "FROM auctions A, fare F "
                     + "WHERE F.FareType='hidden' "
@@ -109,7 +103,7 @@ public class AuctionDAOImpl implements AuctionDAO {
                 Logger.getLogger(AuctionDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        
         return auctions;
     }
 

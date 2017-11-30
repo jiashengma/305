@@ -1,8 +1,6 @@
 package com.ajax.model;
 
-import com.ajax.persistence.Constants;
 import com.ajax.persistence.MySQLConnection;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

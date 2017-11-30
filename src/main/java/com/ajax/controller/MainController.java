@@ -19,6 +19,7 @@ import com.ajax.model.Customer;;
 import com.ajax.model.State;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
+import javax.validation.Valid;
 
 @Controller
 @ControllerAdvice
@@ -34,7 +35,6 @@ public class MainController {
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     private ModelAndView registration() {
         ModelAndView mv = new ModelAndView("registration");
-        mv.addObject("states", State.values());
         return mv;
     }
 
@@ -60,7 +60,7 @@ public class MainController {
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView handleRegistration(
-            @ModelAttribute("customer") Customer customer,
+            @Valid @ModelAttribute("customer") Customer customer,
             BindingResult result,
             @RequestParam Map<String, String> formValues,
             HttpServletRequest request,
@@ -70,13 +70,14 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView("redirect:register");
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("msg", "Error in registration form");
+            //redirectAttributes.addFlashAttribute("msg", "Error in registration form");
+            modelAndView.setViewName("/registration");
         } else {
             // set state (the enum type)
             customer.getAddress().setState(formValues.get("state"));
 
             // add user to database
-            if (regitrationService.addCustomer(customer, formValues) == ReturnValue.ERROR) {
+            if (regitrationService.registerCustomer(customer, formValues) == ReturnValue.ERROR) {
                 redirectAttributes.addFlashAttribute("msg", "Error in registering: failed to add user to database");
             } else {
                 redirectAttributes.addFlashAttribute("msg", "Registration success");
@@ -84,4 +85,11 @@ public class MainController {
         }
         return modelAndView;
     }
+    
+    @RequestMapping(value = "/account", method = RequestMethod.GET)
+    public ModelAndView manageAccountSettings() {
+        ModelAndView mv = new ModelAndView("account-setting");
+        return mv;
+    }
+
 }

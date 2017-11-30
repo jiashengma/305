@@ -1,31 +1,33 @@
 package com.ajax.model;
 
 //import javax.validation.constraints.Pattern;
+
+import javax.validation.constraints.Pattern;
+
 /**
  *
  * @author majiasheng
  */
 public class Person {
 
-    // count for person id (used in creations)
-//    public static int count = 0;
-
     protected int id;
-//    @Pattern(regexp="\c+")
+    @Pattern(regexp="\\w+", message = "First name must just have letters")
     protected String firstName;
-//    @Pattern(regexp="\c+")
+    @Pattern(regexp="\\w+", message = "Last name must just have letters")
     protected String lastName;
-    protected long phone;
+    @Pattern(regexp = "[0-9]{10}", message = "Phone number has 10 digits")
+    protected String phone;
     protected Address address;
+    @Pattern(regexp="[a-zA-Z]+[_0-9]*", message = "Username can only have alpha numeric charactes and \"_\", and it must begin with a letter")
     protected String userName;
+    @Pattern(regexp="[a-zA-Z_.!,~0-9]+", message = "Username can only have alpha numeric charactes and \"_ . ! , ~ \"")
     protected String password;
     protected AccessControl accessControl;
 
     public Person() {
-//        id = count++;
     }
     
-    public Person(String fname, String lname, long phone, Address addr) {
+    public Person(String fname, String lname, String phone, Address addr) {
         this.firstName = fname;
         this.lastName = lname;
         this.phone = phone;
@@ -56,11 +58,11 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

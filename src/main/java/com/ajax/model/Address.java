@@ -1,6 +1,7 @@
 package com.ajax.model;
 
-import java.io.Serializable;
+import javax.validation.constraints.Pattern;
+
 
 /**
  *
@@ -8,9 +9,11 @@ import java.io.Serializable;
  */
 public class Address {
 
+    
     private String street;
     private String city;
     private State state;
+    @Pattern(regexp = "^\\d{6}", message = "Invalid zip code, it must be a 6-digit zip code")
     private int zipCode;
 
     public Address(){

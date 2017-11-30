@@ -1,5 +1,6 @@
 package com.ajax.persistence;
 
+import com.ajax.model.Constants;
 import com.ajax.model.AccessControl;
 import com.ajax.model.Address;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ajax.model.Customer;
+import com.ajax.model.CustomerRepresentative;
 import com.ajax.model.Employee;
 import com.ajax.model.Person;
 import com.ajax.service.ReturnValue;
@@ -58,12 +60,13 @@ public class PersonEntitiesManager {
              * registering customer
              * return immediately if error occurred
              */
-            if (addPerson(customer, conn) != ReturnValue.ERROR && addLoginForCustomer(customer, conn) != ReturnValue.ERROR) {
+            if (addPerson(customer, conn) != ReturnValue.ERROR && addLoginForPerson(customer, conn) != ReturnValue.ERROR) {
 
                 PreparedStatement stmt = conn.prepareStatement(query);
 
                 stmt.setInt(1, customer.getId());
-                stmt.setLong(2, customer.getCreditCard());
+                //stmt.setLong(2, customer.getCreditCard());
+                stmt.setString(2, customer.getCreditCard());
                 stmt.setString(3, customer.getEmail());
                 stmt.setInt(4, customer.getRating());
 
@@ -76,13 +79,14 @@ public class PersonEntitiesManager {
                 customer.setAccNum(rs.getInt(1));
 
                 // rollback all three transactions if error occurred
-                if (ret == ReturnValue.ERROR) {
-                    /* FIXME: is it necessary since we use a same 
-                        connection for all these three transactions? */
-                    conn.rollback(); 
-                } else {
-                    conn.commit();
-                }
+//                if (ret == ReturnValue.ERROR) {
+//                    /* FIXME: is it necessary since we use a same 
+//                     connection for all these three transactions? */
+//                    conn.rollback();
+//                } else {
+//                    conn.commit();
+//                }
+                conn.commit();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -127,7 +131,8 @@ public class PersonEntitiesManager {
             stmt.setString(4, person.getAddress().getCity());
             stmt.setString(5, person.getAddress().getState().name());
             stmt.setInt(6, person.getAddress().getZipCode());
-            stmt.setLong(7, person.getPhone());
+            //stmt.setLong(7, person.getPhone());
+            stmt.setString(7, person.getPhone());
 
             ret = stmt.executeUpdate();
             // retrieve auto increment key
@@ -147,7 +152,7 @@ public class PersonEntitiesManager {
      * @param customer
      * @return
      */
-    public int addLoginForCustomer(Customer customer, Connection conn) {
+    public int addLoginForPerson(Person person, Connection conn) {
 
         int ret = ReturnValue.ERROR;
         try {
@@ -156,9 +161,9 @@ public class PersonEntitiesManager {
                     + " VALUES (?,?,?)";
             PreparedStatement stmt = conn.prepareStatement(query);
 
-            stmt.setInt(1, customer.getId());
-            stmt.setString(2, customer.getUserName());
-            stmt.setString(3, customer.getPassword());
+            stmt.setInt(1, person.getId());
+            stmt.setString(2, person.getUserName());
+            stmt.setString(3, person.getPassword());
 
             ret = stmt.executeUpdate();
         } catch (SQLException ex) {
@@ -213,9 +218,11 @@ public class PersonEntitiesManager {
                 String city = rs.getString(Constants.CITY_FILED);
                 String state = rs.getString(Constants.STATE_FILED);
                 int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
-                long phone = rs.getLong(Constants.PHONE_FILED);
+                //long phone = rs.getLong(Constants.PHONE_FILED);
+                String phone = rs.getString(Constants.PHONE_FILED);
                 int acc = rs.getInt(Constants.ACCOUNTNO_FIELD);
-                long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
+                //long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
+                String creditCard = rs.getString(Constants.CREDITCARDNO_FIELD);
                 String email = rs.getString(Constants.EMAIL_FIELD);
                 int rating = rs.getInt(Constants.RATING_FIELD);
 
@@ -233,7 +240,7 @@ public class PersonEntitiesManager {
                         new Address(street, city, state, zipCode),
                         creditCard, email);
                 customer.setAccessControl(AccessControl.CUSTOMER);
-//                customer.setRating(rating);       // set rating later?
+                // customer.setRating(rating);       //TODO: set rating later?
                 break;
             }
         } catch (SQLException ex) {
@@ -288,9 +295,10 @@ public class PersonEntitiesManager {
                 String street = rs.getString(Constants.STREET_FILED);
                 String city = rs.getString(Constants.CITY_FILED);
                 String state = rs.getString(Constants.STATE_FILED);
-                long phone = rs.getLong(Constants.PHONE_FILED);
+                //long phone = rs.getLong(Constants.PHONE_FILED);
+                String phone = rs.getString(Constants.PHONE_FILED);
                 int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
-                int ssn = rs.getInt(Constants.EMPLOYEE_SSN_FIELD);
+                String ssn = rs.getString(Constants.EMPLOYEE_SSN_FIELD);
                 Date startDate = rs.getDate(Constants.EMPLOYEE_START_DATE_FIELD);
                 double hourlyRate = rs.getDouble(Constants.EMPLOYEE_HOURLY_RATE_FIELD);
                 employee = new Employee(ssn, startDate, hourlyRate, firstname, lastname, phone,
@@ -349,6 +357,8 @@ public class PersonEntitiesManager {
                 } else {
                     person = getEmployeeById(personId, accessControl);
                 }
+                person.setUserName(username);
+                person.setPassword(password);
                 // limit 1
                 break;
             }
@@ -394,5 +404,111 @@ public class PersonEntitiesManager {
             }
         }
         return AccessControl.ERROR;
+    }
+
+    public List<Employee> getAllCustomerRepresentatives() {
+        String query = "SELECT "
+                + " P." + Constants.FIRSTNAME_FILED + ", "
+                + " P." + Constants.LASTNAME_FILED + ", "
+                + " P." + Constants.STREET_FILED + ", "
+                + " P." + Constants.CITY_FILED + ", "
+                + " P." + Constants.STATE_FILED + ", "
+                + " P." + Constants.ZIPCODE_FILED + ", "
+                + " P." + Constants.PHONE_FILED + ", "
+                + " E." + Constants.EMPLOYEE_SSN_FIELD + ", "
+                + " E." + Constants.EMPLOYEE_START_DATE_FIELD + ", "
+                + " E." + Constants.EMPLOYEE_HOURLY_RATE_FIELD
+                + " FROM "
+                + Constants.EMPLOYEE_TABLE + " E, "
+                + Constants.PERSON_TABLE + " P"
+                + " WHERE "
+                + " E." + Constants.EMPLOYEE_ISMANAGER_FIELD
+                + " = 0 "
+                + "AND "
+                + " E." + Constants.ID_FIELD
+                + " =  "
+                + " P." + Constants.ID_FIELD;
+
+        List<Employee> cusReps = new ArrayList<>();
+
+        Connection conn = MySQLConnection.connect();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            conn.commit();
+
+            while (rs.next()) {
+                String firstname = rs.getString(Constants.FIRSTNAME_FILED);
+                String lastname = rs.getString(Constants.LASTNAME_FILED);
+                String street = rs.getString(Constants.STREET_FILED);
+                String city = rs.getString(Constants.CITY_FILED);
+                String state = rs.getString(Constants.STATE_FILED);
+                String phone = rs.getString(Constants.PHONE_FILED);
+                int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
+                String ssn = rs.getString(Constants.EMPLOYEE_SSN_FIELD);
+                Date startDate = rs.getDate(Constants.EMPLOYEE_START_DATE_FIELD);
+                double hourlyRate = rs.getDouble(Constants.EMPLOYEE_HOURLY_RATE_FIELD);
+                Employee employee = new Employee(ssn, startDate, hourlyRate, firstname, lastname, phone,
+                        new Address(street, city, state, zipCode));
+
+                // do not forget to set access control 
+                employee.setAccessControl(AccessControl.CUSTOMER_REPRESENTATIVE);
+
+                cusReps.add(employee);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return cusReps;
+    }
+
+    public int registerEmployee(Employee customerRepresentative) {
+        Connection conn = MySQLConnection.connect();
+        int ret = ReturnValue.ERROR;
+
+        try {
+            String query = "INSERT INTO "
+                    + Constants.EMPLOYEE_TABLE
+                    + " ("
+                    + Constants.EMPLOYEE_SSN_FIELD + ", "
+                    + Constants.EMPLOYEE_START_DATE_FIELD + ", "
+                    + Constants.EMPLOYEE_HOURLY_RATE_FIELD + ", "
+                    + Constants.ID_FIELD
+                    + " ) "
+                    + " VALUES (?,?,?,?)";
+
+            /* try to add login information and add person record for 
+             * registering customer
+             * return immediately if error occurred
+             */
+            if (addPerson(customerRepresentative, conn) != ReturnValue.ERROR
+                    && addLoginForPerson(customerRepresentative, conn) != ReturnValue.ERROR) {
+
+                PreparedStatement stmt = conn.prepareStatement(query);
+
+                stmt.setString(1, customerRepresentative.getSsn());
+                stmt.setDate(2, customerRepresentative.getStartDate());
+                stmt.setDouble(3, customerRepresentative.getHourlyRate());
+                stmt.setInt(4, customerRepresentative.getId());
+
+                ret = stmt.executeUpdate();
+
+                conn.commit();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return ret;
     }
 }
