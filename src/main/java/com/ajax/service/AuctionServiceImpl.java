@@ -26,19 +26,16 @@ public class AuctionServiceImpl implements AuctionService {
      *
      * @param auction
      * @param hiddenFare
-     * @return SUCCESS on success, FAILURE on failure (lower bid than hidden
-     * fare), or ERROR on error while bidding
+     * @return AUCTION_SUCCESS on success, AUCTION_LOW_BID on failure 
+     * (lower bid than hidden fare), or AUCTION_ERROR on error while bidding
      */
     public int handleBid(Auction auction, double hiddenFare) {
         
         auctionDAO.saveAuction(auction);
 
-        if (auction.getNYOP() >= hiddenFare) {
-            // TODO: do reservation/book, should use the winner bid price 
-            flightReservationDAO.reserveFlightFromAuction(auction);
-            return Status.SUCCESS;
-        }
-        return Status.FAILURE;
+        if (auction.getNYOP() >= hiddenFare)
+            return flightReservationDAO.reserveFlightFromAuction(auction);
+        return Status.AUCTION_LOW_BID;
 
     }
     
