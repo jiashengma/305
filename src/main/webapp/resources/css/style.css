@@ -38,9 +38,18 @@ body {
     width: 100%;
 }
 
-table, th, td {
-    
+table, td, th {    
     border: 1px solid black;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    width: 75%;
+}
+
+th, td {
+    padding: 1em;
 }
 
 #auctionHistory {
@@ -52,7 +61,7 @@ table, th, td {
     color: red;
 }
 
-#employeeBody, #cusRep {
+#employeeBody, #cusRep, #mask {
     background: rgba(217, 217, 217, .8);
     padding: 1em;
     width: 100%;
@@ -60,4 +69,13 @@ table, th, td {
 
 #employeeBody > ul > * {
     padding: 0.25em;
+}
+
+#mask {
+    
+}
+
+table.accSettingTable > tr > td{
+    border: none;
+    padding: 1.5em;
 }
