@@ -77,10 +77,8 @@ public class FlightReservationController {
             return new ModelAndView("index");
         }
 
-        ArrayList<Flight> flights = (ArrayList<Flight>) flightReservationService.searchFlight(flightSearchForm);
-
         // add a list of flights as the search result for the view/jsp to render
-        mv.addObject("flightSearchResult", flights);
+        mv.addObject("flightSearchResult", flightReservationService.searchFlight(flightSearchForm));
         return mv;
     }
 
