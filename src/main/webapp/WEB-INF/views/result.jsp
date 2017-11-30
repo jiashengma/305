@@ -9,6 +9,7 @@
         <!-- TODO: use/display result: 
             allow user to book, and participate in auction -->
         <c:forEach var="flight" items="${flightSearchResult}">
+        ${flight.airline} | ${flight.flightNo} | ${flight.fare}
             <form class="reservationFormGroup" name="bookingForm" action="/bookflight" method="POST">
             <!--TODO: 
                 on the left: 
@@ -19,13 +20,13 @@
                     (the forms should contain hidden input type with names and 
                      value pairs, see the auctionForm below)
             -->
-                <input type="hidden" name="personId" value="${person.id}"
+                <input type="hidden" name="personId" value="${person.id}">
                 <input type="submit" value="Book This Flight" />
             </form>
             
             
             <form class="reservationFormGroup" name="auctionForm" action="/prepareAuction" method="POST">
-                ${flight.airline} | ${flight.flightNo} | ${flight.fare}
+
                 <input type="hidden" name="airline" value="${flight.airline}">
                 <input type="hidden" name="flightNo" value="${flight.flightNo}">
                 <input type="hidden" name="hiddenFare" value="${flight.hiddenFare}">
