@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 public class FlightReservationDAO {
 
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
-	    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, flightSearchForm.toString());
+//	    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, flightSearchForm.toString());
 	    List<Flight> flights = new ArrayList<>();
         Connection conn = MySQLConnection.connect();
         try {
@@ -174,18 +174,13 @@ public class FlightReservationDAO {
 
             PreparedStatement stmt = conn.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                airports.add(
-                        new Airport(
-                                rs.getString(Constants.AIRPORT_ID),
-                                rs.getString(Constants.AIRPORT_NAME),
-                                rs.getString(Constants.AIRPORT_CITY),
-                                rs.getString(Constants.AIRPORT_COUNTRY)
-                        )
-                );
-            }
+            while (rs.next())
+                airports.add(new Airport(
+                        rs.getString(Constants.AIRPORT_ID),
+                        rs.getString(Constants.AIRPORT_NAME),
+                        rs.getString(Constants.AIRPORT_CITY),
+                        rs.getString(Constants.AIRPORT_COUNTRY)));
 
-//		    airports.forEach(System.out::println);
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
@@ -193,10 +188,19 @@ public class FlightReservationDAO {
         return airports;
     }
 
-    public boolean reserveFlight(Flight flight) {
+    public boolean reserveFlight(Person customer, Flight flight) {
+    	boolean processedRequest = false;
+	    Connection conn = MySQLConnection.connect();
+	    try {
+		    PreparedStatement stmt = conn.prepareStatement("");
+		    ResultSet rs = stmt.executeQuery();
 
-        //TODO: do reserve flight
-        return false;
+		    processedRequest = true;
+	    } catch (SQLException ex) {
+		    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
+	    }
+
+        return processedRequest;
     }
 
     /**

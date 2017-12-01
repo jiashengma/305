@@ -12,7 +12,6 @@
 
 1 System Users
 	[]	customers - make flight reservation
-	[]	? "customer representatives who provide customer-related services, and the site's manager" ??
 	[]	customer may partake in any number of flight reservation transactions
 	[]	customer's rating should reflect how active a ticket buyer he or she is (+1 to customer's rating)
 
