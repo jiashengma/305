@@ -27,6 +27,7 @@ public class SessionController {
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView redirectLogin() {
+        //TODO: stay in where it was
         return new ModelAndView("index");
     }
 

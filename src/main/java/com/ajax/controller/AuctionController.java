@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -29,11 +30,6 @@ public class AuctionController {
 
     @Autowired
     AuctionService auctionService;
-
-    @RequestMapping(value = "/auction", method = RequestMethod.GET)
-    public ModelAndView redirectToAuction() {
-        return new ModelAndView("auction");
-    }
 
     //@RequestMapping(value = "/prepareAuction", method = RequestMethod.POST)
     public ModelAndView prepareAuction(@RequestParam Map<String, String> requestParams,
@@ -63,11 +59,31 @@ public class AuctionController {
         return mv;
     }
     
-    @RequestMapping(value = "/prepareAuction", method = RequestMethod.POST)
-    public ModelAndView prepareAuction(@ModelAttribute("flight") Flight flight,
-            HttpServletRequest request) {
+    
+//    @RequestMapping(value = "/auction", method = RequestMethod.GET)
+//    public ModelAndView redirectToAuction() {
+//        return new ModelAndView("auction");
+//    }
+    
+//    @RequestMapping(value = "/auction", method = RequestMethod.POST)
+//    public ModelAndView prepareAuction(
+//            @ModelAttribute("flight") Flight flight,
+//            HttpServletRequest request,
+//            final RedirectAttributes redirectAttributes) {
+//        
+//        ModelAndView mv = new ModelAndView("redirect:/auction");
+//        //TODO: use redirect attribute if redirection loses this
+//        redirectAttributes.addFlashAttribute(Constants.FLIGHT, flight);
+//
+//        return mv;
+//    }
+    @RequestMapping(value = "/auction", method = RequestMethod.POST)
+    public ModelAndView prepareAuction(
+            @ModelAttribute("flight") Flight flight,
+            HttpServletRequest request,
+            final RedirectAttributes redirectAttributes) {
         
-        ModelAndView mv = new ModelAndView("redirect:auction");
+        ModelAndView mv = new ModelAndView("auction");
         //TODO: use redirect attribute if redirection loses this
         mv.addObject(Constants.FLIGHT, flight);
 

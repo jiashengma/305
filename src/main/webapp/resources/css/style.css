@@ -61,7 +61,7 @@ th, td {
     color: red;
 }
 
-#employeeBody, #cusRep, #mask {
+#employeeBody, #cusRep, .mask {
     background: rgba(217, 217, 217, .8);
     padding: 1em;
     width: 100%;
@@ -71,11 +71,19 @@ th, td {
     padding: 0.25em;
 }
 
-#mask {
+.mask {
     
 }
 
 table.accSettingTable > tr > td{
     border: none;
     /*padding: 1.5em;*/
+}
+
+.tdSubmit, .searchResultTable {
+    border: none;
+}
+
+.error {
+    color:red;
 }

@@ -86,8 +86,9 @@ public class FlightReservationDAO {
 		        query.append("SELECT F.").append(Constants.FARE_TYPE_FIELD)
 				        .append(", F.").append(Constants.FARE_FIELD)
 		                .append(" FROM ").append(Constants.FARE_TABLE)
-				        .append(" F WHERE F.").append(Constants.AIRLINEID_FIELD)
-				        .append("=\"%s\" and F.").append(Constants.FLIGHTNO_FIELD).append("=%d;");
+				        .append(" F WHERE F.").append(Constants.CLASS_FIELD).append("=\"").append(flightSearchForm.getPrefClass())
+				        .append("\" and F.").append(Constants.AIRLINEID_FIELD)
+                        .append("=\"%s\" and F.").append(Constants.FLIGHTNO_FIELD).append("=%d;");
 		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i));
 		        stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i)));
 		        rs = stmt.executeQuery();
@@ -121,7 +122,8 @@ public class FlightReservationDAO {
 						.append(" FROM ").append(Constants.LEG_TABLE)
 						.append(" L WHERE L.").append(Constants.AIRLINEID_FIELD)
 						.append("=\"%s\" and L.").append(Constants.FLIGHTNO_FIELD)
-						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d");
+						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d;");
+                        
 
 		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i));
 		        System.out.println();
@@ -129,27 +131,14 @@ public class FlightReservationDAO {
 		        rs = stmt.executeQuery();
 
 		        List<Leg> legs = new ArrayList<>();
-		        while (rs.next()) {
-					String[] depAirport = rs.getString(3).split(" ");
-					String[] depAirportDate = depAirport[0].split("-");
-					String[] depAirportTime = depAirport[1].split(":");
-
-			        String[] arrAirport = rs.getString(4).split(" ");
-					String[] arrAirportDate = arrAirport[0].split("-");
-					String[] arrAirportTime = arrAirport[1].split(":");
-
+		        while (rs.next())
 					legs.add(new Leg(rs.getInt(1), Airport.getAirportByID(rs.getString(2)),
-							LocalTime.of(Integer.parseInt(depAirportTime[0]), Integer.parseInt(depAirportTime[1])),
-							LocalTime.of(Integer.parseInt(arrAirportTime[0]), Integer.parseInt(arrAirportTime[1])),
+							rs.getTimestamp(3), rs.getTimestamp(4),
 							Airport.getAirportByID(rs.getString(5))));
 
-		        }   //String airline, int flightNo, List<Leg> legs, double fare, Double hiddenFare
-		        flights.add(new Flight(airlineIDs.get(i), flightNums.get(i), legs, fare,
-				        hiddenFare == -1 ? null : hiddenFare));
+		        flights.add(new Flight(airlineIDs.get(i), flightNums.get(i), legs, 
+                        flightSearchForm.getPrefClass(), fare, hiddenFare == -1 ? null : hiddenFare));
 	        }
-
-	        flights.forEach(System.out::println);
-
             conn.commit();
         } catch (SQLException ex) {
             Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
