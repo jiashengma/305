@@ -57,7 +57,18 @@ public class FlightReservationController {
         mv.addObject("flightSearchResult", flightReservationService.searchFlight(flightSearchForm));
         return mv;
     }
-
+    
+    
+    @RequestMapping(value = "/selectCustomerRepresentative", method = RequestMethod.GET)
+    public ModelAndView selectCustomerRepresentative(@RequestParam Map<String, String> requestParams) {
+        ModelAndView mv = new ModelAndView("selectRep");
+        
+        //TODO: get all reps (they are already in servlet context)
+        //TODO: pass flight and auction information ? or how else can actual reservation get neccessary info
+        
+        return mv;
+    }
+            
     @RequestMapping(value = "/bookflight", method = RequestMethod.GET)
     public ModelAndView handleBookFlight(@RequestParam Map<String, String> requestParams) {
         ModelAndView mv = new ModelAndView();

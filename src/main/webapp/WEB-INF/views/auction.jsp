@@ -18,7 +18,7 @@
 <div class="mask">
     <!--TODO:display flight info maybe?-->
     <c:choose> 
-        <c:when test="${empty flight}"> <p class="error">Error, flight got los</p> </c:when>
+        <c:when test="${empty flight}"> <p class="error">uh oh, flight got lost</p> </c:when>
         <c:otherwise>
             Please enter your bid for ${flight.airline} No.${flight.flightNo}
             <form id="biddingform" action="/bid" method="POST">

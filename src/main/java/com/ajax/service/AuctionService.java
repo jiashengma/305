@@ -18,7 +18,7 @@ public interface AuctionService {
      * @return SUCCESS on success, FAILURE on failure (lower bid than hidden
      * fare), or ERROR on error while bidding
      */
-    public int handleBid(Auction auction, double hiddenFare);
+    public int reserveFlightFromAuction(Auction auction);
     
     public int saveAuction(Auction auction);
 

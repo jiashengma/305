@@ -5,6 +5,7 @@ import com.ajax.model.Customer;
 import com.ajax.model.Flight;
 import com.ajax.model.Person;
 import com.ajax.model.Constants;
+import com.ajax.model.Status;
 import com.ajax.service.AuctionService;
 import java.util.List;
 import java.util.Map;
@@ -91,13 +92,21 @@ public class AuctionController {
     }
 
     @RequestMapping(value = "/bid", method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public int handleBid(@ModelAttribute("auction") Auction auction, @RequestParam("hiddenFare") double hiddenFare) {
+    public ModelAndView handleBid(@ModelAttribute("auction") Auction auction, @RequestParam("hiddenFare") double hiddenFare) {
 
+        ModelAndView mv = new ModelAndView();
+        
         // try to bid
-        int bidStatus = auctionService.handleBid(auction, hiddenFare);
+        // int bidStatus = auctionService.reserveFlightFromAuction(auction, hiddenFare);
+        
+        if (auction.getNYOP() >= hiddenFare) {
+            mv.setViewName("/selectCustomerRepresentative");
+        } else {
+            //TODO: low bid, send back to auction page
+            mv.setViewName("/");
+        }
 
-        return bidStatus;
+        return mv;
     }
     
     @RequestMapping(value ="/auction-history", method = RequestMethod.GET)
