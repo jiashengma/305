@@ -63,6 +63,7 @@ public class PersonEntitiesService {
     }
 
     public int updateCustomer(Customer customer) {
+        //NOTE: customer's email will be null, because email WILL NOT be updated
         throw new UnsupportedOperationException("update customer not yet supported");
     }
 

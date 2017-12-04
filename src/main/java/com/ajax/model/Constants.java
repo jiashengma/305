@@ -11,6 +11,7 @@ public class Constants {
     public static final String FLIGHT = "flight";
     public static final String CUSTOMER_REPRESENTATIVES = "customerRepresentatives";
     public static final String CUSTOMERS = "customers";
+    public static final String MSG_ATTRIBUTE = "msg";
 
     // mysql connection
     public static final String HOSTNAME = "localhost";
