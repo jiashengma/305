@@ -6,14 +6,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalTime;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.springframework.format.datetime.standard.DateTimeContext;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -37,8 +35,10 @@ public class FlightReservationDAO {
 			//	        and AP1.Id=L1.DepAirportId and AP2.Name="Los Angeles International" and AP2.Id=L2.ArrAirportId;
 	            -> obtains AirlineID, FlightNo of all possible routes
 	        */
-	        StringBuilder query = new StringBuilder("SELECT L1.").append(Constants.AIRLINEID_FIELD)
-			        .append(", L1.").append(Constants.FLIGHTNO_FIELD).append(", L1.").append(Constants.LEGNO)
+	        StringBuilder query = new StringBuilder("SELECT L1.")
+                    .append(Constants.AIRLINEID_FIELD)
+			        .append(", L1.").append(Constants.FLIGHTNO_FIELD)
+                    .append(", L1.").append(Constants.LEGNO)
 			        .append(" FROM ").append(Constants.LEG_TABLE).append(" L1, ");
 
 	        if (hasFlightFrom && hasFlightTo)
@@ -51,7 +51,8 @@ public class FlightReservationDAO {
 	        if (hasFlightFrom ^ hasFlightTo)
 	        	query.append(hasFlightFrom ? Constants.DEPATURE_AIRPORT_ID : Constants.ARRIVAL_AIRPORT_ID);
 	        else
-	        	query.append(Constants.DEPATURE_AIRPORT_ID).append(" and AP2.").append(Constants.NAME_FIELD)
+	        	query.append(Constants.DEPATURE_AIRPORT_ID)
+                        .append(" and AP2.").append(Constants.NAME_FIELD)
 				        .append("=\"%s\" and AP2.").append(Constants.ID_FIELD).append("=L2.")
 				        .append(Constants.ARRIVAL_AIRPORT_ID);
 
@@ -193,7 +194,7 @@ public class FlightReservationDAO {
     }
 
     /**
-     * Reserves a flight from a successfully auction
+     * Reserves a flight from a successful auction
      *
      * @param auction
      */

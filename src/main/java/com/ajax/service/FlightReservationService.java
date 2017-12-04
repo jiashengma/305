@@ -1,6 +1,7 @@
 package com.ajax.service;
 
 import com.ajax.model.Airport;
+import com.ajax.model.Auction;
 import com.ajax.model.BookingType;
 import com.ajax.model.Flight;
 import com.ajax.model.FlightSearchForm;
@@ -16,6 +17,8 @@ public class FlightReservationService {
 
     @Autowired
     FlightReservationDAO flightReservationManager;
+    @Autowired
+    FlightReservationDAO flightReservationDAO;
 
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
         System.out.println("TODO: query database for results");
@@ -33,26 +36,11 @@ public class FlightReservationService {
         throw new UnsupportedOperationException("not supported");
     }
 
-    public boolean bookFlight(Flight flight, BookingType type) {
-        if (type == BookingType.AUCTION) {
-            // reserve flight from auction
-            return bookFlightFromAuction(flight);
-        } else if (type == BookingType.DISCOUNT) {
-            // reserve flight with discount
-            return bookDiscountedFlight(flight);
-        }
-        return bookFlight(flight);
+    private int bookFlight(Auction auction) {
+        return flightReservationDAO.reserveFlightFromAuction(auction);
     }
 
-    private boolean bookFlightFromAuction(Flight flight) {
-        throw new UnsupportedOperationException();
-    }
-
-    private boolean bookDiscountedFlight(Flight flight) {
-        throw new UnsupportedOperationException();
-    }
-
-    private boolean bookFlight(Flight flight) {
+    private int bookFlight(Flight flight) {
         throw new UnsupportedOperationException();
     }
 

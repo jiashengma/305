@@ -1,4 +1,8 @@
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
+<c:if test="${not person.accessControl eq 'CUSTOMER'}">
+    <c:redirect url=""/>
+</c:if>
+
 <div class="mask">
 <c:choose>
     <c:when test="${empty flightSearchResult}"> 
@@ -33,18 +37,21 @@
                                 (the forms should contain hidden input type with names and 
                                  value pairs, see the auctionForm below)
                         -->
-                        <input type="hidden" name="personId" value="${person.id}"/>
+                        <input type="hidden" name="airline" value="${flight.airline}">
+                        <input type="hidden" name="flightNo" value="${flight.flightNo}">
+                        <input type="hidden" name="flightClass" value="${flight.flightClass}">
+                        <input type="hidden" name="fare" value="${flight.fare}">
+                        <input type="hidden" name="personId" value="${person.accNum}"/>
                         <td class="tdSubmit"><input type="submit" value="Book This Flight" /></td>
                     </form>
 
 
                     <form class="reservationFormGroup" name="auctionForm" action="/auction" method="POST">
-
                         <input type="hidden" name="airline" value="${flight.airline}">
                         <input type="hidden" name="flightNo" value="${flight.flightNo}">
-                        <input type="hidden" name="flightNo" value="${flight.flightClass}">
+                        <input type="hidden" name="flightClass" value="${flight.flightClass}">
                         <input type="hidden" name="hiddenFare" value="${flight.hiddenFare}">
-                        <input type="hidden" name="personId" value="${person.id}">
+                        <input type="hidden" name="personId" value="${person.accNum}">
                         <td class="tdSubmit"><input type="submit" value="Bid For This Flight" /></td>
                     </form>
                 </tr>
