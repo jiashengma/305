@@ -95,7 +95,7 @@ CREATE TABLE `airport` (
 
 LOCK TABLES `airport` WRITE;
 /*!40000 ALTER TABLE `airport` DISABLE KEYS */;
-INSERT INTO `airport` VALUES ('BET','Berlin Tegel','Berlin','Germany'),('CHI','Chicago O\'Hare International','Chicago','Illinois'),('HJI','Hartsfield-Jackson Atlanta Int ','Atlanta ','United States of America\n'),('IVI','Ivato International ','Antananarivo ','Madagascar\n'),('JFK','John F. Kennedy International ','New York ','United States of America\n'),('LAI','Los Angeles International ','Los Angeles ','United States of America\n'),('LGA','LaGuardia ','New York ','United States of America\n'),('LHA','London Heathrow ','London ','United Kingdom\n'),('LIA','Logan International ','Boston ','United States of America\n'),('SFI','San Francisco International ','San Francisco ','United States of America\n'),('TIA','Tokyo International ','Tokyo ','Japan');
+INSERT INTO `airport` VALUES ('BET','Berlin Tegel','Berlin','Germany'),('CHI','Chicago O\'Hare International','Chicago','Illinois'),('HJI','Hartsfield-Jackson Atlanta Int','Atlanta','United States of America'),('IVI','Ivato International','Antananarivo','Madagascar'),('JFK','John F. Kennedy International','New York','United States of America'),('LAI','Los Angeles International','Los Angeles','United States of America'),('LGA','LaGuardia','New York','United States of America'),('LHA','London Heathrow','London','United Kingdom'),('LIA','Logan International','Boston','United States of America'),('SFI','San Francisco International','San Francisco','United States of America'),('TIA','Tokyo International','Tokyo','Japan');
 /*!40000 ALTER TABLE `airport` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,7 +193,7 @@ DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
   `Id` int(11) NOT NULL,
   `SSN` char(9) NOT NULL,
-  `IsManager` tinyint(1) NOT NULL DEFAULT '0',
+  `IsManager` tinyint(1) NOT NULL DEFAULT'0',
   `StartDate` date NOT NULL,
   `HourlyRate` decimal(10,2) NOT NULL,
   PRIMARY KEY (`SSN`),
