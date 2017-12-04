@@ -20,7 +20,7 @@ public interface AuctionService {
      */
     public int reserveFlightFromAuction(Auction auction);
     
-    public int saveAuction(Auction auction);
+    public boolean saveAuction(Auction auction);
 
     public List<Auction> getAllAuctionHistory(int customerAccNo);
 

@@ -34,7 +34,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public int saveAuction(Auction auction) {
+    public boolean saveAuction(Auction auction) {
         return auctionDAO.saveAuction(auction);
     }
 

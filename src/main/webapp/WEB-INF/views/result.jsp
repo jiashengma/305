@@ -1,5 +1,5 @@
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
-<c:if test="${not person.accessControl eq 'CUSTOMER'}">
+<c:if test="${person.accessControl eq 'CUSTOMER_REPRESENTATIVE' or person.accessControl eq 'MANAGER'}">
     <c:redirect url=""/>
 </c:if>
 
@@ -28,7 +28,7 @@
                     <td>${flight.fare}</td>
 
                     <form class="reservationFormGroup" name="bookingForm" action="/bookflight" method="POST">
-                        <!--TODO: 
+<!--                        TODO: 
                             on the left: 
                                 flight info: flight, airline, dep/arr time, stops etc
                             on the right:
@@ -41,6 +41,7 @@
                         <input type="hidden" name="flightNo" value="${flight.flightNo}">
                         <input type="hidden" name="flightClass" value="${flight.flightClass}">
                         <input type="hidden" name="fare" value="${flight.fare}">
+                        <!--TODO need leg info-->
                         <input type="hidden" name="personId" value="${person.accNum}"/>
                         <td class="tdSubmit"><input type="submit" value="Book This Flight" /></td>
                     </form>
@@ -51,12 +52,22 @@
                         <input type="hidden" name="flightNo" value="${flight.flightNo}">
                         <input type="hidden" name="flightClass" value="${flight.flightClass}">
                         <input type="hidden" name="hiddenFare" value="${flight.hiddenFare}">
+                        <!--TODO need leg info-->
                         <input type="hidden" name="personId" value="${person.accNum}">
                         <td class="tdSubmit"><input type="submit" value="Bid For This Flight" /></td>
                     </form>
                 </tr>
             </c:forEach>
         </table>
+<!--        <form class="reservationFormGroup" name="auctionForm" action="/auction" method="POST">
+                        <input type="hidden" name="airline" value="AA">
+                        <input type="hidden" name="flightNo" value="111">
+                        <input type="hidden" name="flightClass" value="First">
+                        <input type="hidden" name="hiddenFare" value="1000">
+                        TODO need leg info
+                        <input type="hidden" name="personId" value="${person.accNum}">
+                        <td class="tdSubmit"><input type="submit" value="Bid For This Flight" /></td>
+                    </form>-->
     </c:otherwise>
 </c:choose>
 </div>
