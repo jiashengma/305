@@ -4,10 +4,6 @@ package com.ajax.model;
 
 import javax.validation.constraints.Pattern;
 
-/**
- *
- * @author majiasheng
- */
 public class Person {
 
     protected int id;

@@ -14,7 +14,6 @@ public interface AuctionService {
      * (and reservations if bid succeeded)
      *
      * @param auction
-     * @param hiddenFare
      * @return SUCCESS on success, FAILURE on failure (lower bid than hidden
      * fare), or ERROR on error while bidding
      */

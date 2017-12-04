@@ -43,10 +43,8 @@ public class PasswordUtility {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = sha256.digest(saltedPassword.getBytes("UTF-8"));
             hashedPassword = String.format("%064x", new java.math.BigInteger(1, hashedBytes));
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             e.printStackTrace();
-        } catch (UnsupportedEncodingException uee) {
-            uee.printStackTrace();
         }
 
         return hashedPassword;

@@ -21,8 +21,6 @@ public class FlightReservationService {
     FlightReservationDAO flightReservationDAO;
 
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
-        System.out.println("TODO: query database for results");
-
         //TODO: sanitize inputs/args ?
         return flightReservationManager.searchFlight(flightSearchForm);
     }
