@@ -22,7 +22,7 @@
         <c:otherwise>
             Please enter your bid for ${flight.airline} No.${flight.flightNo}
             <form id="biddingform" action="/bid" method="POST">
-                <input type="number" name="NYOP" placeholder="Your bid in $" required=""/><br>
+                <input type="number" name="NYOP" placeholder="Your bid in $" required/><br>
                 <input type="hidden" name="personAccNo" value="${person.accNum}"/>
                 <input type="hidden" name="airline" value="${flight.airline}"/>
                 <input type="hidden" name="flightNo" value="${flight.flightNo}"/>

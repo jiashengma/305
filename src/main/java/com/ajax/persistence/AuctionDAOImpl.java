@@ -24,8 +24,7 @@ import org.springframework.stereotype.Repository;
 public class AuctionDAOImpl implements AuctionDAO {
 
     @Override
-    public int saveAuction(Auction auction) {
-        int ret = ReturnValue.ERROR;
+    public boolean saveAuction(Auction auction) {
         Connection conn = MySQLConnection.connect();
         try {
             String query = "INSERT INTO "
@@ -45,11 +44,13 @@ public class AuctionDAOImpl implements AuctionDAO {
             stmt.setString(4, auction.getFlightClass().name());
             stmt.setDouble(5, auction.getNYOP());
 
-            ret = stmt.executeUpdate();
+            stmt.executeUpdate();
             conn.commit();
 
         } catch (SQLException ex) {
+            ex.printStackTrace();
             System.err.println("Error occurred while trying to insert record into auctions table.");
+            return false;
         } finally {
             try {
                 conn.close();
@@ -58,7 +59,7 @@ public class AuctionDAOImpl implements AuctionDAO {
             }
         }
 
-        return ret;
+        return true;
 
     }
 

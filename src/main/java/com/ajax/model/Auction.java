@@ -94,8 +94,7 @@ public class Auction {
                 + "Airline: " + airline + "\n"
                 + "Flight: " + flightNo + "\n"
                 + "Class: " + flightClass.name() + "\n"
-                + "NYOP: " + NYOP + "\n"
-                + "Date: " + time.toString();
+                + "NYOP: " + NYOP + "\n";
     }
 
 }
