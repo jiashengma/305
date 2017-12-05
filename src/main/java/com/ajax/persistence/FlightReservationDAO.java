@@ -213,6 +213,15 @@ public class FlightReservationDAO {
 					customer.getAccNum(), flight.getSeatNum(), flight.getFlightClass(), flight.getMeal()));
 			stmt.executeUpdate();
 
+			// INSERT INTO includes VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1), "JA", 111, 1, CURRENT_TIMESTAMP);
+			query.setLength(0);
+			query.append("INSERT INTO ").append(Constants.INCLUDES_TABLE).append(" VALUES ((SELECT ")
+					.append(Constants.RESERVATION_TABLE).append(" WHERE ")
+					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %d, %d, CURRENT_TIMESTAMP");
+			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(),
+					flight.getAirline(), flight.getFlightNo(), flight.getLegs().get(0).getNumber()));
+			stmt.executeUpdate();
+
 			processedRequest = true;
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
