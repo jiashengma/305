@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FlightReservationDAO {
 	private static final double SYSTEM_FEE = 1.2;
+    private static final int DEFAULT_MAX_COST = Integer.MAX_VALUE;
 
 	public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
 		List<Flight> flights = new ArrayList<>();
@@ -94,8 +95,8 @@ public class FlightReservationDAO {
 				stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i)));
 				rs = stmt.executeQuery();
 
-				double fare = -1;
-				double hiddenFare = -1;
+				double fare = DEFAULT_MAX_COST;
+				double hiddenFare = DEFAULT_MAX_COST;
 				while (rs.next())
 					switch (rs.getString(1)) {
 						case Constants.HIDDEN_FARE_FIELD:
@@ -108,8 +109,8 @@ public class FlightReservationDAO {
 							Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.WARNING, "Weird Result" + rs.getString(2));
 					}
 
-				if (fare == -1 && hiddenFare > fare)
-					fare = hiddenFare;
+//				if (fare == DEFAULT_MAX_COST && hiddenFare > fare)
+//					fare = hiddenFare;
 //		        System.out.printf("%nfare:%.2f%nhiddenFare:%.2f%n%n", fare, hiddenFare);
 
 				query.setLength(0);
@@ -236,7 +237,7 @@ public class FlightReservationDAO {
 	 *
 	 * @param auction
 	 */
-	public int reserveFlightFromAuction(Auction auction) {
+	public boolean reserveFlightFromAuction(Auction auction) {
 		// TODO: use the info in the auction to do reservation, may call the reserveFlight() method above
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

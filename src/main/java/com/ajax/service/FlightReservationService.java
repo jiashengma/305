@@ -34,11 +34,11 @@ public class FlightReservationService {
         throw new UnsupportedOperationException("not supported");
     }
 
-    private int bookFlight(Auction auction) {
+    public boolean bookFlight(Auction auction) {
         return flightReservationDAO.reserveFlightFromAuction(auction);
     }
 
-    private int bookFlight(Flight flight) {
+    public boolean bookFlight(Flight flight) {
         throw new UnsupportedOperationException();
     }
 
