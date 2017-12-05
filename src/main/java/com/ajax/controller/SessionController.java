@@ -1,7 +1,5 @@
 package com.ajax.controller;
 
-import com.ajax.model.Customer;
-import com.ajax.model.Employee;
 import com.ajax.model.Person;
 import com.ajax.model.Constants;
 import com.ajax.service.LoginService;
@@ -51,17 +49,10 @@ public class SessionController {
         Person person = loginService.login(requestParams.get(Constants.USERNAME_FIELD),
                 requestParams.get(Constants.PASSWORD_FIELD));
 
-        if (person == null) {
-            //TODO: show an popup to indicate username and password mismatch
+        if (person == null)   //TODO: show an popup to indicate username and password mismatch
             redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
-        } else {
-            // add user to session
-            if (person instanceof Customer) {
-                request.getSession().setAttribute(Constants.PERSON, (Customer) person);
-            } else {
-                request.getSession().setAttribute(Constants.PERSON, (Employee) person);
-            }
-        }
+        else    // add user to session
+            request.getSession().setAttribute(Constants.PERSON, person);
         return modelAndView;
     }
 

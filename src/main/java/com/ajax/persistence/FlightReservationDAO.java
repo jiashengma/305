@@ -19,7 +19,6 @@ public class FlightReservationDAO {
 	private static final double SYSTEM_FEE = 1.2;
 
 	public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
-//	    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, flightSearchForm.toString());
 		List<Flight> flights = new ArrayList<>();
 		Connection conn = MySQLConnection.connect();
 		try {
@@ -141,6 +140,8 @@ public class FlightReservationDAO {
 				flights.add(new Flight(airlineIDs.get(i), flightNums.get(i), legs,
 						flightSearchForm.getPrefClass(), fare, hiddenFare == -1 ? null : hiddenFare));
 			}
+			flights.forEach(System.out::println);
+//		    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, flightSearchForm.toString());
 			conn.commit();
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
@@ -221,6 +222,8 @@ public class FlightReservationDAO {
 			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(),
 					flight.getAirline(), flight.getFlightNo(), flight.getLegs().get(0).getNumber()));
 			stmt.executeUpdate();
+
+			conn.commit();
 
 			processedRequest = true;
 		} catch (SQLException ex) {

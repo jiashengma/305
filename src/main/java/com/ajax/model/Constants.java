@@ -9,7 +9,7 @@ public class Constants {
     // request/response/session attributes
     public static final String PERSON = "person";
     public static final String FLIGHT = "flight";
-    public static final String CUSTOMER_REPRESENTATIVES = "customerRepresentatives";
+    public static final String CUSTOMER_REPRESENTATIVE = "customerRepresentative";
     public static final String CUSTOMERS = "customers";
     public static final String MSG_ATTRIBUTE = "msg";
 

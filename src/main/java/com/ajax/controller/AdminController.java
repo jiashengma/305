@@ -8,7 +8,6 @@ package com.ajax.controller;
 import com.ajax.model.Constants;
 import com.ajax.model.Customer;
 import com.ajax.model.Employee;
-import com.ajax.persistence.PersonEntitiesManager;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
 import java.util.List;
@@ -84,7 +83,7 @@ public class AdminController {
         ModelAndView mv = new ModelAndView("customer-representatives");
 
         List<Employee> cusReps = regitrationService.getAllCustomerRepresentatives();
-        mv.addObject(Constants.CUSTOMER_REPRESENTATIVES, cusReps);
+        mv.addObject(Constants.CUSTOMER_REPRESENTATIVE, cusReps);
 
         return mv;
     }

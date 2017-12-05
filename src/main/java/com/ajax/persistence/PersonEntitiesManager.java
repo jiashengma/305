@@ -54,8 +54,7 @@ public class PersonEntitiesManager {
                     + " ) "
                     + " VALUES (?,?,?,?)";
 
-            /* try to add login information and add person record for 
-             * registering customer
+            /* try to add login information and add person record for registering customer
              * return immediately if error occurred
              */
             if (addPerson(customer, conn) != ReturnValue.ERROR && addLoginForPerson(customer, conn) != ReturnValue.ERROR) {
@@ -63,7 +62,6 @@ public class PersonEntitiesManager {
                 PreparedStatement stmt = conn.prepareStatement(query);
 
                 stmt.setInt(1, customer.getId());
-                //stmt.setLong(2, customer.getCreditCard());
                 stmt.setString(2, customer.getCreditCard());
                 stmt.setString(3, customer.getEmail());
                 stmt.setInt(4, customer.getRating());

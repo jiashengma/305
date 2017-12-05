@@ -1,12 +1,6 @@
 package com.ajax.controller;
 
-import com.ajax.model.Airport;
-import com.ajax.model.BookingType;
-import com.ajax.model.Constants;
-import com.ajax.model.Flight;
-import com.ajax.model.FlightClass;
-import com.ajax.model.FlightSearchForm;
-import com.ajax.model.State;
+import com.ajax.model.*;
 import com.ajax.service.FlightReservationService;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
@@ -69,9 +63,10 @@ public class FlightReservationController {
         return mv;
     }
             
-    @RequestMapping(value = "/bookflight", method = RequestMethod.GET)
-    public ModelAndView handleBookFlight(@RequestParam Map<String, String> requestParams) {
+    @RequestMapping(value = "/bookflight", method = RequestMethod.POST)
+    public ModelAndView handleBookFlight(HttpServletRequest request, @RequestParam Map<String, String> requestParams) {
         ModelAndView mv = new ModelAndView();
+	    Customer p = (Customer) request.getSession().getAttribute(Constants.PERSON);
 
         //TODO: pass flight to be booked to bookFlight()
         //if (flightReservationService.bookFlight(null, BookingType.AUCTION)) {
@@ -86,7 +81,6 @@ public class FlightReservationController {
             // mv.setView("index");
         // mv.addObject("msg", "Failed to book flight");
         //}
-        // return mv;
-        return null;
+         return mv;
     }
 }
