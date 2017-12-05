@@ -5,9 +5,7 @@ import com.ajax.model.Customer;
 import com.ajax.model.Flight;
 import com.ajax.model.Constants;
 import com.ajax.service.AuctionService;
-import com.ajax.service.ReturnValue;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -74,14 +71,18 @@ public class AuctionController {
 
         // save auction 
         if (!auctionService.saveAuction(auction)) {
-            mv.addObject(Constants.MSG_ATTRIBUTE, "Error Occurred while trying to save auction");
+            mv.addObject(Constants.MSG_ATTRIBUTE, "<p style=\"color:red\">Error Occurred while trying to save auction</p>");
             return mv;
         }
 
         if (auction.getNYOP() >= hiddenFare) {
             mv.setViewName("selectRep");
-            // TODO: add neccessary info to reserve a flight
-            mv.addObject(Constants.MSG_ATTRIBUTE, "Bid success");
+            /* TODO: add neccessary info to reserve a flight, 
+                maybe a flight object with legs 
+            */
+
+            mv.addObject(Constants.MSG_ATTRIBUTE, "<p style=\"color:green\">Bid success</p>");
+            mv.addObject("auction", auction);
 
         } else {
             mv.addObject(Constants.MSG_ATTRIBUTE, "Low Bid.. Please try again :)");

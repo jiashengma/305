@@ -198,7 +198,7 @@ public class FlightReservationDAO {
      *
      * @param auction
      */
-    public int reserveFlightFromAuction(Auction auction) {
+    public boolean reserveFlightFromAuction(Auction auction) {
         /*TODO: use the info in the auction to do reservation
          this method may call the reserveFlight() method above */
         throw new UnsupportedOperationException("Not supported yet.");
