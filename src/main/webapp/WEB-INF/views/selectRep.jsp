@@ -4,7 +4,7 @@
     Author     : majiasheng
 --%>
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
-<c:if test="${not person.accessControl eq 'CUSTOMER'}">
+<c:if test="${person.accessControl ne 'CUSTOMER'}">
     <c:redirect url=""/>
 </c:if>
 

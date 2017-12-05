@@ -237,6 +237,8 @@ public class PersonEntitiesManager {
                 customer = new Customer(firstname, lastname, phone,
                         new Address(street, city, state, zipCode),
                         creditCard, email);
+                customer.setAccNum(acc);
+                customer.setRating(rating);
                 customer.setAccessControl(AccessControl.CUSTOMER);
                 // customer.setRating(rating);       //TODO: set rating later?
                 break;

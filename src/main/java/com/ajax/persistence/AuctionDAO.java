@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface AuctionDAO {
 
-    public int saveAuction(Auction auction);
+    public boolean saveAuction(Auction auction);
 
     public List<Auction> getAllAuctionHistory(int customerAccNo);
 
