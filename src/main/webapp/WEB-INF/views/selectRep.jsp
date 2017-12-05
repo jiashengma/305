@@ -4,7 +4,7 @@
     Author     : majiasheng
 --%>
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
-<c:if test="${person.accessControl ne 'CUSTOMER'}">
+<c:if test="${person.accessControl ne 'CUSTOMER' }">
     <c:redirect url=""/>
 </c:if>
 
@@ -20,10 +20,10 @@ ${msg}
                 
             </c:when>
             <c:otherwise>
-                <form action="/bookflightViaAuction">        
+                <form action="/bookflightViaAuction" method="POST">        
                     <!--hidden inputs from auction-->
-                <input type="number" name="NYOP" value="${auction.NYOP}" required/><br>
-                <input type="hidden" name="personAccNo" value="${auction.accNum}"/>
+                <input type="hidden" name="NYOP" value="${auction.NYOP}"/><br>
+                <input type="hidden" name="personAccNo" value="${auction.personAccNo}"/>
                 <input type="hidden" name="airline" value="${auction.airline}"/>
                 <input type="hidden" name="flightNo" value="${auction.flightNo}"/>
                 <input type="hidden" name="flightClass" value="${auction.flightClass}"/>
@@ -31,7 +31,7 @@ ${msg}
             </c:choose>
 
             <select>
-                <c:forEach var="rep" items="${customerRepresentatives}">
+                <c:forEach var="rep" items="${customerRepresentative}">
                     <option name="${rep.ssn}">${rep.firstName} ${rep.lastName}</option>
                 </c:forEach>
             </select>
