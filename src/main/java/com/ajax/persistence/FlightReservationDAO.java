@@ -141,7 +141,6 @@ public class FlightReservationDAO {
 						flightSearchForm.getPrefClass(), fare, hiddenFare == -1 ? null : hiddenFare));
 			}
 			flights.forEach(System.out::println);
-//		    Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.FINE, flightSearchForm.toString());
 			conn.commit();
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
@@ -222,7 +221,6 @@ public class FlightReservationDAO {
 			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(),
 					flight.getAirline(), flight.getFlightNo(), flight.getLegs().get(0).getNumber()));
 			stmt.executeUpdate();
-
 			conn.commit();
 
 			processedRequest = true;
