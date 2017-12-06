@@ -11,14 +11,13 @@
 <h2>Select Your Reservation Representative</h2>
 <hr>
 ${msg}
-${header.referer}
 <div class="mask">
     <!--TODO: check if this is from buy now or auction-->
     <c:choose>
         <c:when test="${empty auction}">
-            <form action="/bookflight" method="POST">
+            <form id="bookingForm" action="/bookflight" method="POST">
                 <!--hidden inputs from buy now-->
-                
+
             </c:when>
             <c:otherwise>
                 <form action="/bookflightViaAuction" method="POST">        
@@ -31,12 +30,19 @@ ${header.referer}
                 </c:otherwise>
             </c:choose>
 
-            <select name="rep">
-                <c:forEach var="rep" items="${customerRepresentative}">
+            <!--<select name="rep">-->
+            <select id="reps">
+                <c:forEach var="rep" items="${customerRepresentative}" varStatus="loop">
                     <!--TODO hide ssn.....-->
+                    <!--<option value="${loop.index}">${rep.firstName} ${rep.lastName}</option>-->
                     <option value="${rep.ssn}">${rep.firstName} ${rep.lastName}</option>
                 </c:forEach>
             </select>
+            <%--<c:forEach var="rep" items="${customerRepresentative}" varStatus="loop">--%>
+                <!--<input type="hidden" name="rep_${loop.index}" value="${rep.ssn}"/>-->
+            <%--</c:forEach>--%>
+            <!--<input type="hidden" name="rep" value=""/>-->
+
 
             <input type="submit" value="Select"/>
         </form>

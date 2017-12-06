@@ -5,18 +5,47 @@
 //const ERROR = - 1;
 //const AUCTION_LOW_BID = 0;
 /**
-* asks users to log in before they can proceed to book or bid flights
-*/
-$(".reservationFormGroup").submit(function (e) {
-    var id = $("input[name=personId]").val();
-    if (id === null || id === "") {
-        alert("Please log in to proceed");
-        e.preventDefault();
-    }
+ * asks users to log in before they can proceed to book or bid flights
+ */
+
+
+//$("#bookingForm").submit(function (e) {
+//    $("#reps").val();
+//});
+
+
+$(document).ready(function () {
+
+    $(".reservationFormGroup").submit(function (e) {
+        var id = $("input[name=personId]").val();
+        if (id === null || id === "") {
+            alert("Please log in to proceed");
+            e.preventDefault();
+        }
+    });
+    
+    $("#registrationForm").submit(function (e) {
+        console.log("?");
+
+        var pass = true;
+
+        if (this.repassword.value !== this.password.value) {
+            $("#pwMisMatch").html("<span class=\"error\">Passwords do not match</span>")
+            pass = false;
+        }
+        if (this.reemail.value !== this.email.value) {
+            $("#emailMisMatch").html("<span class=\"error\">Emails do not match</span>")
+            pass = false;
+        }
+
+        if (!pass)
+            e.preventDefault();
+
+    });
 });
-        /**
-         * send ajax post when user bids
-         */
+/**
+ * send ajax post when user bids
+ */
 //$("#biddingform").submit(function (e) {
 //    // prevent form from submitting
 //    e.preventDefault();

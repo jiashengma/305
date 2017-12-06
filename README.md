@@ -4,7 +4,7 @@
 	[x]	notify user to login when they try to book a flight (in handler for booking form submission: get session, check if session("user")==null)
 	[x]	add registration validation (use javax validation + hibernate validator)
 	[x]	create a different registration portal for admin, i.e. use different registraion handler, and set the priviledge bit manually in db 
-	[]	check email and password using jquery in front end
+	[x]	check email and password using jquery in front end
 	[]	customers - search flights
 	[]	***query db for direct or indirect flights between a pair of cities for a given date and "approximate" time.***
 	[]	reverse auctions - price customers are willing to pay for a seat
