@@ -83,8 +83,8 @@ public class MainController {
         }
 
         // load customer representatives for reservation
-        if (context.getAttribute(Constants.CUSTOMER_REPRESENTATIVE) == null) {
-            context.setAttribute(Constants.CUSTOMER_REPRESENTATIVE, personEntitiesService.getAllCustomerRepresentatives());
+        if (context.getAttribute("customerRepresentatives") == null) {
+            context.setAttribute("customerRepresentatives", personEntitiesService.getAllCustomerRepresentatives());
         }
 
     }

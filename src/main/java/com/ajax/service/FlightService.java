@@ -21,7 +21,7 @@ public class FlightService {
     FlightDAO flightDAO;
 
     public List<Flight> getBestSeller() {
-        return flightDAO.getBestSeller();
+        return flightDAO.getBestSellers();
     }
 
     public Object getFlightSuggestion(int accNum) {

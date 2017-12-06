@@ -465,24 +465,24 @@ public class PersonEntitiesManager {
 
     public List<Customer> getAllCustomers() {
         String query = "SELECT "
-                    + " P." + Constants.FIRSTNAME_FILED + ", "
-                    + " P." + Constants.LASTNAME_FILED + ", "
-                    + " P." + Constants.STREET_FILED + ", "
-                    + " P." + Constants.CITY_FILED + ", "
-                    + " P." + Constants.STATE_FILED + ", "
-                    + " P." + Constants.ZIPCODE_FILED + ", "
-                    + " P." + Constants.PHONE_FILED + ", "
-                    + " C." + Constants.ACCOUNTNO_FIELD + ", "
-                    + " C." + Constants.CREDITCARDNO_FIELD + ", "
-                    + " C." + Constants.EMAIL_FIELD + ", "
-                    + " C." + Constants.RATING_FIELD
-                    + " FROM "
-                    + Constants.CUSTOMER_TABLE + " C, "
-                    + Constants.PERSON_TABLE + " P"
-                    + " WHERE "
-                    + " C." + Constants.ID_FIELD
-                    + " =  "
-                    + " P." + Constants.ID_FIELD;
+                + " P." + Constants.FIRSTNAME_FILED + ", "
+                + " P." + Constants.LASTNAME_FILED + ", "
+                + " P." + Constants.STREET_FILED + ", "
+                + " P." + Constants.CITY_FILED + ", "
+                + " P." + Constants.STATE_FILED + ", "
+                + " P." + Constants.ZIPCODE_FILED + ", "
+                + " P." + Constants.PHONE_FILED + ", "
+                + " C." + Constants.ACCOUNTNO_FIELD + ", "
+                + " C." + Constants.CREDITCARDNO_FIELD + ", "
+                + " C." + Constants.EMAIL_FIELD + ", "
+                + " C." + Constants.RATING_FIELD
+                + " FROM "
+                + Constants.CUSTOMER_TABLE + " C, "
+                + Constants.PERSON_TABLE + " P"
+                + " WHERE "
+                + " C." + Constants.ID_FIELD
+                + " =  "
+                + " P." + Constants.ID_FIELD;
 
         List<Customer> customers = new ArrayList<>();
 
@@ -506,11 +506,11 @@ public class PersonEntitiesManager {
                 String email = rs.getString(Constants.EMAIL_FIELD);
                 int rating = rs.getInt(Constants.RATING_FIELD);
                 Customer customer = new Customer(
-                        firstname, 
-                        lastname, 
-                        phone, 
-                        new Address(street, city, state, zipCode), 
-                        credNo, 
+                        firstname,
+                        lastname,
+                        phone,
+                        new Address(street, city, state, zipCode),
+                        credNo,
                         email);
 
                 // do not forget to set access control 
@@ -521,37 +521,93 @@ public class PersonEntitiesManager {
 
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
 
         return customers;
     }
 
     public List<Customer> getAllCustomersByRepId(String ssn) {
-        //TODO: join reservation table as well
         String query = "SELECT "
-                    + " P." + Constants.FIRSTNAME_FILED + ", "
-                    + " P." + Constants.LASTNAME_FILED + ", "
-                    + " P." + Constants.STREET_FILED + ", "
-                    + " P." + Constants.CITY_FILED + ", "
-                    + " P." + Constants.STATE_FILED + ", "
-                    + " P." + Constants.ZIPCODE_FILED + ", "
-                    + " P." + Constants.PHONE_FILED + ", "
-                    + " C." + Constants.ACCOUNTNO_FIELD + ", "
-                    + " C." + Constants.CREDITCARDNO_FIELD + ", "
-                    + " C." + Constants.EMAIL_FIELD + ", "
-                    + " C." + Constants.RATING_FIELD
-                    + " FROM "
-                    + Constants.CUSTOMER_TABLE + " C, "
-                    + Constants.PERSON_TABLE + " P"
-                    + " WHERE "
-                    + ""
-                    + " AND"
-                    + " C." + Constants.ID_FIELD
-                    + " =  "
-                    + " P." + Constants.ID_FIELD;
-        throw new UnsupportedOperationException("get customers not yet supported");
+                + " P." + Constants.FIRSTNAME_FILED + ", "
+                + " P." + Constants.LASTNAME_FILED + ", "
+                + " P." + Constants.STREET_FILED + ", "
+                + " P." + Constants.CITY_FILED + ", "
+                + " P." + Constants.STATE_FILED + ", "
+                + " P." + Constants.ZIPCODE_FILED + ", "
+                + " P." + Constants.PHONE_FILED + ", "
+                + " C." + Constants.ACCOUNTNO_FIELD + ", "
+                + " C." + Constants.CREDITCARDNO_FIELD + ", "
+                + " C." + Constants.EMAIL_FIELD + ", "
+                + " C." + Constants.RATING_FIELD
+                + " FROM "
+                + Constants.CUSTOMER_TABLE + " C, "
+                + Constants.PERSON_TABLE + " P, "
+                + Constants.RESERVATION_TABLE + " R "
+                + "WHERE "
+                + "R." + Constants.REP_SSN_FIELD + " = ? "
+                + "AND "
+                + "R." + Constants.ACCOUNTNO_FIELD + " = " + "C." + Constants.ACCOUNTNO_FIELD
+                + "AND "
+                + "C." + Constants.ID_FIELD + " = " + "P." + Constants.ID_FIELD;
+        List<Customer> customers = new ArrayList<>();
+
+        Connection conn = MySQLConnection.connect();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1,ssn);
+            ResultSet rs = stmt.executeQuery();
+            conn.commit();
+
+            while (rs.next()) {
+                String firstname = rs.getString(Constants.FIRSTNAME_FILED);
+                String lastname = rs.getString(Constants.LASTNAME_FILED);
+                String street = rs.getString(Constants.STREET_FILED);
+                String city = rs.getString(Constants.CITY_FILED);
+                String state = rs.getString(Constants.STATE_FILED);
+                String phone = rs.getString(Constants.PHONE_FILED);
+                int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
+                int accNo = rs.getInt(Constants.ACCOUNTNO_FIELD);
+                String credNo = rs.getString(Constants.CREDITCARDNO_FIELD);
+                String email = rs.getString(Constants.EMAIL_FIELD);
+                int rating = rs.getInt(Constants.RATING_FIELD);
+                Customer customer = new Customer(
+                        firstname,
+                        lastname,
+                        phone,
+                        new Address(street, city, state, zipCode),
+                        credNo,
+                        email);
+
+                // do not forget to set access control 
+                customer.setAccessControl(AccessControl.CUSTOMER);
+
+                customers.add(customer);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        return customers;
     }
-    
+
     public int registerEmployee(Employee customerRepresentative) {
         Connection conn = MySQLConnection.connect();
         int ret = ReturnValue.ERROR;
