@@ -25,8 +25,7 @@ $(document).ready(function () {
     });
     
     $("#registrationForm").submit(function (e) {
-        console.log("?");
-
+        
         var pass = true;
 
         if (this.repassword.value !== this.password.value) {

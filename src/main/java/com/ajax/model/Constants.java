@@ -15,6 +15,8 @@ public class Constants {
     public static final String FLIGHT_SEARCH_RESULT = "flightSearchResult";
     public static final String INDEX_OF_FLIGHT = "indexOfFlight";
     public static final String AUCTION = "auction";
+    public static final String BEST_SELLER = "bestSeller";
+    public static final String FLIGHT_SUGGESTION = "flightSuggestion";
 
     // mysql connection
     public static final String HOSTNAME = "localhost";

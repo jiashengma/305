@@ -8,7 +8,8 @@
 	[]	customers - search flights
 	[]	***query db for direct or indirect flights between a pair of cities for a given date and "approximate" time.***
 	[]	reverse auctions - price customers are willing to pay for a seat
-	[]	customers cancel an existing reservation
+	[]	customers cancel an existing reservation 
+     (reservations from auction can also be canceled? interesting)
 
 1 System Users
 	[]	customers - make flight reservation
