@@ -34,7 +34,7 @@ public class FlightReservationDAO {
 
 			/*  Example query:
 			 select L1.AirlineID, L1.FlightNo, L1.LegNo from leg L1, leg L2, airport AP1, airport AP2 where AP1.Name="LaGuardia"
-			 //	        and AP1.Id=L1.DepAirportId and AP2.Name="Los Angeles International" and AP2.Id=L2.ArrAirportId;
+			 	        and AP1.Id=L1.DepAirportId and AP2.Name="Los Angeles International" and AP2.Id=L2.ArrAirportId;
 			 -> obtains AirlineID, FlightNo of all possible routes
 			 */
 			StringBuilder query = new StringBuilder("SELECT L1.")
@@ -58,15 +58,20 @@ public class FlightReservationDAO {
 						.append("=\"%s\" and AP2.").append(Constants.ID_FIELD).append("=L2.")
 						.append(Constants.ARRIVAL_AIRPORT_ID);
 			}
-			query.append(";");
-//	        System.out.printf(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo());
+			query.append(" and L1.").append(Constants.ARRIVAL_TIME).append(">=\"%s\" and L2.").append(Constants.DEPATURE_TIME)
+					.append("<=DATE_ADD(\"%s\", INTERVAL 1 DAY);");
+//	        System.out.printf(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo(), "2011-01-05", "2011-01-05");
 //	        System.out.println();
 
+	        try {	Thread.sleep(1000);	} catch (InterruptedException ignored) {}
+
 			PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo
-					? String.format(query.toString(),
-							hasFlightFrom ? flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo())
+					? String.format(query.toString(), hasFlightFrom ?
+							flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo())
 					: String.format(query.toString(),
-							flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo()));
+							flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo(),
+							new java.sql.Date(flightSearchForm.getDepDate().getTime()),
+							new java.sql.Date(flightSearchForm.getRetDate().getTime())));
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {	// hard coded numbers because I chose order in SELECT query above
@@ -92,8 +97,9 @@ public class FlightReservationDAO {
 	private Flight getFlight(Connection conn, String airlineID, int flightNum, int legNum, String prefClass) {
 		StringBuilder query = new StringBuilder();
 		try {
-			// for this (airline, flight num) get fares
-			// select F.FareType, F.Fare from Fare F where F.AirlineID="AA" and F.FlightNo=111;
+			/* for this (airline, flight num) get fares
+				select F.FareType, F.Fare from Fare F where F.AirlineID="AA" and F.FlightNo=111;
+			*/
 			query.append("SELECT F.").append(Constants.FARE_TYPE_FIELD)
 					.append(", F.").append(Constants.FARE_FIELD)
 					.append(" FROM ").append(Constants.FARE_TABLE)
@@ -371,18 +377,17 @@ public class FlightReservationDAO {
                 + ", R." + Constants.RESERVATION_DATE_FIELD
                 + ", R." + Constants.BOOKING_FEE_FIELD 
                 + ", R." + Constants.TOTAL_FARE_FIELD 
-                + ", R." + Constants.REP_SSN_FIELD 
-                + ", E." + Constants.FIRSTNAME_FILED 
-                + ", E." + Constants.LASTNAME_FILED 
-                + ", E." + Constants.PHONE_FILED
-                
+                + ", R." + Constants.REP_SSN_FIELD
+                + ", P." + Constants.FIRSTNAME_FILED
+                + ", P." + Constants.LASTNAME_FILED
+                + ", P." + Constants.PHONE_FILED
+
                 + " FROM " + Constants.RESERVATION_TABLE + " R, " + Constants.EMPLOYEE_TABLE + " E, " + Constants.PERSON_TABLE + " P "
                 + "WHERE R." + Constants.ACCOUNTNO_FIELD + " = ? "
                 + "AND R." + Constants.REP_SSN_FIELD + " = E." + Constants.EMPLOYEE_SSN_FIELD
                 + " AND E." + Constants.ID_FIELD + " = P." + Constants.ID_FIELD + ";";
         
         Connection conn = MySQLConnection.connect();
-        
         try {
             PreparedStatement stmt = conn.prepareCall(query);
             stmt.setInt(1, accNo);
