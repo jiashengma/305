@@ -7,6 +7,9 @@ public class Constants {
     public static final String CUSTOMER_REPRESENTATIVE = "customerRepresentative";
     public static final String CUSTOMERS = "customers";
     public static final String MSG_ATTRIBUTE = "msg";
+    public static final String FLIGHT_SEARCH_RESULT = "flightSearchResult";
+    public static final String INDEX_OF_FLIGHT = "indexOfFlight";
+    public static final String AUCTION = "auction";
 
     // mysql connection
     public static final String HOSTNAME = "localhost";
