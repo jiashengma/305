@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -204,7 +205,7 @@ public class FlightReservationDAO {
 			query.setLength(0);
 			query.append("INSERT INTO ").append(Constants.RESERVATION_TABLE).append(" (")
 					.append(Constants.BOOKING_FEE_FIELD).append(", ")
-					.append(Constants.TOTAL_FEE_FIELD).append(", ")
+					.append(Constants.TOTAL_FARE_FIELD).append(", ")
 					.append(Constants.REP_SSN_FIELD).append(", ")
 					.append(Constants.ACCOUNTNO_FIELD).append(") ")
 					.append("VALUES (?, ?, ?, ?);");
@@ -284,26 +285,26 @@ public class FlightReservationDAO {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	public boolean cancelFlight(Customer customer, Flight flight) {
-		Connection conn = MySQLConnection.connect();
-		try {
-			// DELETE FROM passenger WHERE tutorial_id=3;
-			StringBuilder query = new StringBuilder("INSERT INTO ");
-			query.append(Constants.PASSENGER_TABLE).append(" VALUES (%d, %d);");
+    public boolean cancelFlight(Customer customer, Flight flight) {
+        Connection conn = MySQLConnection.connect();
+        try {
+            // DELETE FROM passenger WHERE id=3;
+            StringBuilder query = new StringBuilder("INSERT INTO ");
+            query.append(Constants.PASSENGER_TABLE).append(" VALUES (%d, %d);");
 
-			PreparedStatement stmt = conn.prepareStatement(String.format(query.toString(), customer.getId(), customer.getAccNum()));
-			stmt.executeUpdate();
+            PreparedStatement stmt = conn.prepareStatement(String.format(query.toString(), customer.getId(), customer.getAccNum()));
+            stmt.executeUpdate();
 
-			// INSERT INTO reservation (BookingFee, TotalFare, RepSSN, AccountNo) VALUES (100, 120, 0, 4);
-			query.setLength(0);
-			query.append("INSERT INFO ").append(Constants.RESERVATION_TABLE).append(" (")
-					.append(Constants.BOOKING_FEE_FIELD).append(", ")
-					.append(Constants.TOTAL_FEE_FIELD).append(", ")
-					.append(Constants.REP_SSN_FIELD).append(", ")
-					.append(Constants.ACCOUNTNO_FIELD).append(") VALUES (%d, %d, %s, %d);");
-			stmt = conn.prepareStatement(String.format(query.toString(),
-					flight.getFare() * SYSTEM_FEE, flight.getFare(), customer.getAccNum()));
-			stmt.executeUpdate();
+            // INSERT INTO reservation (BookingFee, TotalFare, RepSSN, AccountNo) VALUES (100, 120, 0, 4);
+            query.setLength(0);
+            query.append("INSERT INFO ").append(Constants.RESERVATION_TABLE).append(" (")
+                    .append(Constants.BOOKING_FEE_FIELD).append(", ")
+                    .append(Constants.TOTAL_FARE_FIELD).append(", ")
+                    .append(Constants.REP_SSN_FIELD).append(", ")
+                    .append(Constants.ACCOUNTNO_FIELD).append(") VALUES (%d, %d, %s, %d);");
+            stmt = conn.prepareStatement(String.format(query.toString(),
+                    flight.getFare() * SYSTEM_FEE, flight.getFare(), customer.getAccNum()));
+            stmt.executeUpdate();
 
 			//  INSERT INTO reservationpassenger VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),
 			// (SELECT Id FROM passenger WHERE AccountNo=5 LIMIT 1), 5, "14A", "Economic", "Spaghetti Carbonara with Pancetta and Mushrooms");
@@ -329,9 +330,61 @@ public class FlightReservationDAO {
 			conn.close();
 
 //			processedRequest = true;
-		} catch (SQLException ex) {
-			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
-		}
-		return false;
-	}
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
+        }
+        return false;
+    }
+
+    public List<Reservation> getReservationHistory(int accNo) {
+        List<Reservation> reservations = new ArrayList<>();
+        
+        String query = "SELECT R." + Constants.RESERVATION_NO_FIELD
+                + ", R." + Constants.RESERVATION_DATE_FIELD
+                + ", R." + Constants.BOOKING_FEE_FIELD 
+                + ", R." + Constants.TOTAL_FARE_FIELD 
+                + ", R." + Constants.REP_SSN_FIELD 
+                + ", E." + Constants.FIRSTNAME_FILED 
+                + ", E." + Constants.LASTNAME_FILED 
+                + ", E." + Constants.PHONE_FILED
+                
+                + " FROM " + Constants.RESERVATION_TABLE + " R, " + Constants.EMPLOYEE_TABLE + " E, " + Constants.PERSON_TABLE + " P "
+                + "WHERE R." + Constants.ACCOUNTNO_FIELD + " = ? "
+                + "AND R." + Constants.REP_SSN_FIELD + " = E." + Constants.EMPLOYEE_SSN_FIELD
+                + " AND E." + Constants.ID_FIELD + " = P." + Constants.ID_FIELD + ";";
+        
+        Connection conn = MySQLConnection.connect();
+        
+        try {
+            PreparedStatement stmt = conn.prepareCall(query);
+            stmt.setInt(1, accNo);
+            
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int reservationNo = rs.getInt(1);
+                Timestamp resrTime = rs.getTimestamp(2);
+                double bookingFee = rs.getDouble(3);
+                double totalFare = rs.getDouble(4);
+                String ssn = rs.getString(5);
+                String fname = rs.getString(6);
+                String lname = rs.getString(7);
+                String phone = rs.getString(8);
+                
+                Reservation reservation = new Reservation(
+                        reservationNo, 
+                        resrTime, 
+                        bookingFee, 
+                        totalFare, 
+                        null, 
+                        new Employee(ssn, null, 0, fname, lname, phone, null), null);
+                        
+                reservations.add(reservation);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return reservations;
+    }
 }

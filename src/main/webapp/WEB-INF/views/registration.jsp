@@ -56,7 +56,7 @@
             <option value="meal1">Meal 1</option>
             <option value="meal2">Meal 2</option>
             <option value="meal3">Meal 3</option>
-        </select>
+        </select><br>
 
 
         <input type="submit" name="submit" value="Sign Me Up">

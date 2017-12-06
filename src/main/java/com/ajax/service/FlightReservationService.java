@@ -6,6 +6,7 @@ import com.ajax.model.BookingType;
 import com.ajax.model.Customer;
 import com.ajax.model.Flight;
 import com.ajax.model.FlightSearchForm;
+import com.ajax.model.Reservation;
 import com.ajax.persistence.FlightReservationDAO;
 
 import java.util.List;
@@ -45,5 +46,8 @@ public class FlightReservationService {
     public List<Airport> getAirports() {
         return flightReservationManager.getAirports();
     }
-
+    
+    public List<Reservation> getReservationHistory(int accNo) {
+        return flightReservationDAO.getReservationHistory(accNo);
+    }
 }
