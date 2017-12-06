@@ -14,9 +14,9 @@
                     <li>
                         <a href="best-seller">Best Sellers</a>
                     </li>
-<!--                    <li>
-                        <a href="#">Link</a>
-                    </li>-->
+                    <li>
+                        <a href="help">Help</a>
+                    </li>
                 </ul>
             </c:when>
         </c:choose>
