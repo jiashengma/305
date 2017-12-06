@@ -7,7 +7,7 @@
         <li><a href="/customers">Customers</a></li>
         TODO:
         <li><a href="">Record a reservation</a></li>
-        <li><a href="">Mailing lists</a></li>
+        <li><a href="/mailing-list">Mailing lists</a></li>
         <li><a href="">Produce a list of flight suggestions for a given customer (based on that customer's past reservations)</a></li>
     </ul>
 

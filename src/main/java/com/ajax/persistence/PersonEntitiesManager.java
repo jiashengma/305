@@ -560,9 +560,9 @@ public class PersonEntitiesManager {
                 + Constants.RESERVATION_TABLE + " R "
                 + "WHERE "
                 + "R." + Constants.REP_SSN_FIELD + " = ? "
-                + "AND "
+                + " AND "
                 + "R." + Constants.ACCOUNTNO_FIELD + " = " + "C." + Constants.ACCOUNTNO_FIELD
-                + "AND "
+                + " AND "
                 + "C." + Constants.ID_FIELD + " = " + "P." + Constants.ID_FIELD;
         List<Customer> customers = new ArrayList<>();
 
