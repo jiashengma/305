@@ -34,7 +34,6 @@ ${msg}
             <select name="rep">
                 <c:forEach var="rep" items="${customerRepresentatives}" varStatus="loop">
                     <!--TODO hide ssn.....-->
-                    <option value="${loop.index}">${rep.firstName} ${rep.lastName}</option>
                     <option value="${rep.ssn}">${rep.firstName} ${rep.lastName}</option>
                 </c:forEach>
             </select>

@@ -168,7 +168,7 @@ public class FlightReservationDAO {
 			rs = stmt.executeQuery();
 			rs.next();
 			int maxSeat = rs.getInt(1);
-			int currSeat = rs.getInt(2);
+			int currSeat = Integer.parseInt(rs.getString(2));
 			System.out.printf("%n (%s %s) ->max: %d, curr: %d ", airlineID, flightNum, maxSeat, currSeat);
 			return maxSeat <= ++currSeat ? null : new Flight(airlineID, flightNum, legs, prefClass, fare, hiddenFare, currSeat);
 		} catch (SQLException ex) {
@@ -238,7 +238,7 @@ public class FlightReservationDAO {
 					(SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),
 					(SELECT Id FROM passenger WHERE AccountNo=5 LIMIT 1),
 					5,
-					"14A",
+					"14",
 					"Economic",
 					"Spaghetti Carbonara with Pancetta and Mushrooms"
 				);
@@ -251,14 +251,15 @@ public class FlightReservationDAO {
 					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ")
 					.append("(SELECT ").append(Constants.ID_FIELD)
 					.append(" FROM ").append(Constants.PASSENGER_TABLE)
-					.append(" WHERE").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1),?,?,?,?);");
+					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ?, ?, ?, ?);");
+//			System.out.println(query.toString() + ">> " + customer.getPrefMeal());
 			stmt = conn.prepareStatement(query.toString());
 			stmt.setInt(1, customer.getAccNum());
 			stmt.setInt(2, customer.getAccNum());
 			stmt.setInt(3, customer.getAccNum());
 			stmt.setString(4, flight.getSeatNum());
 			stmt.setString(5, flight.getFlightClass().name());
-			stmt.setString(6, flight.getMeal());
+			stmt.setString(6, customer.getPrefMeal());
 			stmt.executeUpdate();
 
 			/* INSERT INTO includes
@@ -271,14 +272,16 @@ public class FlightReservationDAO {
 			query.setLength(0);
 			query.append("INSERT INTO ").append(Constants.INCLUDES_TABLE)
 					.append(" VALUES ((SELECT ")
+					.append(Constants.RESERVATION_NO_FIELD).append(" FROM ")
 					.append(Constants.RESERVATION_TABLE).append(" WHERE ")
-					.append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ?, ?, ?, CURRENT_TIMESTAMP");
+					.append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ?, ?, ?, CURRENT_TIMESTAMP);");
 			stmt = conn.prepareStatement(query.toString());
 			stmt.setInt(1, customer.getAccNum());
 			stmt.setString(2, flight.getAirline());
 			stmt.setInt(3, flight.getFlightNo());
 			stmt.setInt(4, flight.getLegs().get(0).getNumber());
 
+//			System.out.println(query.toString());
 			stmt.executeUpdate();
 			conn.commit();
 			conn.close();

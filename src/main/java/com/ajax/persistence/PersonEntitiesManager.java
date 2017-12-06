@@ -152,7 +152,6 @@ public class PersonEntitiesManager {
     /**
      * Adds login account and password information for a customer.
      *
-     * @param customer
      * @return
      */
     public int addLoginForPerson(Person person, Connection conn) {
@@ -193,19 +192,26 @@ public class PersonEntitiesManager {
                     + " C." + Constants.ACCOUNTNO_FIELD + ", "
                     + " C." + Constants.CREDITCARDNO_FIELD + ", "
                     + " C." + Constants.EMAIL_FIELD + ", "
-                    + " C." + Constants.RATING_FIELD
+                    + " C." + Constants.RATING_FIELD + ", "
+					+ " CP." + Constants.CUSTOMER_PREFERENCE
                     + " FROM "
                     + Constants.CUSTOMER_TABLE + " C, "
-                    + Constants.PERSON_TABLE + " P"
+                    + Constants.PERSON_TABLE + " P, "
+                    + Constants.CUSTOMER_PREFERENCES_TABLE + " CP"
                     + " WHERE "
                     + " P." + Constants.ID_FIELD
                     + " = ? "
-                    + "AND "
-                    + " C." + Constants.ID_FIELD
-                    + " =  "
-                    + " P." + Constants.ID_FIELD
+					+ "AND "
+					+ " C." + Constants.ID_FIELD
+					+ " =  "
+					+ " P." + Constants.ID_FIELD
+					+ " AND "
+					+ " CP." + Constants.ACCOUNTNO_FIELD
+					+ " = "
+					+ " C." + Constants.ACCOUNTNO_FIELD
                     + " LIMIT 1;";
 
+//			System.out.println(query);
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setInt(1, id);
@@ -213,41 +219,40 @@ public class PersonEntitiesManager {
             ResultSet rs = stmt.executeQuery();
             conn.commit();
 
-            while (rs.next()) {
-                // get all the fields
-                String firstname = rs.getString(Constants.FIRSTNAME_FILED);
-                String lastname = rs.getString(Constants.LASTNAME_FILED);
-                String street = rs.getString(Constants.STREET_FILED);
-                String city = rs.getString(Constants.CITY_FILED);
-                String state = rs.getString(Constants.STATE_FILED);
-                int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
-                //long phone = rs.getLong(Constants.PHONE_FILED);
-                String phone = rs.getString(Constants.PHONE_FILED);
-                int acc = rs.getInt(Constants.ACCOUNTNO_FIELD);
-                //long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
-                String creditCard = rs.getString(Constants.CREDITCARDNO_FIELD);
-                String email = rs.getString(Constants.EMAIL_FIELD);
-                int rating = rs.getInt(Constants.RATING_FIELD);
+            rs.next();
+			// get all the fields
+			String firstname = rs.getString(Constants.FIRSTNAME_FILED);
+			String lastname = rs.getString(Constants.LASTNAME_FILED);
+			String street = rs.getString(Constants.STREET_FILED);
+			String city = rs.getString(Constants.CITY_FILED);
+			String state = rs.getString(Constants.STATE_FILED);
+			int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
+			//long phone = rs.getLong(Constants.PHONE_FILED);
+			String phone = rs.getString(Constants.PHONE_FILED);
+			int acc = rs.getInt(Constants.ACCOUNTNO_FIELD);
+			//long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
+			String creditCard = rs.getString(Constants.CREDITCARDNO_FIELD);
+			String email = rs.getString(Constants.EMAIL_FIELD);
+			int rating = rs.getInt(Constants.RATING_FIELD);
+			String prefMeal = rs.getString(Constants.CUSTOMER_PREFERENCE);
 
-                System.out.println(
-                        "\nfrist name: " + firstname + "\n"
-                        + "last name: " + lastname + "\n"
-                        + "street: " + street + "\n"
-                        + "city: " + city + "\n"
-                        + "state: " + state + "\n"
-                        + "phone: " + phone + "\n"
-                );
+			System.out.println(
+					"\nname: " + firstname + " " + lastname + "\n"
+					+ "street: " + street + "\n"
+					+ "city: " + city + "\n"
+					+ "state: " + state + "\n"
+					+ "phone: " + phone + "\n");
 
-                // set fields in customer
-                customer = new Customer(firstname, lastname, phone,
-                        new Address(street, city, state, zipCode),
-                        creditCard, email);
-                customer.setAccNum(acc);
-                customer.setRating(rating);
-                customer.setAccessControl(AccessControl.CUSTOMER);
-                // customer.setRating(rating);       //TODO: set rating later?
-                break;
-            }
+			// set fields in customer
+			customer = new Customer(firstname, lastname, phone,
+					new Address(street, city, state, zipCode),
+					creditCard, email);
+			customer.setAccNum(acc);
+			customer.setRating(rating);
+			customer.setAccessControl(AccessControl.CUSTOMER);
+			customer.setPrefMeal(prefMeal);
+			// customer.setRating(rating);       //TODO: set rating later?
+
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
