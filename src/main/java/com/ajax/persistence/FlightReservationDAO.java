@@ -168,7 +168,15 @@ public class FlightReservationDAO {
 			rs = stmt.executeQuery();
 			rs.next();
 			int maxSeat = rs.getInt(1);
-			int currSeat = Integer.parseInt(rs.getString(2));
+			int currSeat;
+			try {
+				currSeat = Integer.parseInt(rs.getString(2));
+			} catch (NumberFormatException n) {
+				String seat = rs.getString(2);
+				currSeat = Integer.parseInt(seat.substring(0, seat.length() -1));
+				currSeat *= 6;
+				currSeat += (seat.charAt(seat.length() -1) - 'A');
+			}
 			System.out.printf("%n (%s %s) ->max: %d, curr: %d ", airlineID, flightNum, maxSeat, currSeat);
 			return maxSeat <= ++currSeat ? null : new Flight(airlineID, flightNum, legs, prefClass, fare, hiddenFare, currSeat);
 		} catch (SQLException ex) {
@@ -288,7 +296,8 @@ public class FlightReservationDAO {
 
 			processedRequest = true;
 		} catch (SQLException ex) {
-			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
+			System.out.println("DUP ERROR - person has already reserved this flight!!");
+//			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL DUP Error", ex);
 		}
 
 		return processedRequest;

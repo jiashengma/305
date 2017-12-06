@@ -356,22 +356,16 @@ public class PersonEntitiesManager {
             conn.commit();
 
             // construct user
-            while (rs.next()) {
+            rs.next();
+			int personId = rs.getInt("id");
 
-                int personId = rs.getInt("id");
-
-                // query db to construct person object
-                AccessControl accessControl = getAccessControl(personId);
-                if (accessControl == AccessControl.CUSTOMER) {
-                    person = getCustomerById(personId);
-                } else {
-                    person = getEmployeeById(personId, accessControl);
-                }
-                person.setUserName(username);
-                person.setPassword(password);
-                // limit 1
-                break;
-            }
+			// query db to construct person object
+			AccessControl accessControl = getAccessControl(personId);
+			person = accessControl == AccessControl.CUSTOMER ? getCustomerById(personId) : getEmployeeById(personId, accessControl);
+			person.setId(personId);
+			person.setUserName(username);
+			person.setPassword(password);
+			// limit 1
 
         } catch (SQLException e) {
             e.printStackTrace();

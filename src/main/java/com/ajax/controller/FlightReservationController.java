@@ -120,13 +120,16 @@ public class FlightReservationController {
         System.out.println("\n\nrepSSN: " + repSSN);
         
         if (result.hasErrors()) {
+			System.out.println();
             // TODO: binding error
         }
 
         if (flightReservationService.bookFlight((Customer)(request.getSession().getAttribute(Constants.PERSON)), repSSN, auction)) {
-            //TODO: reservation success, set view name 
+            //TODO: reservation success, set view name
+			System.out.println();
         } else {
             //TODO: reservation failed , set view name
+			System.out.println();
         }
 
         return mv;

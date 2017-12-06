@@ -19,9 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class SessionController {
-    
-    @Autowired
-    private LoginService loginService;
+    @Autowired private LoginService loginService;
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView redirectLogin() {
