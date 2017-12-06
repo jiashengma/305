@@ -51,6 +51,13 @@
         
         Credit Card Number<br><input type="text" name="creditCard" placeholder="Credit Card No."><br>
         <span class="error"><form:errors path="customer.creditCard"/></span><br>
+        
+        <select name="prefMeal">
+            <option value="meal1">Meal 1</option>
+            <option value="meal2">Meal 2</option>
+            <option value="meal3">Meal 3</option>
+        </select>
+
 
         <input type="submit" name="submit" value="Sign Me Up">
     </form>
