@@ -16,8 +16,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class FlightReservationDAO {
+
 	private static final double SYSTEM_FEE = 1.2;
-    private static final int DEFAULT_MAX_COST = Integer.MAX_VALUE;
+	private static final int DEFAULT_MAX_COST = Integer.MAX_VALUE;
 
 	public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
 		List<Flight> flights = new ArrayList<>();
@@ -32,45 +33,50 @@ public class FlightReservationDAO {
 			}
 
 			/*  Example query:
-				select L1.AirlineID, L1.FlightNo, L1.LegNo from leg L1, leg L2, airport AP1, airport AP2 where AP1.Name="LaGuardia"
-			//	        and AP1.Id=L1.DepAirportId and AP2.Name="Los Angeles International" and AP2.Id=L2.ArrAirportId;
-				-> obtains AirlineID, FlightNo of all possible routes
-			*/
+			 select L1.AirlineID, L1.FlightNo, L1.LegNo from leg L1, leg L2, airport AP1, airport AP2 where AP1.Name="LaGuardia"
+			 //	        and AP1.Id=L1.DepAirportId and AP2.Name="Los Angeles International" and AP2.Id=L2.ArrAirportId;
+			 -> obtains AirlineID, FlightNo of all possible routes
+			 */
 			StringBuilder query = new StringBuilder("SELECT L1.")
 					.append(Constants.AIRLINEID_FIELD)
 					.append(", L1.").append(Constants.FLIGHTNO_FIELD)
 					.append(", L1.").append(Constants.LEGNO)
 					.append(" FROM ").append(Constants.LEG_TABLE).append(" L1, ");
 
-			if (hasFlightFrom && hasFlightTo)
+			if (hasFlightFrom && hasFlightTo) {
 				query.append(Constants.LEG_TABLE).append(" L2, ");
+			}
 			query.append(Constants.AIRPORT_TABLE).append(" AP1");
-			if (hasFlightFrom && hasFlightTo)
+			if (hasFlightFrom && hasFlightTo) {
 				query.append(", ").append(Constants.AIRPORT_TABLE).append(" AP2 ");
+			}
 			query.append(" WHERE AP1.").append(Constants.NAME_FIELD).append("=\"%s\" and AP1.")
 					.append(Constants.ID_FIELD).append("=L1.");
-			if (hasFlightFrom ^ hasFlightTo)
+			if (hasFlightFrom ^ hasFlightTo) {
 				query.append(hasFlightFrom ? Constants.DEPATURE_AIRPORT_ID : Constants.ARRIVAL_AIRPORT_ID);
-			else
+			} else {
 				query.append(Constants.DEPATURE_AIRPORT_ID)
 						.append(" and AP2.").append(Constants.NAME_FIELD)
 						.append("=\"%s\" and AP2.").append(Constants.ID_FIELD).append("=L2.")
 						.append(Constants.ARRIVAL_AIRPORT_ID);
+			}
 
 			query.append(";");
 //	        System.out.printf(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo());
 //	        System.out.println();
 
-			PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo ?
-					String.format(query.toString(),
-							hasFlightFrom ? flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo()) :
-					String.format(query.toString(),
+			PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo
+					? String.format(query.toString(),
+							hasFlightFrom ? flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo())
+					: String.format(query.toString(),
 							flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo()));
 			ResultSet rs = stmt.executeQuery();
 
-			while (rs.next())   // hard coded numbers because I chose order in select statement above
+			while (rs.next()) // hard coded numbers because I chose order in select statement above
+			{
 				flights.add(getFlight(conn, rs.getString(1), rs.getInt(2), rs.getInt(3),
 						flightSearchForm.getPrefClass()));
+			}
 
 			flights.forEach(System.out::println);
 			conn.commit();
@@ -106,7 +112,7 @@ public class FlightReservationDAO {
 			ResultSet rs = stmt.executeQuery();
 			double fare = DEFAULT_MAX_COST;
 			double hiddenFare = DEFAULT_MAX_COST;
-			while (rs.next())
+			while (rs.next()) {
 				switch (rs.getString(1)) {
 					case Constants.HIDDEN_FARE_FIELD:
 						hiddenFare = rs.getInt(2);
@@ -117,6 +123,7 @@ public class FlightReservationDAO {
 					default:
 						Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.WARNING, "Weird Result" + rs.getString(2));
 				}
+			}
 
 //		        System.out.printf("%nfare:%.2f%nhiddenFare:%.2f%n%n", fare, hiddenFare);
 			query.setLength(0);
@@ -141,10 +148,11 @@ public class FlightReservationDAO {
 			rs = stmt.executeQuery();
 
 			List<Leg> legs = new ArrayList<>();
-			while (rs.next())
+			while (rs.next()) {
 				legs.add(new Leg(rs.getInt(1), Airport.getAirportByID(rs.getString(2)),
 						rs.getTimestamp(3), rs.getTimestamp(4),
 						Airport.getAirportByID(rs.getString(5))));
+			}
 
 			return new Flight(airlineID, flightNum, legs, prefClass, fare, hiddenFare);
 		} catch (SQLException ex) {
@@ -164,12 +172,13 @@ public class FlightReservationDAO {
 
 			PreparedStatement stmt = conn.prepareStatement(query);
 			ResultSet rs = stmt.executeQuery();
-			while (rs.next())
+			while (rs.next()) {
 				airports.add(new Airport(
 						rs.getString(Constants.AIRPORT_ID),
 						rs.getString(Constants.AIRPORT_NAME),
 						rs.getString(Constants.AIRPORT_CITY),
 						rs.getString(Constants.AIRPORT_COUNTRY)));
+			}
 
 			conn.close();
 		} catch (SQLException ex) {
@@ -184,47 +193,75 @@ public class FlightReservationDAO {
 		try {
 			// INSERT INTO passenger VALUES (4, 4);
 			StringBuilder query = new StringBuilder("INSERT INTO ");
-			query.append(Constants.PASSENGER_TABLE).append(" VALUES (%d, %d);");
+			query.append(Constants.PASSENGER_TABLE).append(" VALUES (?, ?);");
 
-			PreparedStatement stmt = conn.prepareStatement(String.format(query.toString(), customer.getId(), customer.getAccNum()));
+			PreparedStatement stmt = conn.prepareStatement(String.format(query.toString()));
+			stmt.setInt(1, customer.getId());
+			stmt.setInt(2, customer.getAccNum());
 			stmt.executeUpdate();
 
 			// INSERT INTO reservation (BookingFee, TotalFare, RepSSN, AccountNo) VALUES (100, 120, 0, 4);
 			query.setLength(0);
-			query.append("INSERT INFO ").append(Constants.RESERVATION_TABLE).append(" (")
+			query.append("INSERT INTO ").append(Constants.RESERVATION_TABLE).append(" (")
 					.append(Constants.BOOKING_FEE_FIELD).append(", ")
 					.append(Constants.TOTAL_FEE_FIELD).append(", ")
 					.append(Constants.REP_SSN_FIELD).append(", ")
-					.append(Constants.ACCOUNTNO_FIELD).append(") VALUES (?, ?, ?, ?);");
-			System.out.println(query.toString());
-			stmt = conn.prepareStatement(query.toString());
+					.append(Constants.ACCOUNTNO_FIELD).append(") ")
+					.append("VALUES (?, ?, ?, ?);");
+
+			stmt = conn.prepareStatement(String.format(query.toString()));
 			stmt.setDouble(1, flight.getFare() * SYSTEM_FEE);
 			stmt.setDouble(2, flight.getFare());
 			stmt.setString(3, repSSN);
 			stmt.setInt(4, customer.getAccNum());
+
 			stmt.executeUpdate();
 
-			//  INSERT INTO reservationpassenger VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),
-			// (SELECT Id FROM passenger WHERE AccountNo=5 LIMIT 1), 5, "14A", "Economic", "Spaghetti Carbonara with Pancetta and Mushrooms");
+			/* INSERT INTO reservationpassenger
+				VALUES (
+					(SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),
+					(SELECT Id FROM passenger WHERE AccountNo=5 LIMIT 1),
+					5,
+					"14A",
+					"Economic",
+					"Spaghetti Carbonara with Pancetta and Mushrooms"
+				);*/
 			query.setLength(0);
-			query.append("INSERT INFO ").append(Constants.RESERVATION_PASSENGER_TABLE).append(" VALUES (")
-					.append("(SELECT ").append(Constants.RESERVATION_NO_FIELD).append(" FROM ").append(Constants.RESERVATION_TABLE)
-					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), (SELECT ")
-					.append(Constants.ID_FIELD).append(" FROM ").append(Constants.PASSENGER_TABLE).append(" WHERE")
-					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %s, %s);");
-			System.out.println(query.toString());
-			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(), customer.getAccNum(),
-					customer.getAccNum(), flight.getSeatNum(), flight.getFlightClass(), flight.getMeal()));
+			query.append("INSERT INTO ").append(Constants.RESERVATION_PASSENGER_TABLE)
+					.append(" VALUES (")
+					.append("(SELECT ").append(Constants.RESERVATION_NO_FIELD)
+					.append(" FROM ").append(Constants.RESERVATION_TABLE)
+					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ")
+					.append("(SELECT ").append(Constants.ID_FIELD)
+					.append(" FROM ").append(Constants.PASSENGER_TABLE)
+					.append(" WHERE").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1),?,?,?,?);");
+			stmt = conn.prepareStatement(String.format(query.toString()));
+			stmt.setInt(1, customer.getAccNum());
+			stmt.setInt(2, customer.getAccNum());
+			stmt.setInt(3, customer.getAccNum());
+			stmt.setString(4, flight.getSeatNum());
+			stmt.setString(5, flight.getFlightClass().name());
+			stmt.setString(6, flight.getMeal());
 			stmt.executeUpdate();
 
-			// INSERT INTO includes VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1), "JA", 111, 1, CURRENT_TIMESTAMP);
+			/* INSERT INTO includes
+				VALUES (
+					(SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),
+					"JA",
+					111,
+					1,
+					CURRENT_TIMESTAMP);*/
 			query.setLength(0);
-			query.append("INSERT INTO ").append(Constants.INCLUDES_TABLE).append(" VALUES ((SELECT ")
+			query.append("INSERT INTO ").append(Constants.INCLUDES_TABLE)
+					.append(" VALUES ((SELECT ")
 					.append(Constants.RESERVATION_TABLE).append(" WHERE ")
-					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %d, %d, CURRENT_TIMESTAMP");
-			System.out.println(query.toString());
-			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(),
-					flight.getAirline(), flight.getFlightNo(), flight.getLegs().get(0).getNumber()));
+					.append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ?, ?, ?, CURRENT_TIMESTAMP");
+			stmt = conn.prepareStatement(String.format(query.toString()));
+			stmt.setInt(1, customer.getAccNum());
+			stmt.setString(2, flight.getAirline());
+			stmt.setInt(3, flight.getFlightNo());
+			stmt.setInt(4, flight.getLegs().get(0).getNumber());
+
 			stmt.executeUpdate();
 			conn.commit();
 			conn.close();

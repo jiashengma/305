@@ -104,4 +104,8 @@ public class Constants {
     public static final String FARE_FIELD = "Fare";
     public static final String HIDDEN_FARE_FIELD = "Hidden";
     public static final String REGULAR_FARE_FIELD = "Regular";
+    
+    // public static final String
+    public static final String CUSTOMER_PREFERENCES_TABLE = "customerpreferences";
+    public static final String CUSTOMER_PREFERENCE = "Preference";
 }

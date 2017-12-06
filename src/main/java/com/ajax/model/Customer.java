@@ -13,6 +13,7 @@ public class Customer extends Person {
     private String creditCard;
     private int rating;
     private int accNum;
+    private String prefMeal;
 
     public Customer() {
         super();
@@ -27,6 +28,15 @@ public class Customer extends Person {
         rating = 0;
         this.creditCard = creditCard;
         this.email = email;
+        this.accessControl = AccessControl.CUSTOMER;
+    }
+
+    public String getPrefMeal() {
+        return prefMeal;
+    }
+
+    public void setPrefMeal(String prefMeal) {
+        this.prefMeal = prefMeal;
     }
 
     public String getEmail() {

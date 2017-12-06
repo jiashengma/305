@@ -74,14 +74,8 @@ public class PersonEntitiesManager {
                 // set key (id) 
                 customer.setAccNum(rs.getInt(1));
 
-                // rollback all three transactions if error occurred
-//                if (ret == ReturnValue.ERROR) {
-//                    /* FIXME: is it necessary since we use a same 
-//                     connection for all these three transactions? */
-//                    conn.rollback();
-//                } else {
-//                    conn.commit();
-//                }
+                addCustomerPreference(customer, conn);
+
                 conn.commit();
             }
         } catch (SQLException e) {
@@ -95,6 +89,21 @@ public class PersonEntitiesManager {
         }
 
         return ret;
+    }
+
+    public int addCustomerPreference(Customer customer, Connection conn) throws SQLException {
+        String query = "INSERT INTO "
+                + Constants.CUSTOMER_PREFERENCES_TABLE
+                + " ("
+                + Constants.ACCOUNTNO_FIELD + ", "
+                + Constants.CUSTOMER_PREFERENCE
+                + " ) "
+                + " VALUES (?,?)";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, customer.getAccNum());
+        stmt.setString(2, customer.getPrefMeal());
+
+        return stmt.executeUpdate();
     }
 
     /**
@@ -563,7 +572,7 @@ public class PersonEntitiesManager {
 
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1,ssn);
+            stmt.setString(1, ssn);
             ResultSet rs = stmt.executeQuery();
             conn.commit();
 
