@@ -5,6 +5,8 @@
 	[x]	add registration validation (use javax validation + hibernate validator)
 	[x]	create a different registration portal for admin, i.e. use different registraion handler, and set the priviledge bit manually in db 
 	[x]	check email and password using jquery in front end
+	[x]	customers - search flights
+	[x]	check email and password using jquery in front end
 	[]	customers - search flights
 	[]	***query db for direct or indirect flights between a pair of cities for a given date and "approximate" time.***
 	[]	reverse auctions - price customers are willing to pay for a seat
@@ -36,7 +38,7 @@
 	[]	Produce a list of flight suggestions for a given customer (based on that customer's past reservations)
 
 3.3 Customer-Level Transactions
-	[]	One-Way
+	[x]	One-Way
 	[]	Round-Trip
 	[]	Multi-City
 	[]	Domestic or International

@@ -1,11 +1,6 @@
 package com.ajax.model;
 
-/**
- *
- * @author majiasheng
- */
 public class Constants {
-
     // request/response/session attributes
     public static final String PERSON = "person";
     public static final String FLIGHT = "flight";

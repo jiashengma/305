@@ -25,16 +25,13 @@ public class SessionController {
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView redirectLogin() {
-        //TODO: stay in where it was
         return new ModelAndView("index");
     }
 
     //TODO: may need to have 3 login handlers, customer, admin(manager,representative)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView handleLogin(@RequestParam Map<String, String> requestParams,
-            HttpServletRequest request,
-            final RedirectAttributes redirectAttributes) {
-
+            HttpServletRequest request, final RedirectAttributes redirectAttributes) {
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:/login");
 
@@ -63,8 +60,7 @@ public class SessionController {
      */
     @RequestMapping("/logout")
     public ModelAndView handleLogout(HttpServletRequest request) {
-        // destroy session
-        request.getSession(false).invalidate();
+        request.getSession(false).invalidate(); // destroy session
         return new ModelAndView("index");
     }
 
