@@ -22,11 +22,11 @@ ${msg}
             <c:otherwise>
                 <form action="/bookflightViaAuction" method="POST">        
                     <!--hidden inputs from auction-->
-<!--                <input type="hidden" name="NYOP" value="${auction.NYOP}"/><br>
+<%--                <input type="hidden" name="NYOP" value="${auction.NYOP}"/><br>
                 <input type="hidden" name="personAccNo" value="${auction.personAccNo}"/>
                 <input type="hidden" name="airline" value="${auction.airline}"/>
                 <input type="hidden" name="flightNo" value="${auction.flightNo}"/>
-                <input type="hidden" name="flightClass" value="${auction.flightClass}"/>-->
+                <input type="hidden" name="flightClass" value="${auction.flightClass}"/>--%>
                 </c:otherwise>
             </c:choose>
 
@@ -34,7 +34,7 @@ ${msg}
             <select id="reps">
                 <c:forEach var="rep" items="${customerRepresentative}" varStatus="loop">
                     <!--TODO hide ssn.....-->
-                    <!--<option value="${loop.index}">${rep.firstName} ${rep.lastName}</option>-->
+                    <option value="${loop.index}">${rep.firstName} ${rep.lastName}</option>
                     <option value="${rep.ssn}">${rep.firstName} ${rep.lastName}</option>
                 </c:forEach>
             </select>

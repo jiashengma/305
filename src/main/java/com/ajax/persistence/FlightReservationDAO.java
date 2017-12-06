@@ -195,9 +195,13 @@ public class FlightReservationDAO {
 					.append(Constants.BOOKING_FEE_FIELD).append(", ")
 					.append(Constants.TOTAL_FEE_FIELD).append(", ")
 					.append(Constants.REP_SSN_FIELD).append(", ")
-					.append(Constants.ACCOUNTNO_FIELD).append(") VALUES (%d, %d, %s, %d);");
-			stmt = conn.prepareStatement(String.format(query.toString(),
-					flight.getFare() * SYSTEM_FEE, flight.getFare(), repSSN, customer.getAccNum()));
+					.append(Constants.ACCOUNTNO_FIELD).append(") VALUES (?, ?, ?, ?);");
+			System.out.println(query.toString());
+			stmt = conn.prepareStatement(query.toString());
+			stmt.setDouble(1, flight.getFare() * SYSTEM_FEE);
+			stmt.setDouble(2, flight.getFare());
+			stmt.setString(3, repSSN);
+			stmt.setInt(4, customer.getAccNum());
 			stmt.executeUpdate();
 
 			//  INSERT INTO reservationpassenger VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),
@@ -208,6 +212,7 @@ public class FlightReservationDAO {
 					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), (SELECT ")
 					.append(Constants.ID_FIELD).append(" FROM ").append(Constants.PASSENGER_TABLE).append(" WHERE")
 					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %s, %s);");
+			System.out.println(query.toString());
 			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(), customer.getAccNum(),
 					customer.getAccNum(), flight.getSeatNum(), flight.getFlightClass(), flight.getMeal()));
 			stmt.executeUpdate();
@@ -217,6 +222,7 @@ public class FlightReservationDAO {
 			query.append("INSERT INTO ").append(Constants.INCLUDES_TABLE).append(" VALUES ((SELECT ")
 					.append(Constants.RESERVATION_TABLE).append(" WHERE ")
 					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %d, %d, CURRENT_TIMESTAMP");
+			System.out.println(query.toString());
 			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(),
 					flight.getAirline(), flight.getFlightNo(), flight.getLegs().get(0).getNumber()));
 			stmt.executeUpdate();

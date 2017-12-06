@@ -79,7 +79,7 @@ public class FlightDAO {
                 + "		AND AccountNo = ?\n"
                 + "	GROUP BY AccountNo, City\n"
                 + "	ORDER BY COUNT(City) DESC;";
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

@@ -77,16 +77,13 @@ public class FlightReservationController {
      * Handles flight reservation from buy now
      *
      * @param request
-     * @param indexOfFlight
      * @param repSSN
      * @return
      */
     @RequestMapping(value = "/bookflight", method = RequestMethod.POST)
     public ModelAndView handleBookFlight(
             HttpServletRequest request,
-//            @RequestParam(Constants.INDEX_OF_FLIGHT) int indexOfFlight,
             @RequestParam("rep") String repSSN
-            
     ) {
         ModelAndView mv = new ModelAndView();
         System.out.println("\n\nrepSSN: " + repSSN);
