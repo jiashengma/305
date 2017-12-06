@@ -1,5 +1,6 @@
 package com.ajax.model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,15 @@ public class Reservation {
     private Customer customer;
     private CustomerRepresentative rep;
     private List<Leg> legs;
+    private Timestamp date;
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
 
     public Reservation() {
         legs = new ArrayList<Leg>();

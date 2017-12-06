@@ -10,14 +10,23 @@ public class Flight {
     private FlightClass flightClass;
 	private double fare;
 	private Optional<Double> hiddenFare;
+        private int numberOfSeats;
 
 	public Flight() {}
 
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats) {
+        this.numberOfSeats = numberOfSeats;
+    }
+        
 	public Flight(String airline, int flightNo, List<Leg> legs, String flightClass, double fare, Double hiddenFare) {
 		this.airline = airline;
 		this.flightNo = flightNo;
 		this.legs = legs;
-        this.flightClass = FlightClass.valueOf(flightClass);
+                this.flightClass = FlightClass.valueOf(flightClass);
 		this.fare = fare;
 		this.hiddenFare = Optional.ofNullable(hiddenFare);
 	}
@@ -77,4 +86,12 @@ public class Flight {
 		return String.format("Flight{airline='%s', flightNo=%d, legs=<%s>, fare=%.2f, hiddenFare=%.2f}",
 				airline, flightNo, sb.toString(), fare, hiddenFare.orElse(-1.0));
 	}
+        
+        @Override
+        public boolean equals(Object o){
+            if (o instanceof Flight){
+                return this.flightNo == ((Flight)o).flightNo && this.airline.equals(((Flight)o).airline);
+            }
+            return false;
+        }
 }
