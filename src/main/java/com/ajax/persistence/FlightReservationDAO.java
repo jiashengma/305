@@ -17,7 +17,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class FlightReservationDAO {
-
 	private static final double SYSTEM_FEE = 1.2;
 	private static final int DEFAULT_MAX_COST = Integer.MAX_VALUE;
 
@@ -44,13 +43,11 @@ public class FlightReservationDAO {
 					.append(", L1.").append(Constants.LEGNO)
 					.append(" FROM ").append(Constants.LEG_TABLE).append(" L1, ");
 
-			if (hasFlightFrom && hasFlightTo) {
+			if (hasFlightFrom && hasFlightTo)
 				query.append(Constants.LEG_TABLE).append(" L2, ");
-			}
 			query.append(Constants.AIRPORT_TABLE).append(" AP1");
-			if (hasFlightFrom && hasFlightTo) {
+			if (hasFlightFrom && hasFlightTo)
 				query.append(", ").append(Constants.AIRPORT_TABLE).append(" AP2 ");
-			}
 			query.append(" WHERE AP1.").append(Constants.NAME_FIELD).append("=\"%s\" and AP1.")
 					.append(Constants.ID_FIELD).append("=L1.");
 			if (hasFlightFrom ^ hasFlightTo) {
@@ -61,7 +58,6 @@ public class FlightReservationDAO {
 						.append("=\"%s\" and AP2.").append(Constants.ID_FIELD).append("=L2.")
 						.append(Constants.ARRIVAL_AIRPORT_ID);
 			}
-
 			query.append(";");
 //	        System.out.printf(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo());
 //	        System.out.println();
@@ -73,8 +69,7 @@ public class FlightReservationDAO {
 							flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo()));
 			ResultSet rs = stmt.executeQuery();
 
-			while (rs.next()) // hard coded numbers because I chose order in select statement above
-			{
+			while (rs.next()) {	// hard coded numbers because I chose order in SELECT query above
 				flights.add(getFlight(conn, rs.getString(1), rs.getInt(2), rs.getInt(3),
 						flightSearchForm.getPrefClass()));
 			}
@@ -126,7 +121,7 @@ public class FlightReservationDAO {
 				}
 			}
 
-//		        System.out.printf("%nfare:%.2f%nhiddenFare:%.2f%n%n", fare, hiddenFare);
+//			System.out.printf("%nfare:%.2f%nhiddenFare:%.2f%n%n", fare, hiddenFare);
 			query.setLength(0);
 			// select L.LegNo, AP1.Name, L.ArrTime, L.DepTime, AP2.Name from leg L, airport AP1, airport AP2
 			//  where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1 and AP1.Id=L.DepAirportId and AP2.Id=L.ArrAirportId;
@@ -140,8 +135,8 @@ public class FlightReservationDAO {
 					.append("=? and L.").append(Constants.FLIGHTNO_FIELD)
 					.append("=?").append(" and L.").append(Constants.LEGNO).append(">=?;");
 
-//		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i));
-//		        System.out.println();
+//			System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i));
+//	 		System.out.println();
 			stmt = conn.prepareStatement(query.toString());
 			stmt.setString(1, airlineID);
 			stmt.setInt(2, flightNum);
@@ -149,13 +144,33 @@ public class FlightReservationDAO {
 			rs = stmt.executeQuery();
 
 			List<Leg> legs = new ArrayList<>();
-			while (rs.next()) {
+			while (rs.next())
 				legs.add(new Leg(rs.getInt(1), Airport.getAirportByID(rs.getString(2)),
 						rs.getTimestamp(3), rs.getTimestamp(4),
 						Airport.getAirportByID(rs.getString(5))));
-			}
 
-			return new Flight(airlineID, flightNum, legs, prefClass, fare, hiddenFare);
+			// select F.NoOfSeats, MAX(R.SeatNo) from flight F, includes I, reservationpassenger R
+			// where I.ResrNo=R.ResrNo and I.AirlineId="JA" and I.FlightNo=111;
+			query.setLength(0);
+			query.append("SELECT F.").append(Constants.NUMSEATS_FIELD)
+					.append(", MAX(R.").append(Constants.SEATNO_FIELD)
+					.append(") FROM ").append(Constants.FLIGHT_TABLE).append(" F, ")
+					.append(Constants.INCLUDES_TABLE).append(" I, ")
+					.append(Constants.RESERVATION_PASSENGER_TABLE).append(" R WHERE I.")
+					.append(Constants.RESERVATION_NO_FIELD).append("=R.").append(Constants.RESERVATION_NO_FIELD)
+					.append(" and F.").append(Constants.AIRLINEID_FIELD).append("=? and F.")
+					.append(Constants.FLIGHTNO_FIELD).append("=?;");
+			System.out.println(query.toString());
+			stmt = conn.prepareStatement(query.toString());
+			stmt.setString(1, airlineID);
+			stmt.setInt(2, flightNum);
+
+			rs = stmt.executeQuery();
+			rs.next();
+			int maxSeat = rs.getInt(1);
+			int currSeat = rs.getInt(2);
+			System.out.printf("%n (%s %s) ->max: %d, curr: %d ", airlineID, flightNum, maxSeat, currSeat);
+			return maxSeat <= ++currSeat ? null : new Flight(airlineID, flightNum, legs, prefClass, fare, hiddenFare, currSeat);
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL parse error", ex);
 		}
@@ -196,7 +211,7 @@ public class FlightReservationDAO {
 			StringBuilder query = new StringBuilder("INSERT INTO ");
 			query.append(Constants.PASSENGER_TABLE).append(" VALUES (?, ?);");
 
-			PreparedStatement stmt = conn.prepareStatement(String.format(query.toString()));
+			PreparedStatement stmt = conn.prepareStatement(query.toString());
 			stmt.setInt(1, customer.getId());
 			stmt.setInt(2, customer.getAccNum());
 			stmt.executeUpdate();
@@ -210,7 +225,7 @@ public class FlightReservationDAO {
 					.append(Constants.ACCOUNTNO_FIELD).append(") ")
 					.append("VALUES (?, ?, ?, ?);");
 
-			stmt = conn.prepareStatement(String.format(query.toString()));
+			stmt = conn.prepareStatement(query.toString());
 			stmt.setDouble(1, flight.getFare() * SYSTEM_FEE);
 			stmt.setDouble(2, flight.getFare());
 			stmt.setString(3, repSSN);
@@ -226,7 +241,8 @@ public class FlightReservationDAO {
 					"14A",
 					"Economic",
 					"Spaghetti Carbonara with Pancetta and Mushrooms"
-				);*/
+				);
+			*/
 			query.setLength(0);
 			query.append("INSERT INTO ").append(Constants.RESERVATION_PASSENGER_TABLE)
 					.append(" VALUES (")
@@ -236,7 +252,7 @@ public class FlightReservationDAO {
 					.append("(SELECT ").append(Constants.ID_FIELD)
 					.append(" FROM ").append(Constants.PASSENGER_TABLE)
 					.append(" WHERE").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1),?,?,?,?);");
-			stmt = conn.prepareStatement(String.format(query.toString()));
+			stmt = conn.prepareStatement(query.toString());
 			stmt.setInt(1, customer.getAccNum());
 			stmt.setInt(2, customer.getAccNum());
 			stmt.setInt(3, customer.getAccNum());
@@ -257,7 +273,7 @@ public class FlightReservationDAO {
 					.append(" VALUES ((SELECT ")
 					.append(Constants.RESERVATION_TABLE).append(" WHERE ")
 					.append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ?, ?, ?, CURRENT_TIMESTAMP");
-			stmt = conn.prepareStatement(String.format(query.toString()));
+			stmt = conn.prepareStatement(query.toString());
 			stmt.setInt(1, customer.getAccNum());
 			stmt.setString(2, flight.getAirline());
 			stmt.setInt(3, flight.getFlightNo());

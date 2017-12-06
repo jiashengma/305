@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class Flight {
+	private static String[] arr = {"A", "B", "C", "D", "E", "F"};
+
 	private String airline;
 	private int flightNo;
 	private List<Leg> legs;
@@ -15,13 +17,14 @@ public class Flight {
 
 	public Flight() {}
 
-	public Flight(String airline, int flightNo, List<Leg> legs, String flightClass, double fare, Double hiddenFare) {
+	public Flight(String airline, int flightNo, List<Leg> legs, String flightClass, double fare, Double hiddenFare, int seatNum) {
 		this.airline = airline;
 		this.flightNo = flightNo;
 		this.legs = legs;
 		this.flightClass = FlightClass.valueOf(flightClass);
 		this.fare = fare;
 		this.hiddenFare = Optional.ofNullable(hiddenFare);
+		this.SeatNum = String.format("%d%s", seatNum / 6, arr[seatNum % 6]);
 	}
 	// TODO: add fare restrictions
 	public String getAirline() {

@@ -28,9 +28,7 @@ import java.util.logging.Logger;
  */
 @Service
 public class PersonEntitiesManager {
-
-    @Autowired
-    private PasswordUtility passwordUtility;
+    @Autowired private PasswordUtility passwordUtility;
 
     /**
      * On customer registration, add info to database. Populates three tables:
