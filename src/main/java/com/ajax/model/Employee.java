@@ -2,10 +2,6 @@ package com.ajax.model;
 
 import java.sql.Date;
 
-/**
- *
- * @author majiasheng
- */
 public class Employee extends Person {
 
     private String ssn;

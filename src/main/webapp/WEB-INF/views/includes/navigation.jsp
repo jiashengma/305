@@ -7,15 +7,20 @@
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <!-- <ul class="nav navbar-nav">
-                <li class="active">
-                        <a href="#">Link</a>
-                </li>
-                <li>
-                        <a href="#">Link</a>
-                </li>
-        </ul>
-        <form class="navbar-form navbar-left" role="search">
+
+        <c:choose> 
+            <c:when test="${person.accessControl ne 'CUSTOMER_REPRESENTATIVE' and person.accessControl ne 'MANAGER'}">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="best-seller">Best Sellers</a>
+                    </li>
+                    <li>
+                        <a href="help">Help</a>
+                    </li>
+                </ul>
+            </c:when>
+        </c:choose>
+        <!--         <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                         <input type="text" class="form-control" placeholder="Keyword for item">
                 </div> 

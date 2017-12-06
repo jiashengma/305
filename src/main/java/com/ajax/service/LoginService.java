@@ -16,13 +16,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LoginService {
-    @Autowired
-    PersonEntitiesManager personEntitiesManager;
+    @Autowired private PersonEntitiesManager personEntitiesManager;
     
     public Person login(String username, String password) {
-        
-        Person person = personEntitiesManager.login(username, password);
-        
-        return person;
+        return personEntitiesManager.login(username, password);
     }
 }

@@ -23,6 +23,7 @@
         <c:otherwise>
             <table>
         <tr>
+            <th></th>
             <th>Airline</th>
             <th>FlightNo</th>
             <th>Class</th>
@@ -30,8 +31,10 @@
             <th>Date</th>
             <th>Accepted?</th>
         </tr>
-        <c:forEach var="auction" items="${auctions}">
+        <c:forEach var="auction" items="${auctions}" varStatus="loop">
+            
             <tr>
+                <td>&nbsp;${loop.index+1}&nbsp;</td>
                 <td>${auction.airline}</td>
                 <td>${auction.flightNo}</td>
                 <td>${auction.flightClass}</td>

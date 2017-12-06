@@ -3,7 +3,7 @@
 <jsp:useBean id="address" class="com.ajax.model.Address" />
 <h2 id="h">Sign Me Up</h2>
 <div id="regform">
-    <form method="POST" action="/register">
+    <form id="registrationForm" method="POST" action="/register">
         First Name<br>
         <input type="text" name="firstName" placeholder="First Name" required>
         <span class="error"><form:errors path="customer.firstName"/></span><br>
@@ -18,6 +18,7 @@
         
         Re-enter email<br>
         <input type="text" name="reemail" placeholder="Re-enter email" required><br>
+        <div id="emailMisMatch"></div>
         
         Username<br>
         <input type="text" name="userName" placeholder="Username" required>
@@ -29,7 +30,7 @@
         
         Re-enter password<br>
         <input type="password" name="repassword" placeholder="Re-enter password" required><br>
-        <!--        Tel<input type="tel" name="phone" placeholder="Phone Number"><br>-->
+        <div id="pwMisMatch"></div>
         
         Tel<br>
         <input type="text" name="phone" placeholder="Phone Number" required>
@@ -50,6 +51,13 @@
         
         Credit Card Number<br><input type="text" name="creditCard" placeholder="Credit Card No."><br>
         <span class="error"><form:errors path="customer.creditCard"/></span><br>
+        
+        <select name="prefMeal">
+            <option value="meal1">Meal 1</option>
+            <option value="meal2">Meal 2</option>
+            <option value="meal3">Meal 3</option>
+        </select><br>
+
 
         <input type="submit" name="submit" value="Sign Me Up">
     </form>

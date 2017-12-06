@@ -1,17 +1,17 @@
 package com.ajax.model;
 
-/**
- *
- * @author majiasheng
- */
 public class Constants {
-
     // request/response/session attributes
     public static final String PERSON = "person";
     public static final String FLIGHT = "flight";
-    public static final String CUSTOMER_REPRESENTATIVES = "customerRepresentatives";
+    public static final String CUSTOMER_REPRESENTATIVE = "customerRepresentative";
     public static final String CUSTOMERS = "customers";
     public static final String MSG_ATTRIBUTE = "msg";
+    public static final String FLIGHT_SEARCH_RESULT = "flightSearchResult";
+    public static final String INDEX_OF_FLIGHT = "indexOfFlight";
+    public static final String AUCTION = "auction";
+    public static final String BEST_SELLER = "bestSeller";
+    public static final String FLIGHT_SUGGESTION = "flightSuggestion";
 
     // mysql connection
     public static final String HOSTNAME = "localhost";
@@ -30,11 +30,33 @@ public class Constants {
     public static final String ZIPCODE_FILED = "ZipCode";
     public static final String PHONE_FILED = "Phone";
 
-    public static final String CUSTOMER_TABLE = "customer";
+	// customer
+	public static final String CUSTOMER_TABLE = "customer";
     public static final String ACCOUNTNO_FIELD = "AccountNo";
     public static final String CREDITCARDNO_FIELD = "CreditCardNo";
     public static final String EMAIL_FIELD = "Email";
     public static final String RATING_FIELD = "Rating";
+
+    // passenger
+    public static final String PASSENGER_TABLE = "passenger";
+
+    // reservation
+    public static final String RESERVATION_TABLE = "reservation";
+    public static final String RESERVATION_NO_FIELD = "ResrNo";
+    public static final String RESERVATION_DATE_FIELD = "ResrDate";
+    public static final String BOOKING_FEE_FIELD = "BookingFee";
+    public static final String TOTAL_FARE_FIELD = "TotalFare";
+    public static final String REP_SSN_FIELD = "RepSSN";
+    public static final String RESERVATIONS = "reservations";
+
+	// reservationpassenger
+	public static final String RESERVATION_PASSENGER_TABLE = "reservationpassenger";
+	public static final String SEATNO_FIELD = "SeatNo";
+	public static final String MEAL_FIELD = "Meal";
+
+	// includes
+	public static final String INCLUDES_TABLE = "includes";
+	public static final String DEPDATE_FIELD = "DepDate";
 
     public static final String LOGIN_TABLE = "login";
     public static final String USERNAME_FIELD = "username";
@@ -58,7 +80,6 @@ public class Constants {
     public static final String DEPATURE_TIME = "DepTime";
     public static final String ARRIVAL_TIME = "ArrTime";
     public static final String ARRIVAL_AIRPORT_ID = "ArrAirportId";
-
 
     public static final int AIRPORT_ID                 = 1;
     public static final int AIRPORT_NAME               = 2;
@@ -84,4 +105,8 @@ public class Constants {
     public static final String FARE_FIELD = "Fare";
     public static final String HIDDEN_FARE_FIELD = "Hidden";
     public static final String REGULAR_FARE_FIELD = "Regular";
+    
+    // public static final String
+    public static final String CUSTOMER_PREFERENCES_TABLE = "customerpreferences";
+    public static final String CUSTOMER_PREFERENCE = "Preference";
 }

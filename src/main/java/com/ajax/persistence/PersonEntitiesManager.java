@@ -28,9 +28,7 @@ import java.util.logging.Logger;
  */
 @Service
 public class PersonEntitiesManager {
-
-    @Autowired
-    private PasswordUtility passwordUtility;
+    @Autowired private PasswordUtility passwordUtility;
 
     /**
      * On customer registration, add info to database. Populates three tables:
@@ -54,8 +52,7 @@ public class PersonEntitiesManager {
                     + " ) "
                     + " VALUES (?,?,?,?)";
 
-            /* try to add login information and add person record for 
-             * registering customer
+            /* try to add login information and add person record for registering customer
              * return immediately if error occurred
              */
             if (addPerson(customer, conn) != ReturnValue.ERROR && addLoginForPerson(customer, conn) != ReturnValue.ERROR) {
@@ -63,7 +60,6 @@ public class PersonEntitiesManager {
                 PreparedStatement stmt = conn.prepareStatement(query);
 
                 stmt.setInt(1, customer.getId());
-                //stmt.setLong(2, customer.getCreditCard());
                 stmt.setString(2, customer.getCreditCard());
                 stmt.setString(3, customer.getEmail());
                 stmt.setInt(4, customer.getRating());
@@ -76,14 +72,8 @@ public class PersonEntitiesManager {
                 // set key (id) 
                 customer.setAccNum(rs.getInt(1));
 
-                // rollback all three transactions if error occurred
-//                if (ret == ReturnValue.ERROR) {
-//                    /* FIXME: is it necessary since we use a same 
-//                     connection for all these three transactions? */
-//                    conn.rollback();
-//                } else {
-//                    conn.commit();
-//                }
+                addCustomerPreference(customer, conn);
+
                 conn.commit();
             }
         } catch (SQLException e) {
@@ -97,6 +87,21 @@ public class PersonEntitiesManager {
         }
 
         return ret;
+    }
+
+    public int addCustomerPreference(Customer customer, Connection conn) throws SQLException {
+        String query = "INSERT INTO "
+                + Constants.CUSTOMER_PREFERENCES_TABLE
+                + " ("
+                + Constants.ACCOUNTNO_FIELD + ", "
+                + Constants.CUSTOMER_PREFERENCE
+                + " ) "
+                + " VALUES (?,?)";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, customer.getAccNum());
+        stmt.setString(2, customer.getPrefMeal());
+
+        return stmt.executeUpdate();
     }
 
     /**
@@ -147,7 +152,6 @@ public class PersonEntitiesManager {
     /**
      * Adds login account and password information for a customer.
      *
-     * @param customer
      * @return
      */
     public int addLoginForPerson(Person person, Connection conn) {
@@ -188,19 +192,26 @@ public class PersonEntitiesManager {
                     + " C." + Constants.ACCOUNTNO_FIELD + ", "
                     + " C." + Constants.CREDITCARDNO_FIELD + ", "
                     + " C." + Constants.EMAIL_FIELD + ", "
-                    + " C." + Constants.RATING_FIELD
+                    + " C." + Constants.RATING_FIELD + ", "
+					+ " CP." + Constants.CUSTOMER_PREFERENCE
                     + " FROM "
                     + Constants.CUSTOMER_TABLE + " C, "
-                    + Constants.PERSON_TABLE + " P"
+                    + Constants.PERSON_TABLE + " P, "
+                    + Constants.CUSTOMER_PREFERENCES_TABLE + " CP"
                     + " WHERE "
                     + " P." + Constants.ID_FIELD
                     + " = ? "
-                    + "AND "
-                    + " C." + Constants.ID_FIELD
-                    + " =  "
-                    + " P." + Constants.ID_FIELD
+					+ "AND "
+					+ " C." + Constants.ID_FIELD
+					+ " =  "
+					+ " P." + Constants.ID_FIELD
+					+ " AND "
+					+ " CP." + Constants.ACCOUNTNO_FIELD
+					+ " = "
+					+ " C." + Constants.ACCOUNTNO_FIELD
                     + " LIMIT 1;";
 
+//			System.out.println(query);
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setInt(1, id);
@@ -208,41 +219,40 @@ public class PersonEntitiesManager {
             ResultSet rs = stmt.executeQuery();
             conn.commit();
 
-            while (rs.next()) {
-                // get all the fields
-                String firstname = rs.getString(Constants.FIRSTNAME_FILED);
-                String lastname = rs.getString(Constants.LASTNAME_FILED);
-                String street = rs.getString(Constants.STREET_FILED);
-                String city = rs.getString(Constants.CITY_FILED);
-                String state = rs.getString(Constants.STATE_FILED);
-                int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
-                //long phone = rs.getLong(Constants.PHONE_FILED);
-                String phone = rs.getString(Constants.PHONE_FILED);
-                int acc = rs.getInt(Constants.ACCOUNTNO_FIELD);
-                //long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
-                String creditCard = rs.getString(Constants.CREDITCARDNO_FIELD);
-                String email = rs.getString(Constants.EMAIL_FIELD);
-                int rating = rs.getInt(Constants.RATING_FIELD);
+            rs.next();
+			// get all the fields
+			String firstname = rs.getString(Constants.FIRSTNAME_FILED);
+			String lastname = rs.getString(Constants.LASTNAME_FILED);
+			String street = rs.getString(Constants.STREET_FILED);
+			String city = rs.getString(Constants.CITY_FILED);
+			String state = rs.getString(Constants.STATE_FILED);
+			int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
+			//long phone = rs.getLong(Constants.PHONE_FILED);
+			String phone = rs.getString(Constants.PHONE_FILED);
+			int acc = rs.getInt(Constants.ACCOUNTNO_FIELD);
+			//long creditCard = rs.getLong(Constants.CREDITCARDNO_FIELD);
+			String creditCard = rs.getString(Constants.CREDITCARDNO_FIELD);
+			String email = rs.getString(Constants.EMAIL_FIELD);
+			int rating = rs.getInt(Constants.RATING_FIELD);
+			String prefMeal = rs.getString(Constants.CUSTOMER_PREFERENCE);
 
-                System.out.println(
-                        "\nfrist name: " + firstname + "\n"
-                        + "last name: " + lastname + "\n"
-                        + "street: " + street + "\n"
-                        + "city: " + city + "\n"
-                        + "state: " + state + "\n"
-                        + "phone: " + phone + "\n"
-                );
+			System.out.println(
+					"\nname: " + firstname + " " + lastname + "\n"
+					+ "street: " + street + "\n"
+					+ "city: " + city + "\n"
+					+ "state: " + state + "\n"
+					+ "phone: " + phone + "\n");
 
-                // set fields in customer
-                customer = new Customer(firstname, lastname, phone,
-                        new Address(street, city, state, zipCode),
-                        creditCard, email);
-                customer.setAccNum(acc);
-                customer.setRating(rating);
-                customer.setAccessControl(AccessControl.CUSTOMER);
-                // customer.setRating(rating);       //TODO: set rating later?
-                break;
-            }
+			// set fields in customer
+			customer = new Customer(firstname, lastname, phone,
+					new Address(street, city, state, zipCode),
+					creditCard, email);
+			customer.setAccNum(acc);
+			customer.setRating(rating);
+			customer.setAccessControl(AccessControl.CUSTOMER);
+			customer.setPrefMeal(prefMeal);
+			// customer.setRating(rating);       //TODO: set rating later?
+
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -346,22 +356,16 @@ public class PersonEntitiesManager {
             conn.commit();
 
             // construct user
-            while (rs.next()) {
+            rs.next();
+			int personId = rs.getInt("id");
 
-                int personId = rs.getInt("id");
-
-                // query db to construct person object
-                AccessControl accessControl = getAccessControl(personId);
-                if (accessControl == AccessControl.CUSTOMER) {
-                    person = getCustomerById(personId);
-                } else {
-                    person = getEmployeeById(personId, accessControl);
-                }
-                person.setUserName(username);
-                person.setPassword(password);
-                // limit 1
-                break;
-            }
+			// query db to construct person object
+			AccessControl accessControl = getAccessControl(personId);
+			person = accessControl == AccessControl.CUSTOMER ? getCustomerById(personId) : getEmployeeById(personId, accessControl);
+			person.setId(personId);
+			person.setUserName(username);
+			person.setPassword(password);
+			// limit 1
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -467,24 +471,24 @@ public class PersonEntitiesManager {
 
     public List<Customer> getAllCustomers() {
         String query = "SELECT "
-                    + " P." + Constants.FIRSTNAME_FILED + ", "
-                    + " P." + Constants.LASTNAME_FILED + ", "
-                    + " P." + Constants.STREET_FILED + ", "
-                    + " P." + Constants.CITY_FILED + ", "
-                    + " P." + Constants.STATE_FILED + ", "
-                    + " P." + Constants.ZIPCODE_FILED + ", "
-                    + " P." + Constants.PHONE_FILED + ", "
-                    + " C." + Constants.ACCOUNTNO_FIELD + ", "
-                    + " C." + Constants.CREDITCARDNO_FIELD + ", "
-                    + " C." + Constants.EMAIL_FIELD + ", "
-                    + " C." + Constants.RATING_FIELD
-                    + " FROM "
-                    + Constants.CUSTOMER_TABLE + " C, "
-                    + Constants.PERSON_TABLE + " P"
-                    + " WHERE "
-                    + " C." + Constants.ID_FIELD
-                    + " =  "
-                    + " P." + Constants.ID_FIELD;
+                + " P." + Constants.FIRSTNAME_FILED + ", "
+                + " P." + Constants.LASTNAME_FILED + ", "
+                + " P." + Constants.STREET_FILED + ", "
+                + " P." + Constants.CITY_FILED + ", "
+                + " P." + Constants.STATE_FILED + ", "
+                + " P." + Constants.ZIPCODE_FILED + ", "
+                + " P." + Constants.PHONE_FILED + ", "
+                + " C." + Constants.ACCOUNTNO_FIELD + ", "
+                + " C." + Constants.CREDITCARDNO_FIELD + ", "
+                + " C." + Constants.EMAIL_FIELD + ", "
+                + " C." + Constants.RATING_FIELD
+                + " FROM "
+                + Constants.CUSTOMER_TABLE + " C, "
+                + Constants.PERSON_TABLE + " P"
+                + " WHERE "
+                + " C." + Constants.ID_FIELD
+                + " =  "
+                + " P." + Constants.ID_FIELD;
 
         List<Customer> customers = new ArrayList<>();
 
@@ -508,11 +512,11 @@ public class PersonEntitiesManager {
                 String email = rs.getString(Constants.EMAIL_FIELD);
                 int rating = rs.getInt(Constants.RATING_FIELD);
                 Customer customer = new Customer(
-                        firstname, 
-                        lastname, 
-                        phone, 
-                        new Address(street, city, state, zipCode), 
-                        credNo, 
+                        firstname,
+                        lastname,
+                        phone,
+                        new Address(street, city, state, zipCode),
+                        credNo,
                         email);
 
                 // do not forget to set access control 
@@ -523,37 +527,93 @@ public class PersonEntitiesManager {
 
         } catch (SQLException ex) {
             Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
 
         return customers;
     }
 
     public List<Customer> getAllCustomersByRepId(String ssn) {
-        //TODO: join reservation table as well
         String query = "SELECT "
-                    + " P." + Constants.FIRSTNAME_FILED + ", "
-                    + " P." + Constants.LASTNAME_FILED + ", "
-                    + " P." + Constants.STREET_FILED + ", "
-                    + " P." + Constants.CITY_FILED + ", "
-                    + " P." + Constants.STATE_FILED + ", "
-                    + " P." + Constants.ZIPCODE_FILED + ", "
-                    + " P." + Constants.PHONE_FILED + ", "
-                    + " C." + Constants.ACCOUNTNO_FIELD + ", "
-                    + " C." + Constants.CREDITCARDNO_FIELD + ", "
-                    + " C." + Constants.EMAIL_FIELD + ", "
-                    + " C." + Constants.RATING_FIELD
-                    + " FROM "
-                    + Constants.CUSTOMER_TABLE + " C, "
-                    + Constants.PERSON_TABLE + " P"
-                    + " WHERE "
-                    + ""
-                    + " AND"
-                    + " C." + Constants.ID_FIELD
-                    + " =  "
-                    + " P." + Constants.ID_FIELD;
-        throw new UnsupportedOperationException("get customers not yet supported");
+                + " P." + Constants.FIRSTNAME_FILED + ", "
+                + " P." + Constants.LASTNAME_FILED + ", "
+                + " P." + Constants.STREET_FILED + ", "
+                + " P." + Constants.CITY_FILED + ", "
+                + " P." + Constants.STATE_FILED + ", "
+                + " P." + Constants.ZIPCODE_FILED + ", "
+                + " P." + Constants.PHONE_FILED + ", "
+                + " C." + Constants.ACCOUNTNO_FIELD + ", "
+                + " C." + Constants.CREDITCARDNO_FIELD + ", "
+                + " C." + Constants.EMAIL_FIELD + ", "
+                + " C." + Constants.RATING_FIELD
+                + " FROM "
+                + Constants.CUSTOMER_TABLE + " C, "
+                + Constants.PERSON_TABLE + " P, "
+                + Constants.RESERVATION_TABLE + " R "
+                + "WHERE "
+                + "R." + Constants.REP_SSN_FIELD + " = ? "
+                + " AND "
+                + "R." + Constants.ACCOUNTNO_FIELD + " = " + "C." + Constants.ACCOUNTNO_FIELD
+                + " AND "
+                + "C." + Constants.ID_FIELD + " = " + "P." + Constants.ID_FIELD;
+        List<Customer> customers = new ArrayList<>();
+
+        Connection conn = MySQLConnection.connect();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, ssn);
+            ResultSet rs = stmt.executeQuery();
+            conn.commit();
+
+            while (rs.next()) {
+                String firstname = rs.getString(Constants.FIRSTNAME_FILED);
+                String lastname = rs.getString(Constants.LASTNAME_FILED);
+                String street = rs.getString(Constants.STREET_FILED);
+                String city = rs.getString(Constants.CITY_FILED);
+                String state = rs.getString(Constants.STATE_FILED);
+                String phone = rs.getString(Constants.PHONE_FILED);
+                int zipCode = rs.getInt(Constants.ZIPCODE_FILED);
+                int accNo = rs.getInt(Constants.ACCOUNTNO_FIELD);
+                String credNo = rs.getString(Constants.CREDITCARDNO_FIELD);
+                String email = rs.getString(Constants.EMAIL_FIELD);
+                int rating = rs.getInt(Constants.RATING_FIELD);
+                Customer customer = new Customer(
+                        firstname,
+                        lastname,
+                        phone,
+                        new Address(street, city, state, zipCode),
+                        credNo,
+                        email);
+
+                // do not forget to set access control 
+                customer.setAccessControl(AccessControl.CUSTOMER);
+
+                customers.add(customer);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(PersonEntitiesManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        return customers;
     }
-    
+
     public int registerEmployee(Employee customerRepresentative) {
         Connection conn = MySQLConnection.connect();
         int ret = ReturnValue.ERROR;

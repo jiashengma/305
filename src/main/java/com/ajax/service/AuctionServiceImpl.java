@@ -29,7 +29,7 @@ public class AuctionServiceImpl implements AuctionService {
      * @return AUCTION_SUCCESS on success, AUCTION_LOW_BID on failure (lower bid
      * than hidden fare), or AUCTION_ERROR on error while bidding
      */
-    public int reserveFlightFromAuction(Auction auction) {
+    public boolean reserveFlightFromAuction(Auction auction) {
         return flightReservationDAO.reserveFlightFromAuction(auction);
     }
 

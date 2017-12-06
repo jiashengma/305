@@ -18,10 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ajax.model.Customer;
+import com.ajax.model.Employee;
 import com.ajax.model.FlightClass;
 ;
 import com.ajax.model.State;
 import com.ajax.service.FlightReservationService;
+import com.ajax.service.FlightService;
 import com.ajax.service.PersonEntitiesService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
@@ -38,18 +40,21 @@ import org.springframework.web.bind.annotation.InitBinder;
 public class MainController {
 
     State state;
-    
+
     @Autowired
     private RegitrationService regitrationService;
-    
+
     @Autowired
     private PersonEntitiesService personEntitiesService;
-    
+
     @Autowired
     private FlightReservationService flightReservationService;
-    
+
     @Autowired
     private ServletContext context;
+
+    @Autowired
+    private FlightService flightService;
 
     /**
      *
@@ -79,8 +84,8 @@ public class MainController {
         }
 
         // load customer representatives for reservation
-        if (context.getAttribute(Constants.CUSTOMER_REPRESENTATIVES) == null) {
-            context.setAttribute(Constants.CUSTOMER_REPRESENTATIVES,personEntitiesService.getAllCustomerRepresentatives());
+        if (context.getAttribute("customerRepresentatives") == null) {
+            context.setAttribute("customerRepresentatives", personEntitiesService.getAllCustomerRepresentatives());
         }
 
     }
@@ -150,4 +155,36 @@ public class MainController {
         return mv;
     }
 
+    @RequestMapping(value = "/best-seller", method = RequestMethod.GET)
+    public ModelAndView bestSeller() {
+        ModelAndView mv = new ModelAndView("best-seller");
+
+        if (context.getAttribute(Constants.BEST_SELLER) == null) {
+            context.setAttribute(Constants.BEST_SELLER, flightService.getBestSeller());
+        }
+        return mv;
+    }
+
+    @RequestMapping(value = "/flight-suggestion", method = RequestMethod.GET)
+    public ModelAndView flightSuggestion(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("flight-suggestion");
+        Customer customer = (Customer) (request.getSession().getAttribute(Constants.PERSON));
+        mv.addObject(Constants.FLIGHT_SUGGESTION, flightService.getFlightSuggestion(customer.getAccNum()));
+        return mv;
+    }
+
+    @RequestMapping(value = "/mailing-list", method = RequestMethod.GET)
+    public ModelAndView mailingList(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("mailing-list");
+        Employee employee = (Employee) (request.getSession().getAttribute(Constants.PERSON));
+        List<Customer> customers = personEntitiesService.getAllCustomersByRepId(employee.getSsn());
+        mv.addObject(Constants.CUSTOMERS, customers);
+        return mv;
+    }
+    
+    @RequestMapping(value = "/help", method = RequestMethod.GET)
+    public ModelAndView help() {
+        return new ModelAndView("help");
+    }
+    
 }

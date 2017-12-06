@@ -14,11 +14,10 @@ public interface AuctionService {
      * (and reservations if bid succeeded)
      *
      * @param auction
-     * @param hiddenFare
      * @return SUCCESS on success, FAILURE on failure (lower bid than hidden
      * fare), or ERROR on error while bidding
      */
-    public int reserveFlightFromAuction(Auction auction);
+    public boolean reserveFlightFromAuction(Auction auction);
     
     public boolean saveAuction(Auction auction);
 

@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class Flight {
+	private static String[] arr = {"A", "B", "C", "D", "E", "F"};
+
 	private String airline;
 	private int flightNo;
 	private List<Leg> legs;
-    private FlightClass flightClass;
+	private FlightClass flightClass;
+	private String meal;
+	private String SeatNum;
 	private double fare;
 	private Optional<Double> hiddenFare;
         private int numberOfSeats;
@@ -21,16 +25,17 @@ public class Flight {
     public void setNumberOfSeats(int numberOfSeats) {
         this.numberOfSeats = numberOfSeats;
     }
-        
-	public Flight(String airline, int flightNo, List<Leg> legs, String flightClass, double fare, Double hiddenFare) {
+    
+    public Flight(String airline, int flightNo, List<Leg> legs, String flightClass, double fare, Double hiddenFare, int seatNum) {
 		this.airline = airline;
 		this.flightNo = flightNo;
 		this.legs = legs;
-                this.flightClass = FlightClass.valueOf(flightClass);
+		this.flightClass = FlightClass.valueOf(flightClass);
 		this.fare = fare;
 		this.hiddenFare = Optional.ofNullable(hiddenFare);
+		this.SeatNum = String.format("%d%s", seatNum / 6, arr[seatNum % 6]);
 	}
-	//TODO: add fare restrictions
+	// TODO: add fare restrictions
 	public String getAirline() {
 		return airline;
 	}
@@ -55,14 +60,14 @@ public class Flight {
 		this.legs = legs;
 	}
 
-    public FlightClass getFlightClass() {
-        return flightClass;
-    }
+	public FlightClass getFlightClass() {
+		return flightClass;
+	}
 
-    public void setFlightClass(String flightClass) {
-        this.flightClass = FlightClass.valueOf(flightClass);
-    }
-    
+	public void setFlightClass(String flightClass) {
+		this.flightClass = FlightClass.valueOf(flightClass);
+	}
+
 	public double getFare() {
 		return fare;
 	}
@@ -77,6 +82,22 @@ public class Flight {
 
 	public void setHiddenFare(double hiddenFare) {
 		this.hiddenFare = Optional.of(hiddenFare);
+	}
+
+	public String getMeal() {
+		return meal;
+	}
+
+	public void setMeal(String meal) {
+		this.meal = meal;
+	}
+
+	public String getSeatNum() {
+		return SeatNum;
+	}
+
+	public void setSeatNum(String seatNum) {
+		SeatNum = seatNum;
 	}
 
 	@Override

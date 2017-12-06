@@ -3,8 +3,10 @@ package com.ajax.service;
 import com.ajax.model.Airport;
 import com.ajax.model.Auction;
 import com.ajax.model.BookingType;
+import com.ajax.model.Customer;
 import com.ajax.model.Flight;
 import com.ajax.model.FlightSearchForm;
+import com.ajax.model.Reservation;
 import com.ajax.persistence.FlightReservationDAO;
 
 import java.util.List;
@@ -21,9 +23,6 @@ public class FlightReservationService {
     FlightReservationDAO flightReservationDAO;
 
     public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
-        System.out.println("TODO: query database for results");
-
-        //TODO: sanitize inputs/args ?
         return flightReservationManager.searchFlight(flightSearchForm);
     }
 
@@ -36,16 +35,19 @@ public class FlightReservationService {
         throw new UnsupportedOperationException("not supported");
     }
 
-    private int bookFlight(Auction auction) {
+    public boolean bookFlight(Customer customer, String repSSN, Auction auction) {
         return flightReservationDAO.reserveFlightFromAuction(auction);
     }
 
-    private int bookFlight(Flight flight) {
-        throw new UnsupportedOperationException();
+    public boolean bookFlight(Customer customer, String repSSN, Flight flight) {
+        return flightReservationDAO.reserveFlight(customer, repSSN, flight);
     }
 
     public List<Airport> getAirports() {
         return flightReservationManager.getAirports();
     }
-
+    
+    public List<Reservation> getReservationHistory(int accNo) {
+        return flightReservationDAO.getReservationHistory(accNo);
+    }
 }

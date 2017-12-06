@@ -1,4 +1,6 @@
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%--<c:if test="${person.accessControl ne 'MANAGER' or person.accessControl ne 'CUSTOMER_REPRESENTATIVE'}" >--%>
 <c:if test="${empty person}">
     <c:redirect url="/"/>
 </c:if>

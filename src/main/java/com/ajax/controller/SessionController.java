@@ -1,7 +1,5 @@
 package com.ajax.controller;
 
-import com.ajax.model.Customer;
-import com.ajax.model.Employee;
 import com.ajax.model.Person;
 import com.ajax.model.Constants;
 import com.ajax.service.LoginService;
@@ -21,22 +19,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class SessionController {
-    
-    @Autowired
-    private LoginService loginService;
+    @Autowired private LoginService loginService;
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView redirectLogin() {
-        //TODO: stay in where it was
         return new ModelAndView("index");
     }
 
     //TODO: may need to have 3 login handlers, customer, admin(manager,representative)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView handleLogin(@RequestParam Map<String, String> requestParams,
-            HttpServletRequest request,
-            final RedirectAttributes redirectAttributes) {
-
+            HttpServletRequest request, final RedirectAttributes redirectAttributes) {
         // redirect to prevent double submission when refreshing page
         ModelAndView modelAndView = new ModelAndView("redirect:/login");
 
@@ -51,17 +44,10 @@ public class SessionController {
         Person person = loginService.login(requestParams.get(Constants.USERNAME_FIELD),
                 requestParams.get(Constants.PASSWORD_FIELD));
 
-        if (person == null) {
-            //TODO: show an popup to indicate username and password mismatch
+        if (person == null)   //TODO: show an popup to indicate username and password mismatch
             redirectAttributes.addFlashAttribute("msg", "Username and password do not match");
-        } else {
-            // add user to session
-            if (person instanceof Customer) {
-                request.getSession().setAttribute(Constants.PERSON, (Customer) person);
-            } else {
-                request.getSession().setAttribute(Constants.PERSON, (Employee) person);
-            }
-        }
+        else    // add user to session
+            request.getSession().setAttribute(Constants.PERSON, person);
         return modelAndView;
     }
 
@@ -72,8 +58,8 @@ public class SessionController {
      */
     @RequestMapping("/logout")
     public ModelAndView handleLogout(HttpServletRequest request) {
-        // destroy session
-        request.getSession(false).invalidate();
+        if (request.getSession(false)!=null)
+            request.getSession(false).invalidate(); // destroy session
         return new ModelAndView("index");
     }
 

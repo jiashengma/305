@@ -4,11 +4,14 @@
 	[x]	notify user to login when they try to book a flight (in handler for booking form submission: get session, check if session("user")==null)
 	[x]	add registration validation (use javax validation + hibernate validator)
 	[x]	create a different registration portal for admin, i.e. use different registraion handler, and set the priviledge bit manually in db 
-	[]	check email and password using jquery in front end
+	[x]	check email and password using jquery in front end
+	[x]	customers - search flights
+	[x]	check email and password using jquery in front end
 	[]	customers - search flights
 	[]	***query db for direct or indirect flights between a pair of cities for a given date and "approximate" time.***
 	[]	reverse auctions - price customers are willing to pay for a seat
-	[]	customers cancel an existing reservation
+	[]	customers cancel an existing reservation 
+     (reservations from auction can also be canceled? interesting)
 
 1 System Users
 	[]	customers - make flight reservation
@@ -35,7 +38,7 @@
 	[]	Produce a list of flight suggestions for a given customer (based on that customer's past reservations)
 
 3.3 Customer-Level Transactions
-	[]	One-Way
+	[x]	One-Way
 	[]	Round-Trip
 	[]	Multi-City
 	[]	Domestic or International
@@ -59,8 +62,7 @@
 	[]	A comprehensive Help facility, including a topic-driven pull-down Help menu 
 
 6 Other
-    [] Prompt user to select customer representative after auction (default if
-    no selection)
+    [] Prompt user to select customer representative after auction (default if no selection)
 
 99 Notes
 	[]	Reservation have booking fees, which is how your company makes money, and an associated customer representative

@@ -4,7 +4,7 @@
     Author     : majiasheng
 --%>
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
-<c:if test="${person.accessControl ne 'CUSTOMER'}">
+<c:if test="${person.accessControl ne 'CUSTOMER' }">
     <c:redirect url=""/>
 </c:if>
 
@@ -12,12 +12,38 @@
 <hr>
 ${msg}
 <div class="mask">
-    <form>
-        <select>
-            <c:forEach var="rep" items="${customerRepresentatives}">
-                <option name="${rep.ssn}">${rep.firstName} ${rep.lastName}</option>
-            </c:forEach>
-        </select>
-    </form>
+    <!--TODO: check if this is from buy now or auction-->
+    <c:choose>
+        <c:when test="${empty auction}">
+            <form id="bookingForm" action="/bookflight" method="POST">
+                <!--hidden inputs from buy now-->
+
+            </c:when>
+            <c:otherwise>
+                <form action="/bookflightViaAuction" method="POST">        
+                    <!--hidden inputs from auction-->
+<%--                <input type="hidden" name="NYOP" value="${auction.NYOP}"/><br>
+                <input type="hidden" name="personAccNo" value="${auction.personAccNo}"/>
+                <input type="hidden" name="airline" value="${auction.airline}"/>
+                <input type="hidden" name="flightNo" value="${auction.flightNo}"/>
+                <input type="hidden" name="flightClass" value="${auction.flightClass}"/>--%>
+                </c:otherwise>
+            </c:choose>
+
+            <!--<select name="rep">-->
+            <select name="rep">
+                <c:forEach var="rep" items="${customerRepresentatives}" varStatus="loop">
+                    <!--TODO hide ssn.....-->
+                    <option value="${rep.ssn}">${rep.firstName} ${rep.lastName}</option>
+                </c:forEach>
+            </select>
+            <%--<c:forEach var="rep" items="${customerRepresentative}" varStatus="loop">--%>
+                <!--<input type="hidden" name="rep_${loop.index}" value="${rep.ssn}"/>-->
+            <%--</c:forEach>--%>
+            <!--<input type="hidden" name="rep" value=""/>-->
+
+
+            <input type="submit" value="Select"/>
+        </form>
 </div>
 <%@include file="/WEB-INF/views/includes/footer.jsp" %>
