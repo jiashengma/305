@@ -6,6 +6,7 @@ import com.ajax.model.Flight;
 import com.ajax.model.Constants;
 import com.ajax.service.AuctionService;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,9 +32,10 @@ public class AuctionController {
     @RequestMapping(value = "/auction", method = RequestMethod.POST)
 //    @RequestMapping(value = "/auction", method = RequestMethod.GET)
     public ModelAndView prepareAuction(
-            @ModelAttribute("flight") Flight flight,
-            HttpServletRequest request
-    //            @RequestParam Map<String,String> requestParams
+            //            @ModelAttribute("flight") Flight flight,
+            HttpServletRequest request,
+            //            @RequestParam Map<String,String> requestParams
+            @RequestParam(Constants.INDEX_OF_FLIGHT) int indexOfFlight
     ) {
 
 //        String airline = requestParams.get("airline");
@@ -44,27 +46,26 @@ public class AuctionController {
 //        flight.setAirline(airline);
 //        flight.setFlightNo(flightNo);
 //        flight.setHiddenFare(hiddenFare);
-//        
-        System.out.println(flight.getAirline() + " " + flight.getFlightNo());
-
+//        System.out.println(flight.getAirline() + " " + flight.getFlightNo());
         ModelAndView mv = new ModelAndView("auction");
+        request.getSession().setAttribute(Constants.INDEX_OF_FLIGHT, indexOfFlight);
 
-        mv.addObject(Constants.FLIGHT, flight);
+//        mv.addObject(Constants.FLIGHT, flight);
+        //mv.addObject(Constants.INDEX_OF_FLIGHT, indexOfFlight);
 
         return mv;
     }
 
     @RequestMapping(value = "/bid", method = RequestMethod.POST)
     public ModelAndView handleBid(
-            @ModelAttribute("auction") Auction auction,
+            @ModelAttribute(Constants.AUCTION) Auction auction,
             BindingResult result,
-            @RequestParam("hiddenFare") double hiddenFare,
+            //            @RequestParam("hiddenFare") double hiddenFare,
+            @RequestParam(Constants.INDEX_OF_FLIGHT) int indexOfFlight,
             HttpServletRequest request) {
 
         ModelAndView mv = new ModelAndView("auctionFail");
 
-        // try to bid
-        // int bidStatus = auctionService.reserveFlightFromAuction(auction, hiddenFare);
         if (result.hasErrors()) {
             System.out.println("\n\nerr!!");
         }
@@ -75,15 +76,12 @@ public class AuctionController {
             return mv;
         }
 
+        double hiddenFare = ((List<Flight>) (request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight).getHiddenFare();
+        
         if (auction.getNYOP() >= hiddenFare) {
             mv.setViewName("selectRep");
-            /* TODO: add neccessary info to reserve a flight, 
-                maybe a flight object with legs 
-            */
-
             mv.addObject(Constants.MSG_ATTRIBUTE, "<p style=\"color:green\">Bid success</p>");
-            mv.addObject("auction", auction);
-
+            mv.addObject(Constants.AUCTION, auction);
         } else {
             mv.addObject(Constants.MSG_ATTRIBUTE, "Low Bid.. Please try again :)");
         }

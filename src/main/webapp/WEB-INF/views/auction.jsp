@@ -18,16 +18,19 @@
 <div class="mask">
     <!--TODO:display flight info maybe?-->
     <c:choose> 
-        <c:when test="${empty flight}"> <p class="error">uh oh, flight got lost</p> </c:when>
+        <c:when test="${empty flightSearchResult.get(indexOfFlight)}"> <p class="error">uh oh, flight got lost</p> </c:when>
+        
         <c:otherwise>
-            Please enter your bid for ${flight.airline} No.${flight.flightNo}
+            Please enter your bid for ${flightSearchResult.get(indexOfFlight).airline} No.${flightSearchResult.get(indexOfFlight).flightNo}
+            
             <form id="biddingform" action="/bid" method="POST">
                 <input type="number" name="NYOP" placeholder="Your bid in $" required/><br>
+                <input type="hidden" name="indexOfFlight" value="${indexOfFlight}"/><br>
                 <input type="hidden" name="personAccNo" value="${person.accNum}"/>
-                <input type="hidden" name="airline" value="${flight.airline}"/>
-                <input type="hidden" name="flightNo" value="${flight.flightNo}"/>
-                <input type="hidden" name="flightClass" value="${flight.flightClass}"/>
-                <input type="hidden" name="hiddenFare" value="${flight.hiddenFare}"/>
+                <input type="hidden" name="airline" value="${flightSearchResult.get(indexOfFlight).airline}"/>
+                <input type="hidden" name="flightNo" value="${flightSearchResult.get(indexOfFlight).flightNo}"/>
+                <input type="hidden" name="flightClass" value="${flightSearchResult.get(indexOfFlight).flightClass}"/>
+                <input type="hidden" name="hiddenFare" value="${flightSearchResult.get(indexOfFlight).hiddenFare}"/>
                 <input type="submit" value="Bid" />
             </form>
         </c:otherwise>

@@ -73,6 +73,7 @@ public class AuctionDAOImpl implements AuctionDAO {
                     + "WHERE F.FareType='hidden' "
                     + "AND A.AirlineID=F.AirlineID "
                     + "AND A.FlightNo=F.FlightNo "
+                    + "AND A.Class=F.Class "
                     + "AND " + Constants.ACCOUNTNO_FIELD + " = ? ";
             
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -92,7 +93,6 @@ public class AuctionDAOImpl implements AuctionDAO {
 
                 Auction auction = new Auction(customerAccNo, NYOP, airlineId, flightNo, flightClass, timestamp, accepted.equals("Yes"));
                 auctions.add(auction);
-
             }
 
         } catch (SQLException ex) {
@@ -104,6 +104,7 @@ public class AuctionDAOImpl implements AuctionDAO {
                 Logger.getLogger(AuctionDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        System.out.println("\n\nauctions: " + auctions.size());
         
         return auctions;
     }

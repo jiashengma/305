@@ -23,8 +23,8 @@
             <div class="col-md-3">Number of Passenger</div>
         </div>
         <div class="row">
-            <div class="col-md-3"><input type="date" name="depDate"></div>
-            <div class="col-md-3"><input type="date" name="retDate"></div>
+            <div class="col-md-3"><input type="date" name="depDate" required></div>
+            <div class="col-md-3"><input type="date" name="retDate" required></div>
             <div class="col-md-3">
                 <select name="Passenger">
                     <option value="1">1</option>

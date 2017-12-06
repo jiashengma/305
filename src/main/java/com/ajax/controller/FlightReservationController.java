@@ -45,18 +45,26 @@ public class FlightReservationController {
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView handleSearchFlight(@ModelAttribute("flightSearchForm") FlightSearchForm flightSearchForm,
-            BindingResult result) {
+    public ModelAndView handleSearchFlight(
+            @ModelAttribute("flightSearchForm") FlightSearchForm flightSearchForm,
+            BindingResult result,
+            HttpServletRequest request) {
 
-        ModelAndView mv = new ModelAndView("result");
+        ModelAndView mv = new ModelAndView("index");
         if (result.hasErrors()) {
-            //TODO: display message to user instead
-            System.out.println("Flight search form has error");
-            return new ModelAndView("index");
+            System.err.println("Flight search form has error: " + result.toString());
+            mv.addObject(Constants.MSG_ATTRIBUTE, "<p class=\"error\">:( sorry, there is an error in flight search form</p>");
+            return mv;
         }
+        
+        mv.setViewName("result");
 
         // add a list of flights as the search result for the view/jsp to render
-        mv.addObject("flightSearchResult", flightReservationService.searchFlight(flightSearchForm));
+//        mv.addObject("flightSearchResult", flightReservationService.searchFlight(flightSearchForm));
+        request.getSession().setAttribute(
+                Constants.FLIGHT_SEARCH_RESULT, 
+                flightReservationService.searchFlight(flightSearchForm));
+        
         return mv;
     }
 
@@ -71,14 +79,22 @@ public class FlightReservationController {
     /**
      * Handles flight reservation from buy now
      *
-     * @param requestParams
+     * @param request
+     * @param indexOfFlight
      * @return
      */
-    @RequestMapping(value = "/bookflight", method = RequestMethod.GET)
-    public ModelAndView handleBookFlight(@RequestParam Map<String, String> requestParams) {
+    @RequestMapping(value = "/bookflight", method = RequestMethod.POST)
+    public ModelAndView handleBookFlight(
+            HttpServletRequest request,
+            @RequestParam(Constants.INDEX_OF_FLIGHT) int indexOfFlight
+    ) {
         ModelAndView mv = new ModelAndView();
 
-        //TODO:
+        request.getSession().setAttribute(Constants.INDEX_OF_FLIGHT, indexOfFlight);
+        
+        Flight selectedFlight = ((List<Flight>)(request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight);
+        //TODO: reserve: Andrew
+        
         return null;
     }
 
