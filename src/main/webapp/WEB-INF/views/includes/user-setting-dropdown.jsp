@@ -9,6 +9,7 @@
         <c:when test="${person.accessControl ne 'CUSTOMER_REPRESENTATIVE' and person.accessControl ne 'MANAGER'}">
             <li><a href="/reservation-history">Reservation History</a></li>
             <li><a href="/auction-history">Auction History</a></li>
+            <li><a href="/flight-suggestion">Flight Suggestions</a></li>
         </c:when>
         <c:otherwise>
             <!--TODO-->

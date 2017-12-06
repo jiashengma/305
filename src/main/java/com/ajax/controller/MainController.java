@@ -22,6 +22,7 @@ import com.ajax.model.FlightClass;
 ;
 import com.ajax.model.State;
 import com.ajax.service.FlightReservationService;
+import com.ajax.service.FlightService;
 import com.ajax.service.PersonEntitiesService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
@@ -38,18 +39,21 @@ import org.springframework.web.bind.annotation.InitBinder;
 public class MainController {
 
     State state;
-    
+
     @Autowired
     private RegitrationService regitrationService;
-    
+
     @Autowired
     private PersonEntitiesService personEntitiesService;
-    
+
     @Autowired
     private FlightReservationService flightReservationService;
-    
+
     @Autowired
     private ServletContext context;
+
+    @Autowired
+    private FlightService flightService;
 
     /**
      *
@@ -80,7 +84,7 @@ public class MainController {
 
         // load customer representatives for reservation
         if (context.getAttribute(Constants.CUSTOMER_REPRESENTATIVE) == null) {
-            context.setAttribute(Constants.CUSTOMER_REPRESENTATIVE,personEntitiesService.getAllCustomerRepresentatives());
+            context.setAttribute(Constants.CUSTOMER_REPRESENTATIVE, personEntitiesService.getAllCustomerRepresentatives());
         }
 
     }
@@ -147,6 +151,24 @@ public class MainController {
     @RequestMapping(value = "/account-setting", method = RequestMethod.GET)
     public ModelAndView manageAccountSettings() {
         ModelAndView mv = new ModelAndView("account-setting");
+        return mv;
+    }
+
+    @RequestMapping(value = "/best-seller", method = RequestMethod.GET)
+    public ModelAndView bestSeller() {
+        ModelAndView mv = new ModelAndView("best-seller");
+
+        if (context.getAttribute(Constants.BEST_SELLER) == null) {
+            context.setAttribute(Constants.BEST_SELLER, flightService.getBestSeller());
+        }
+        return mv;
+    }
+
+    @RequestMapping(value = "/flight-suggestion", method = RequestMethod.GET)
+    public ModelAndView flightSuggestion(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("flight-suggestion");
+        Customer customer = (Customer)(request.getSession().getAttribute(Constants.PERSON));
+        mv.addObject(Constants.FLIGHT_SUGGESTION, flightService.getFlightSuggestion(customer.getAccNum()));
         return mv;
     }
 
