@@ -24,7 +24,7 @@
                         <td>${flight.flightClass}</td>
                         <td>${flight.fare}</td>
 
-                    <form class="reservationFormGroup" name="bookingForm" action="/bookflight" method="POST">
+                    <form class="reservationFormGroup" name="bookingForm" action="/selectRep" method="POST">
                         <!--TODO:
                                 on the left:
                                         flight info: flight, airline, dep/arr time, stops etc
@@ -36,7 +36,7 @@
                         -->
                         <!--TODO need leg info-->
                         <input type="hidden" name="indexOfFlight" value="${loop.index}"/>
-                        <input type="hidden" name="personId" value="${person.accNum}"/>
+                        <input type="hidden" name="personId" value="${person.accNum}">
 <!--                        <input type="hidden" name="airline" value="${flight.airline}">
                         <input type="hidden" name="flightNo" value="${flight.flightNo}">
                         <input type="hidden" name="flightClass" value="${flight.flightClass}">

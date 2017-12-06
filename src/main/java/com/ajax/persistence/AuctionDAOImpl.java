@@ -2,10 +2,7 @@ package com.ajax.persistence;
 
 import com.ajax.model.Constants;
 import com.ajax.model.Auction;
-import com.ajax.model.FlightClass;
-import com.ajax.service.ReturnValue;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

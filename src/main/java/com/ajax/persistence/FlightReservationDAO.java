@@ -181,7 +181,7 @@ public class FlightReservationDAO {
 		return airports;
 	}
 
-	public boolean reserveFlight(Customer customer, CustomerRepresentative rep, Flight flight) {
+	public boolean reserveFlight(Customer customer, String repSSN, Flight flight) {
 		boolean processedRequest = false;
 		Connection conn = MySQLConnection.connect();
 		try {
@@ -200,7 +200,7 @@ public class FlightReservationDAO {
 					.append(Constants.REP_SSN_FIELD).append(", ")
 					.append(Constants.ACCOUNTNO_FIELD).append(") VALUES (%d, %d, %s, %d);");
 			stmt = conn.prepareStatement(String.format(query.toString(),
-					flight.getFare() * SYSTEM_FEE, flight.getFare(), rep.getSsn(), customer.getAccNum()));
+					flight.getFare() * SYSTEM_FEE, flight.getFare(), repSSN, customer.getAccNum()));
 			stmt.executeUpdate();
 
 			//  INSERT INTO reservationpassenger VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),

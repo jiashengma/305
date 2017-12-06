@@ -11,6 +11,7 @@
 <h2>Select Your Reservation Representative</h2>
 <hr>
 ${msg}
+${header.referer}
 <div class="mask">
     <!--TODO: check if this is from buy now or auction-->
     <c:choose>
@@ -32,6 +33,7 @@ ${msg}
 
             <select name="rep">
                 <c:forEach var="rep" items="${customerRepresentative}">
+                    <!--TODO hide ssn.....-->
                     <option value="${rep.ssn}">${rep.firstName} ${rep.lastName}</option>
                 </c:forEach>
             </select>

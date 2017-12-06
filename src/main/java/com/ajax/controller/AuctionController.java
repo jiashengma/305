@@ -6,7 +6,6 @@ import com.ajax.model.Flight;
 import com.ajax.model.Constants;
 import com.ajax.service.AuctionService;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,7 +60,7 @@ public class AuctionController {
             @ModelAttribute(Constants.AUCTION) Auction auction,
             BindingResult result,
             //            @RequestParam("hiddenFare") double hiddenFare,
-            @RequestParam(Constants.INDEX_OF_FLIGHT) int indexOfFlight,
+//            @RequestParam(Constants.INDEX_OF_FLIGHT) int indexOfFlight,
             HttpServletRequest request) {
 
         ModelAndView mv = new ModelAndView("auctionFail");
@@ -69,19 +68,24 @@ public class AuctionController {
         if (result.hasErrors()) {
             System.out.println("\n\nerr!!");
         }
-
+        
         // save auction 
         if (!auctionService.saveAuction(auction)) {
             mv.addObject(Constants.MSG_ATTRIBUTE, "<p style=\"color:red\">Error Occurred while trying to save auction</p>");
             return mv;
         }
 
-        double hiddenFare = ((List<Flight>) (request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight).getHiddenFare();
+        int indexOfFlight = (Integer)request.getSession().getAttribute(Constants.INDEX_OF_FLIGHT);
+        Flight selectedFlight = ((List<Flight>)(request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight);
+        double hiddenFare = selectedFlight.getHiddenFare();
         
         if (auction.getNYOP() >= hiddenFare) {
             mv.setViewName("selectRep");
             mv.addObject(Constants.MSG_ATTRIBUTE, "<p style=\"color:green\">Bid success</p>");
-            mv.addObject(Constants.AUCTION, auction);
+            // mv.addObject(Constants.AUCTION, auction);
+            // add auction "object" as an indication of coming from auction
+            mv.addObject(Constants.AUCTION, 0);
+            
         } else {
             mv.addObject(Constants.MSG_ATTRIBUTE, "Low Bid.. Please try again :)");
         }

@@ -25,7 +25,7 @@
             
             <form id="biddingform" action="/bid" method="POST">
                 <input type="number" name="NYOP" placeholder="Your bid in $" required/><br>
-                <input type="hidden" name="indexOfFlight" value="${indexOfFlight}"/><br>
+                <!--<input type="hidden" name="indexOfFlight" value="${indexOfFlight}"/><br>-->
                 <input type="hidden" name="personAccNo" value="${person.accNum}"/>
                 <input type="hidden" name="airline" value="${flightSearchResult.get(indexOfFlight).airline}"/>
                 <input type="hidden" name="flightNo" value="${flightSearchResult.get(indexOfFlight).flightNo}"/>
