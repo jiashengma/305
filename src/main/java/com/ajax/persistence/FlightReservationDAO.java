@@ -58,7 +58,6 @@ public class FlightReservationDAO {
 						.append(Constants.ARRIVAL_AIRPORT_ID);
 
 			query.append(";");
-//	        System.out.println();
 //	        System.out.printf(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo());
 //	        System.out.println();
 
@@ -69,77 +68,10 @@ public class FlightReservationDAO {
 							flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo()));
 			ResultSet rs = stmt.executeQuery();
 
-			ArrayList<String> airlineIDs = new ArrayList<>();
-			ArrayList<Integer> flightNums = new ArrayList<>();
-			ArrayList<Integer> legNums = new ArrayList<>();
-			while (rs.next()) {   // obtaining L1.AirlineID, L1.FlightNo, L1.LegNo
-				airlineIDs.add(rs.getString(1));
-				flightNums.add(rs.getInt(2));
-				legNums.add(rs.getInt(3));
-			}   // hard coded numbers because I chose order in select statement above
+			while (rs.next())   // hard coded numbers because I chose order in select statement above
+				flights.add(getFlight(conn, rs.getString(1), rs.getInt(2), rs.getInt(3),
+						flightSearchForm.getPrefClass()));
 
-//	        System.out.println();
-//	        airlineIDs.forEach(System.out::println);
-
-			for (int i = 0; i < airlineIDs.size(); i++) {
-				query.setLength(0);
-				// for this (airline, flight num) get fares
-				// select F.FareType, F.Fare from Fare F where F.AirlineID="AA" and F.FlightNo=111;
-				query.append("SELECT F.").append(Constants.FARE_TYPE_FIELD)
-						.append(", F.").append(Constants.FARE_FIELD)
-						.append(" FROM ").append(Constants.FARE_TABLE)
-						.append(" F WHERE F.").append(Constants.CLASS_FIELD).append("=\"").append(flightSearchForm.getPrefClass())
-						.append("\" and F.").append(Constants.AIRLINEID_FIELD)
-						.append("=\"%s\" and F.").append(Constants.FLIGHTNO_FIELD).append("=%d;");
-//		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i));
-				stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i)));
-				rs = stmt.executeQuery();
-
-				double fare = DEFAULT_MAX_COST;
-				double hiddenFare = DEFAULT_MAX_COST;
-				while (rs.next())
-					switch (rs.getString(1)) {
-						case Constants.HIDDEN_FARE_FIELD:
-							hiddenFare = rs.getInt(2);
-							break;
-						case Constants.REGULAR_FARE_FIELD:
-							fare = rs.getInt(2);
-							break;
-						default:
-							Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.WARNING, "Weird Result" + rs.getString(2));
-					}
-
-//				if (fare == DEFAULT_MAX_COST && hiddenFare > fare)
-//					fare = hiddenFare;
-//		        System.out.printf("%nfare:%.2f%nhiddenFare:%.2f%n%n", fare, hiddenFare);
-
-				query.setLength(0);
-				// select L.LegNo, AP1.Name, L.ArrTime, L.DepTime, AP2.Name from leg L, airport AP1, airport AP2
-				//  where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1 and AP1.Id=L.DepAirportId and AP2.Id=L.ArrAirportId;
-				query.append("SELECT L.").append(Constants.LEGNO)
-						.append(", L.").append(Constants.DEPATURE_AIRPORT_ID)
-						.append(", L.").append(Constants.ARRIVAL_TIME)
-						.append(", L.").append(Constants.DEPATURE_TIME)
-						.append(", L.").append(Constants.ARRIVAL_AIRPORT_ID)
-						.append(" FROM ").append(Constants.LEG_TABLE)
-						.append(" L WHERE L.").append(Constants.AIRLINEID_FIELD)
-						.append("=\"%s\" and L.").append(Constants.FLIGHTNO_FIELD)
-						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d;");
-
-//		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i));
-//		        System.out.println();
-				stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i)));
-				rs = stmt.executeQuery();
-
-				List<Leg> legs = new ArrayList<>();
-				while (rs.next())
-					legs.add(new Leg(rs.getInt(1), Airport.getAirportByID(rs.getString(2)),
-							rs.getTimestamp(3), rs.getTimestamp(4),
-							Airport.getAirportByID(rs.getString(5))));
-
-				flights.add(new Flight(airlineIDs.get(i), flightNums.get(i), legs,
-						flightSearchForm.getPrefClass(), fare, hiddenFare == -1 ? null : hiddenFare));
-			}
 			flights.forEach(System.out::println);
 			conn.commit();
 		} catch (SQLException ex) {
@@ -152,6 +84,73 @@ public class FlightReservationDAO {
 			}
 		}
 		return flights;
+	}
+
+	// obtaining L1.AirlineID, L1.FlightNo, L1.LegNo
+	private Flight getFlight(Connection conn, String airlineID, int flightNum, int legNum, String prefClass) {
+		StringBuilder query = new StringBuilder();
+		try {
+			// for this (airline, flight num) get fares
+			// select F.FareType, F.Fare from Fare F where F.AirlineID="AA" and F.FlightNo=111;
+			query.append("SELECT F.").append(Constants.FARE_TYPE_FIELD)
+					.append(", F.").append(Constants.FARE_FIELD)
+					.append(" FROM ").append(Constants.FARE_TABLE)
+					.append(" F WHERE F.").append(Constants.CLASS_FIELD)
+					.append("=? and F.").append(Constants.AIRLINEID_FIELD)
+					.append("=? and F.").append(Constants.FLIGHTNO_FIELD).append("=?;");
+			PreparedStatement stmt = conn.prepareStatement(query.toString());
+			stmt.setString(1, prefClass);
+			stmt.setString(2, airlineID);
+			stmt.setInt(3, flightNum);
+
+			ResultSet rs = stmt.executeQuery();
+			double fare = DEFAULT_MAX_COST;
+			double hiddenFare = DEFAULT_MAX_COST;
+			while (rs.next())
+				switch (rs.getString(1)) {
+					case Constants.HIDDEN_FARE_FIELD:
+						hiddenFare = rs.getInt(2);
+						break;
+					case Constants.REGULAR_FARE_FIELD:
+						fare = rs.getInt(2);
+						break;
+					default:
+						Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.WARNING, "Weird Result" + rs.getString(2));
+				}
+
+//		        System.out.printf("%nfare:%.2f%nhiddenFare:%.2f%n%n", fare, hiddenFare);
+			query.setLength(0);
+			// select L.LegNo, AP1.Name, L.ArrTime, L.DepTime, AP2.Name from leg L, airport AP1, airport AP2
+			//  where L.AirlineID="AA" and L.FlightNo=111 and L.LegNo>=1 and AP1.Id=L.DepAirportId and AP2.Id=L.ArrAirportId;
+			query.append("SELECT L.").append(Constants.LEGNO)
+					.append(", L.").append(Constants.DEPATURE_AIRPORT_ID)
+					.append(", L.").append(Constants.ARRIVAL_TIME)
+					.append(", L.").append(Constants.DEPATURE_TIME)
+					.append(", L.").append(Constants.ARRIVAL_AIRPORT_ID)
+					.append(" FROM ").append(Constants.LEG_TABLE)
+					.append(" L WHERE L.").append(Constants.AIRLINEID_FIELD)
+					.append("=? and L.").append(Constants.FLIGHTNO_FIELD)
+					.append("=?").append(" and L.").append(Constants.LEGNO).append(">=?;");
+
+//		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i));
+//		        System.out.println();
+			stmt = conn.prepareStatement(query.toString());
+			stmt.setString(1, airlineID);
+			stmt.setInt(2, flightNum);
+			stmt.setInt(3, legNum);
+			rs = stmt.executeQuery();
+
+			List<Leg> legs = new ArrayList<>();
+			while (rs.next())
+				legs.add(new Leg(rs.getInt(1), Airport.getAirportByID(rs.getString(2)),
+						rs.getTimestamp(3), rs.getTimestamp(4),
+						Airport.getAirportByID(rs.getString(5))));
+
+			return new Flight(airlineID, flightNum, legs, prefClass, fare, hiddenFare);
+		} catch (SQLException ex) {
+			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL parse error", ex);
+		}
+		return null;
 	}
 
 	public List<Airport> getAirports() {
