@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ajax.model.Customer;
+import com.ajax.model.Employee;
 import com.ajax.model.FlightClass;
 ;
 import com.ajax.model.State;
@@ -171,5 +172,15 @@ public class MainController {
         mv.addObject(Constants.FLIGHT_SUGGESTION, flightService.getFlightSuggestion(customer.getAccNum()));
         return mv;
     }
-
+    
+    
+    @RequestMapping(value = "/mailing-list", method = RequestMethod.GET)
+    public ModelAndView mailingList(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("mailing-list");
+        Employee employee = (Employee)(request.getSession().getAttribute(Constants.PERSON));
+        List<Customer> customers = personEntitiesService.getAllCustomersByRepId(employee.getSsn());
+        mv.addObject(Constants.CUSTOMERS, customers);
+        return mv;
+    }
+ 
 }
