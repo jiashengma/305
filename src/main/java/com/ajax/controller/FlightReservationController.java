@@ -5,6 +5,7 @@ import com.ajax.model.Constants;
 import com.ajax.model.Customer;
 import com.ajax.model.Flight;
 import com.ajax.model.FlightSearchForm;
+import com.ajax.model.Reservation;
 import com.ajax.service.FlightReservationService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,4 +134,14 @@ public class FlightReservationController {
 
         return mv;
     }
+    
+    @RequestMapping(value = "/reservation-history", method = RequestMethod.GET)
+    public ModelAndView reservationHistory(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("reservation-history");
+        Customer c = (Customer)(request.getSession().getAttribute(Constants.PERSON));
+        List<Reservation> reservations = flightReservationService.getReservationHistory(c.getAccNum());
+        mv.addObject(Constants.RESERVATIONS, reservations);
+        return mv;
+    }
+    
 }

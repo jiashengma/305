@@ -1,5 +1,6 @@
 package com.ajax.model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,16 +10,27 @@ import java.util.List;
  */
 public class Reservation {
     private int reservationNo;
+    private Timestamp reservationTime;
     private double bookingFee;
     private double totalFare;
     private Customer customer;
-    private CustomerRepresentative rep;
+    private Employee rep;
     private List<Leg> legs;
 
     public Reservation() {
-        legs = new ArrayList<Leg>();
+        legs = new ArrayList<>();
     }
-    
+
+    public Reservation(int reservationNo, Timestamp reservationTime, double bookingFee, double totalFare, Customer customer, Employee rep, List<Leg> legs) {
+        this.reservationNo = reservationNo;
+        this.reservationTime = reservationTime;
+        this.bookingFee = bookingFee;
+        this.totalFare = totalFare;
+        this.customer = customer;
+        this.rep = rep;
+        this.legs = legs;
+    }
+
     public int getReservationNo() {
         return reservationNo;
     }
@@ -26,6 +38,15 @@ public class Reservation {
     public void setReservationNo(int reservationNo) {
         this.reservationNo = reservationNo;
     }
+
+    public Timestamp getReservationTime() {
+        return reservationTime;
+    }
+
+    public void setReservationTime(Timestamp reservationTime) {
+        this.reservationTime = reservationTime;
+    }
+    
 
     public double getBookingFee() {
         return bookingFee;
@@ -51,11 +72,11 @@ public class Reservation {
         this.customer = customer;
     }
 
-    public CustomerRepresentative getRep() {
+    public Employee getRep() {
         return rep;
     }
 
-    public void setRep(CustomerRepresentative rep) {
+    public void setRep(Employee rep) {
         this.rep = rep;
     }
 

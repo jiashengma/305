@@ -45,8 +45,9 @@ public class Constants {
     public static final String RESERVATION_NO_FIELD = "ResrNo";
     public static final String RESERVATION_DATE_FIELD = "ResrDate";
     public static final String BOOKING_FEE_FIELD = "BookingFee";
-    public static final String TOTAL_FEE_FIELD = "TotalFare";
+    public static final String TOTAL_FARE_FIELD = "TotalFare";
     public static final String REP_SSN_FIELD = "RepSSN";
+    public static final String RESERVATIONS = "reservations";
 
 	// reservationpassenger
 	public static final String RESERVATION_PASSENGER_TABLE = "reservationpassenger";
