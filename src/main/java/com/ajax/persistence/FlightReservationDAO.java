@@ -126,7 +126,6 @@ public class FlightReservationDAO {
 						.append("=\"%s\" and L.").append(Constants.FLIGHTNO_FIELD)
 						.append("=%d").append(" and L.").append(Constants.LEGNO).append(">=%d;");
 
-
 //		        System.out.printf(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i));
 //		        System.out.println();
 				stmt = conn.prepareStatement(String.format(query.toString(), airlineIDs.get(i), flightNums.get(i), legNums.get(i)));
@@ -223,6 +222,7 @@ public class FlightReservationDAO {
 					flight.getAirline(), flight.getFlightNo(), flight.getLegs().get(0).getNumber()));
 			stmt.executeUpdate();
 			conn.commit();
+			conn.close();
 
 			processedRequest = true;
 		} catch (SQLException ex) {
@@ -242,4 +242,54 @@ public class FlightReservationDAO {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	public boolean cancelFlight(Customer customer, Flight flight) {
+		Connection conn = MySQLConnection.connect();
+		try {
+			// DELETE FROM passenger WHERE tutorial_id=3;
+			StringBuilder query = new StringBuilder("INSERT INTO ");
+			query.append(Constants.PASSENGER_TABLE).append(" VALUES (%d, %d);");
+
+			PreparedStatement stmt = conn.prepareStatement(String.format(query.toString(), customer.getId(), customer.getAccNum()));
+			stmt.executeUpdate();
+
+			// INSERT INTO reservation (BookingFee, TotalFare, RepSSN, AccountNo) VALUES (100, 120, 0, 4);
+			query.setLength(0);
+			query.append("INSERT INFO ").append(Constants.RESERVATION_TABLE).append(" (")
+					.append(Constants.BOOKING_FEE_FIELD).append(", ")
+					.append(Constants.TOTAL_FEE_FIELD).append(", ")
+					.append(Constants.REP_SSN_FIELD).append(", ")
+					.append(Constants.ACCOUNTNO_FIELD).append(") VALUES (%d, %d, %s, %d);");
+			stmt = conn.prepareStatement(String.format(query.toString(),
+					flight.getFare() * SYSTEM_FEE, flight.getFare(), customer.getAccNum()));
+			stmt.executeUpdate();
+
+			//  INSERT INTO reservationpassenger VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),
+			// (SELECT Id FROM passenger WHERE AccountNo=5 LIMIT 1), 5, "14A", "Economic", "Spaghetti Carbonara with Pancetta and Mushrooms");
+			query.setLength(0);
+			query.append("INSERT INFO ").append(Constants.RESERVATION_PASSENGER_TABLE).append(" VALUES (")
+					.append("(SELECT ").append(Constants.RESERVATION_NO_FIELD).append(" FROM ").append(Constants.RESERVATION_TABLE)
+					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), (SELECT ")
+					.append(Constants.ID_FIELD).append(" FROM ").append(Constants.PASSENGER_TABLE).append(" WHERE")
+					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %s, %s);");
+			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(), customer.getAccNum(),
+					customer.getAccNum(), flight.getSeatNum(), flight.getFlightClass(), flight.getMeal()));
+			stmt.executeUpdate();
+
+			// INSERT INTO includes VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1), "JA", 111, 1, CURRENT_TIMESTAMP);
+			query.setLength(0);
+			query.append("INSERT INTO ").append(Constants.INCLUDES_TABLE).append(" VALUES ((SELECT ")
+					.append(Constants.RESERVATION_TABLE).append(" WHERE ")
+					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %d, %d, CURRENT_TIMESTAMP");
+			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(),
+					flight.getAirline(), flight.getFlightNo(), flight.getLegs().get(0).getNumber()));
+			stmt.executeUpdate();
+			conn.commit();
+			conn.close();
+
+//			processedRequest = true;
+		} catch (SQLException ex) {
+			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
+		}
+		return false;
+	}
 }
