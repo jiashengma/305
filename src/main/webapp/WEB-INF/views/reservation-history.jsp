@@ -1,5 +1,6 @@
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!--prohibit unlogged in user to get to this page-->
 <c:choose>
     <c:when test="${person.accessControl ne 'CUSTOMER'}">
@@ -30,7 +31,7 @@
                         <td>${reservation.flight.flightNo}</td>
                         <td>${reservation.flight.flightClass}</td>
                         <td>${reservation.flight.seatNum}</td>
-                        <td>${reservation.totalFare}</td>
+                        <td><fmt:formatNumber type="currency" currencySymbol="$">${reservation.totalFare}</fmt:formatNumber></td>
                         <td>${reservation.reservationTime}</td>
                         
                     </tr>
