@@ -19,14 +19,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ajax.model.Customer;
 import com.ajax.model.Employee;
+import com.ajax.model.Flight;
 import com.ajax.model.FlightClass;
-;
 import com.ajax.model.State;
 import com.ajax.service.FlightReservationService;
 import com.ajax.service.FlightService;
 import com.ajax.service.PersonEntitiesService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
@@ -165,11 +167,52 @@ public class MainController {
         return mv;
     }
 
+    /**
+     * Customers get their own flight suggestion
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/flight-suggestion", method = RequestMethod.GET)
     public ModelAndView flightSuggestion(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("flight-suggestion");
         Customer customer = (Customer) (request.getSession().getAttribute(Constants.PERSON));
-        mv.addObject(Constants.FLIGHT_SUGGESTION, flightService.getFlightSuggestion(customer.getAccNum()));
+        mv.addObject(Constants.FLIGHT_SUGGESTIONS, flightService.getFlightSuggestion(customer.getAccNum()));
+        return mv;
+    }
+
+    /**
+     * Customer representatives get list of flight suggestions for customers
+     *
+     * @param request
+     * @param requesterId
+     * @return
+     */
+    @RequestMapping(value = "/flight-suggestion-for-customer", method = RequestMethod.GET)
+    public ModelAndView flightSuggestion(HttpServletRequest request,
+            @RequestParam("requester") int requesterId) {
+        ModelAndView mv = new ModelAndView("flight-suggestion");
+        Employee employee = null;
+        try {
+            employee = (Employee) (request.getSession().getAttribute(Constants.PERSON));
+        } catch (NullPointerException npe) {
+            return new ModelAndView("index");
+        }
+        if (employee == null) {
+            return new ModelAndView("index");
+        }
+
+        Map<Integer, List<Flight>> flightSuggestions = new HashMap<>();
+        List<Customer> customers = regitrationService.getAllCustomersByRepSSN(employee.getSsn());
+        
+        for (Customer c : customers) {
+            flightSuggestions.put(c.getAccNum(), (List<Flight>)flightService.getFlightSuggestion(c.getAccNum()));
+        }
+
+        mv.addObject(Constants.FLIGHT_SUGGESTIONS, flightSuggestions);
+        mv.addObject("customers", customers);
+        // add this object to jsp to indicate control is coming from rep
+        mv.addObject("requester", requesterId);
         return mv;
     }
 
@@ -181,10 +224,10 @@ public class MainController {
         mv.addObject(Constants.CUSTOMERS, customers);
         return mv;
     }
-    
+
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public ModelAndView help() {
         return new ModelAndView("help");
     }
-    
+
 }

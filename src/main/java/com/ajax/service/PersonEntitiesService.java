@@ -55,7 +55,7 @@ public class PersonEntitiesService {
     }
 
     public List<Customer> getAllCustomersByRepId(String ssn) {
-        return personEntitiesManager.getAllCustomersByRepId(ssn);
+        return personEntitiesManager.getAllCustomersByRepSSN(ssn);
     }
     
     public int registerEmployee(Employee customerRepresentative) {

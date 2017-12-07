@@ -47,7 +47,7 @@ public class FlightDAO {
                 // bestSellers.add();
             }
 
-            conn.close();
+            conn.commit();
         } catch (SQLException ex) {
             Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
         } finally {
@@ -112,7 +112,10 @@ public class FlightDAO {
         throw new UnsupportedOperationException("Not supported yet.");
         
     }
-    
+   
+    public List<Flight> getFlightSuggestion(int repid, int accNum) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 //    private Flight getFlight(Connection conn, String airlineID, int flightNum, int legNum) {
 //		StringBuilder query = new StringBuilder();
 //		try {
@@ -208,5 +211,4 @@ public class FlightDAO {
 //		}
 //		return null;
 //	}
-
 }

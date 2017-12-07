@@ -64,7 +64,7 @@ public class RegitrationService {
         return personEntitiesManager.getAllCustomers();
     }
     
-    public List<Customer> getAllCustomersByRepId(String ssn) {
-        return personEntitiesManager.getAllCustomersByRepId(ssn);
+    public List<Customer> getAllCustomersByRepSSN(String ssn) {
+        return personEntitiesManager.getAllCustomersByRepSSN(ssn);
     }
 }

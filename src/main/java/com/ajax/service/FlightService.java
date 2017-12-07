@@ -24,8 +24,12 @@ public class FlightService {
         return flightDAO.getBestSellers();
     }
 
-    public Object getFlightSuggestion(int accNum) {
+    public List<Flight> getFlightSuggestion(int accNum) {
         return flightDAO.getFlightSuggestion(accNum);
+    }
+    
+    public List<Flight> getFlightSuggestion(int repid, int accNum) {
+        return flightDAO.getFlightSuggestion(repid, accNum);
     }
     
     
