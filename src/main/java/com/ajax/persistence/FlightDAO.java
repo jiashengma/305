@@ -89,6 +89,7 @@ public class FlightDAO {
                 + "	ORDER BY COUNT(City) DESC;";
         
         Connection conn = null;
+        List<Flight> flights = new ArrayList<>();
         try {
             conn = MySQLConnection.connect();
 
@@ -97,7 +98,7 @@ public class FlightDAO {
             while (rs.next()) {
                 //TODO:
 
-                // bestSellers.add();
+                // .add();
             }
 
             conn.close();
@@ -114,7 +115,7 @@ public class FlightDAO {
 
         }
         
-        throw new UnsupportedOperationException("Not supported yet.");
+        return flights;
         
     }
    
