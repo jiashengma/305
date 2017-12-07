@@ -19,7 +19,7 @@
 	[]	customer's rating should reflect how active a ticket buyer he or she is (+1 to customer's rating)
 
 3.1 Manager Transactions
-	[\]	Add, Edit and Delete information for an employee
+	[x]	Add, Edit and Delete information for an employee
 	[]	Obtain a sales report for a particular month
 	[]	Produce a comprehensive listing of all flights
 	[]	Produce a list of reservations by flight number or by customer name
