@@ -8,6 +8,7 @@ package com.ajax.persistence;
 import com.ajax.model.Airport;
 import com.ajax.model.Constants;
 import com.ajax.model.Flight;
+import com.ajax.model.FlightClass;
 import com.ajax.model.Leg;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Repository;
 /**
  *
  * @author majiasheng
- */
+ */GROUP BY (
 @Repository
 public class FlightDAO {
 
@@ -33,8 +34,8 @@ public class FlightDAO {
         String query = "SELECT AirlineID, FlightNo, COUNT(ResrNo) AS NumOfResr "
                 + " FROM includes I "
                 + " GROUP BY AirlineID, FlightNo "
-                + " HAVING COUNT(ResrNo) > " + BEST_SELLER_NUM
-                + " ORDER BY NumOfResr DESC";
+                + " ORDER BY NumOfResr DESC "
+                + " LIMIT 5;";
         Connection conn = null;
         try {
             conn = MySQLConnection.connect();
@@ -43,7 +44,11 @@ public class FlightDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 //TODO:
-
+                Flight f = new Flight();
+                f.setAirline(rs.getString(1));
+                f.setFlightNo(rs.getInt(2));
+                bestSellers.add(f);
+                
                 // bestSellers.add();
             }
 
