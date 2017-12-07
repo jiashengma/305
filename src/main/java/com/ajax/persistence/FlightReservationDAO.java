@@ -390,6 +390,7 @@ public class FlightReservationDAO {
 
                 + " FROM " + Constants.RESERVATION_TABLE + " R, " + Constants.EMPLOYEE_TABLE + " E, " + Constants.PERSON_TABLE + " P, " + Constants.RESERVATION_PASSENGER_TABLE + " RP, " + Constants.INCLUDES_TABLE + " I "
                 + "WHERE R." + Constants.ACCOUNTNO_FIELD + " = ? "
+                + " AND R." + Constants.ACCOUNTNO_FIELD + " = RP." + Constants.ACCOUNTNO_FIELD
                 + " AND R." + Constants.RESERVATION_NO_FIELD + " = I." + Constants.RESERVATION_NO_FIELD
                 + " AND R." + Constants.REP_SSN_FIELD + " = E." + Constants.EMPLOYEE_SSN_FIELD
                 + " AND E." + Constants.ID_FIELD + " = P." + Constants.ID_FIELD + ";";
