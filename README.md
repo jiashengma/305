@@ -7,15 +7,15 @@
 	[x]	check email and password using jquery in front end
 	[x]	customers - search flights
 	[x]	check email and password using jquery in front end
-	[]	customers - search flights
+	[x]	customers - search flights
 	[]	***query db for direct or indirect flights between a pair of cities for a given date and "approximate" time.***
 	[]	reverse auctions - price customers are willing to pay for a seat
-	[]	customers cancel an existing reservation 
+	[/]	customers cancel an existing reservation 
      (reservations from auction can also be canceled? interesting)
 
 1 System Users
-	[]	customers - make flight reservation
-	[]	customer may partake in any number of flight reservation transactions
+	[x]	customers - make flight reservation
+	[x]	customer may partake in any number of flight reservation transactions
 	[]	customer's rating should reflect how active a ticket buyer he or she is (+1 to customer's rating)
 
 3.1 Manager Transactions
@@ -41,15 +41,15 @@
 	[x]	One-Way
 	[]	Round-Trip
 	[]	Multi-City
-	[]	Domestic or International
+	[x]	Domestic or International
 	[]	Flexible Date/time
 	[]	A customer's current reservations
 	[]	Travel itinerary for a given reservation
 	[]	A customer's current bid on a given reverse auction
 	[]	The bid history for a given reverse auction
-	[]	A history of all current and past reservations a customer has made
-	[]	Best-Seller list of flights
-	[]	Personalized flight suggestion list 
+	[x]	A history of all current and past reservations a customer has made
+	[x]	Best-Seller list of flights
+	[x]	Personalized flight suggestion list 
 
 4 User Access Control
 	[x]	Customer Representatives cannot perform manager-level transactions, but can read employee info except pay rate.
@@ -58,11 +58,11 @@
 
 5 Utilities
 	[x]	Allowing the manager to add and delete users
-	[]	Backing up the database files
+	[x]	Backing up the database files
 	[]	A comprehensive Help facility, including a topic-driven pull-down Help menu 
 
 6 Other
-    [] Prompt user to select customer representative after auction (default if no selection)
+    [x] Prompt user to select customer representative after auction (default if no selection)
 
 99 Notes
 	[]	Reservation have booking fees, which is how your company makes money, and an associated customer representative
