@@ -37,31 +37,30 @@ public class UserController {
 
         int ret = Status.FAILURE;
 
-        AccessControl ac = ((Person)(request.getSession().getAttribute(Constants.PERSON))).getAccessControl();
+        AccessControl ac = ((Person) (request.getSession().getAttribute(Constants.PERSON))).getAccessControl();
         person.setAccessControl(ac);
         // update person
         if (ac == AccessControl.CUSTOMER) {
             Customer customer = new Customer(
-                    person.getFirstName(), 
-                    person.getLastName(), 
-                    person.getPhone(), 
-                    person.getAddress(), 
+                    person.getFirstName(),
+                    person.getLastName(),
+                    person.getPhone(),
+                    person.getAddress(),
                     creditCard, null);
-            
+
             ret = personEntitiesService.updateCustomer(customer);
         } else {
             /*TODO: should have two different methods for updating employee
              admin can update start date and salary
             
-                or just one method, for admin only, and disable(do not show)
-                account setting in customer rep
-            */
-            
-            
+             or just one method, for admin only, and disable(do not show)
+             account setting in customer rep
+             */
+
             // Employee employee = new Employee(creditCard, null, ret, creditCard, creditCard, creditCard, null)
             // ret = personEntitiesService.updateEmployee((Employee) person);
         }
-        
+
         if (ret == Status.SUCCESS) {
             mv = new ModelAndView("redirect:/confirmEdit");
             redirectAttributes.addFlashAttribute(Constants.MSG_ATTRIBUTE, "<p style=\"color:green\">Update success</p>");
@@ -82,4 +81,37 @@ public class UserController {
         ModelAndView mv = new ModelAndView("account-setting");
         return mv;
     }
+
+//    @RequestMapping(value = "/confirmEdit", method = RequestMethod.POST)
+//    public ModelAndView confirmEdit(@RequestParam Map<String, String> requestParams,
+//            HttpServletRequest request,
+//            final RedirectAttributes redirectAttributes) {
+//        ModelAndView mv = new ModelAndView();
+//        // get user from session
+//        User user = (User) request.getSession().getAttribute(SessionConstant.USER_ATTRIBUTE);
+//        // update user
+//        user.setFirstName(requestParams.get(SessionConstant.FIRSTNAME_REQUEST_PARAM));
+//        user.setLastName(requestParams.get(SessionConstant.LASTNAME_REQUEST_PARAM));
+//
+//        if (userEntityService.updateUser(user)) {
+//            mv = new ModelAndView("redirect:/confirmEdit");
+//            redirectAttributes.addFlashAttribute(SessionConstant.MSG_ATTRIBUTE, SessionConstant.UPDATE_INFO_SUCCESS_MSG);
+//        } else {
+//            // send user back to user setting page with error message
+//            mv.setViewName(request.getRequestURI());
+//            redirectAttributes.addFlashAttribute(SessionConstant.MSG_ATTRIBUTE, SessionConstant.UPDATE_INFO_FAILURE_MSG);
+//        }
+//        return mv;
+//    }
+//
+//    /**
+//     *
+//     * @return
+//     */
+//    @RequestMapping(value = "/confirmEdit", method = RequestMethod.GET)
+//    public ModelAndView redirectConfirmEdit() {
+//        ModelAndView mv = new ModelAndView("user-setting");
+//        return mv;
+//    }
+
 }
