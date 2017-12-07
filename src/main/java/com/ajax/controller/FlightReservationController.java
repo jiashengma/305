@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
 
-
-
 @Controller
 @ControllerAdvice
 public class FlightReservationController {
@@ -52,15 +50,15 @@ public class FlightReservationController {
             mv.addObject(Constants.MSG_ATTRIBUTE, "<p class=\"error\">:( sorry, there is an error in flight search form</p>");
             return mv;
         }
-        
+
         mv.setViewName("result");
 
         // add a list of flights as the search result for the view/jsp to render
 //        mv.addObject("flightSearchResult", flightReservationService.searchFlight(flightSearchForm));
         request.getSession().setAttribute(
-                Constants.FLIGHT_SEARCH_RESULT, 
+                Constants.FLIGHT_SEARCH_RESULT,
                 flightReservationService.searchFlight(flightSearchForm));
-        
+
         return mv;
     }
 
@@ -90,12 +88,12 @@ public class FlightReservationController {
         System.out.println("\n\nrepSSN: " + repSSN);
 
         //int indexOfFlight = Integer.parseInt((String)request.getSession().getAttribute(Constants.INDEX_OF_FLIGHT));
-        int indexOfFlight = (Integer)request.getSession().getAttribute(Constants.INDEX_OF_FLIGHT);
-        Flight selectedFlight = ((List<Flight>)(request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight);
-        
-        if (flightReservationService.bookFlight((Customer)(request.getSession().getAttribute(Constants.PERSON)), repSSN, selectedFlight))
-            // reservation success
+        int indexOfFlight = (Integer) request.getSession().getAttribute(Constants.INDEX_OF_FLIGHT);
+        Flight selectedFlight = ((List<Flight>) (request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight);
+
+        if (flightReservationService.bookFlight((Customer) (request.getSession().getAttribute(Constants.PERSON)), repSSN, selectedFlight)) {
             return new ModelAndView("reservation-success");
+        }
         return new ModelAndView("reservation-fail");
     }
 
@@ -117,31 +115,30 @@ public class FlightReservationController {
     ) {
         ModelAndView mv = new ModelAndView();
 
-        System.out.println("\n\nrepSSN: " + repSSN);
-        
         if (result.hasErrors()) {
-			System.out.println();
-            // TODO: binding error
+            System.err.println(result.toString());
         }
-
-        if (flightReservationService.bookFlight((Customer)(request.getSession().getAttribute(Constants.PERSON)), repSSN, auction)) {
-            //TODO: reservation success, set view name
-			System.out.println();
-        } else {
-            //TODO: reservation failed , set view name
-			System.out.println();
+        
+        
+        //TODO: use the selected flight object? and set the fare to NYOP?
+        //if (flightReservationService.bookFlight((Customer) (request.getSession().getAttribute(Constants.PERSON)), repSSN, auction)) {
+        
+        int indexOfFlight = (Integer) request.getSession().getAttribute(Constants.INDEX_OF_FLIGHT);
+        Flight selectedFlight = ((List<Flight>) (request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight);
+        selectedFlight.setFare(auction.getNYOP());
+        if (flightReservationService.bookFlight((Customer) (request.getSession().getAttribute(Constants.PERSON)), repSSN, selectedFlight)) {
+            return new ModelAndView("reservation-success");
         }
-
-        return mv;
+        return new ModelAndView("reservation-fail");
     }
-    
+
     @RequestMapping(value = "/reservation-history", method = RequestMethod.GET)
     public ModelAndView reservationHistory(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("reservation-history");
-        Customer c = (Customer)(request.getSession().getAttribute(Constants.PERSON));
+        Customer c = (Customer) (request.getSession().getAttribute(Constants.PERSON));
         List<Reservation> reservations = flightReservationService.getReservationHistory(c.getAccNum());
         mv.addObject(Constants.RESERVATIONS, reservations);
         return mv;
     }
-    
+
 }

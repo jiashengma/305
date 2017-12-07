@@ -7,7 +7,6 @@
 
 <!-- <script src="/WEB-INF/js/jquery.min.js"></script>
 <script src="/WEB-INF/js/bootstrap.min.js"></script>
-<script src="/WEB-INF/js/scripts.js"></script>
 -->
 <spring:url value= "/resources/js/jquery.min.js" var="jquery" />
 <spring:url value= "/resources/js/bootstrap.min.js" var="boot" />
@@ -15,6 +14,7 @@
 <script src="${jquery}"></script>
 <script src="${boot}"></script>
 <script src="${script}"></script>
+<script src="/resources/js/manager.js"></script>
 
 </body>
 </html>

@@ -5,9 +5,11 @@
  */
 package com.ajax.controller;
 
+import com.ajax.model.Address;
 import com.ajax.model.Constants;
 import com.ajax.model.Customer;
 import com.ajax.model.Employee;
+import com.ajax.service.PersonEntitiesService;
 import com.ajax.service.RegitrationService;
 import com.ajax.service.ReturnValue;
 import java.util.List;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -31,8 +34,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AdminController {
 
-    //@Autowired
-    //PersonEntitiesManager personEntitiesManager;
+    @Autowired
+    PersonEntitiesService personEntitiesService;
     @Autowired
     RegitrationService regitrationService;
 
@@ -87,18 +90,43 @@ public class AdminController {
 
         return mv;
     }
-    
+
     @RequestMapping(value = "/customers", method = RequestMethod.GET)
     public ModelAndView showCustomers(HttpServletRequest request) {
 
         ModelAndView mv = new ModelAndView("customers");
 
-        String repId = ((Employee)(request.getSession().getAttribute(Constants.PERSON))).getSsn();
-        
+        String repId = ((Employee) (request.getSession().getAttribute(Constants.PERSON))).getSsn();
+
         List<Customer> customers = regitrationService.getAllCustomersByRepId(repId);
         mv.addObject(Constants.CUSTOMERS, customers);
 
         return mv;
+    }
+
+    @RequestMapping(value = "/admin/delete", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public boolean adminDeleteUser(@RequestParam("ssn") String repssn, HttpServletRequest request) {
+        return personEntitiesService.deleteEmployee(repssn);
+    }
+
+    @RequestMapping(value = "/admin/update", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public boolean adminEditEmployee(
+            @ModelAttribute("employee") Employee employee,
+            BindingResult r1,
+            @ModelAttribute("address") Address address,
+            BindingResult r2,
+            @RequestParam("state") String state) {
+        if (r1.hasErrors() || r2.hasErrors()) {
+            System.err.println(r1.toString() + " | " + r2.toString());
+            return false;
+        }
+        address.setState(state);
+        employee.setAddress(address);
+        
+        // updateUser() only use these four fields
+        return personEntitiesService.updateEmployee(employee);
     }
 
 }

@@ -661,19 +661,66 @@ public class PersonEntitiesManager {
         return ret;
     }
 
-    public int updateCustomer(Customer customer) {
+    public boolean updateCustomer(Customer customer) {
         throw new UnsupportedOperationException("update customer not yet supported");
     }
 
-    public int updateEmployee(Employee employee) {
-        throw new UnsupportedOperationException("update employee not yet supported");
+    public boolean updateEmployee(Employee employee) {
+        
+        String query="";
+        
+        Connection conn = null;
+        try {
+            conn = MySQLConnection.connect();
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+            
+            //TODO: set params
+            
+            stmt.executeUpdate();
+            conn.close();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        }
+        return false;
     }
 
-    public int deleteCustomer(Customer customer) {
+    public boolean deleteCustomer(int accNo) {
         throw new UnsupportedOperationException("delete customer not yet supported");
     }
 
-    public int deleteEmployee(Employee employee) {
-        throw new UnsupportedOperationException("delete employee not yet supported");
+    public boolean deleteEmployee(String repssn) {
+        String query = "DELETE FROM employee WHERE SSN = ?";
+        Connection conn = null;
+        try {
+            conn = MySQLConnection.connect();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, repssn);
+            stmt.executeUpdate();
+            conn.close();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        }
+        return false;
     }
 }

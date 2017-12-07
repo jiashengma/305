@@ -84,6 +84,10 @@ table.accSettingTable > tr > td{
     border: none;
 }
 
-.error {
+.error, .red {
     color:red;
+}
+
+.green {
+    color:green;
 }

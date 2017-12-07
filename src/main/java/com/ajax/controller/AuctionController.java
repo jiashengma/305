@@ -59,14 +59,12 @@ public class AuctionController {
     public ModelAndView handleBid(
             @ModelAttribute(Constants.AUCTION) Auction auction,
             BindingResult result,
-            //            @RequestParam("hiddenFare") double hiddenFare,
-//            @RequestParam(Constants.INDEX_OF_FLIGHT) int indexOfFlight,
             HttpServletRequest request) {
 
         ModelAndView mv = new ModelAndView("auctionFail");
 
         if (result.hasErrors()) {
-            System.out.println("\n\nerr!!");
+            System.err.println("\n\nerr!!");
         }
         
         // save auction 

@@ -67,16 +67,16 @@ public class PersonEntitiesService {
         throw new UnsupportedOperationException("update customer not yet supported");
     }
 
-    public int updateEmployee(Employee employee) {
-        throw new UnsupportedOperationException("update employee not yet supported");
+    public boolean updateEmployee(Employee employee) {
+        return personEntitiesManager.updateEmployee(employee);
     }
 
     public int deleteCustomer(Customer customer) {
         throw new UnsupportedOperationException("delete customer not yet supported");
     }
 
-    public int deleteEmployee(Employee employee) {
-        throw new UnsupportedOperationException("delete employee not yet supported");
+    public boolean deleteEmployee(String repssn) {
+        return personEntitiesManager.deleteEmployee(repssn);
     }
     
 }
