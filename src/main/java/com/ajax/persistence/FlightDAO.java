@@ -94,6 +94,7 @@ public class FlightDAO {
             conn = MySQLConnection.connect();
 
             PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, accNum);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 //TODO:
