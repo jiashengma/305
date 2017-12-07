@@ -265,21 +265,19 @@ public class FlightReservationDAO {
 					(SELECT Id FROM passenger WHERE AccountNo=5 LIMIT 1),
 					5,
 					"14",
-					"Economic",
+					"Economy",
 					"Spaghetti Carbonara with Pancetta and Mushrooms"
 				);
 			*/
 			query.setLength(0);
 			query.append("INSERT INTO ").append(Constants.RESERVATION_PASSENGER_TABLE)
 					.append(" VALUES (")
-					.append("(SELECT ").append(Constants.RESERVATION_NO_FIELD)
-					.append(" FROM ").append(Constants.RESERVATION_TABLE)
-					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? ORDER BY ")
-						.append(Constants.RESERVATION_NO_FIELD).append(" DESC LIMIT 1), ")
-					.append("(SELECT ").append(Constants.ID_FIELD)
-					.append(" FROM ").append(Constants.PASSENGER_TABLE)
-					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? ORDER BY ")
-						.append(Constants.RESERVATION_NO_FIELD).append(" DESC LIMIT 1), ?, ?, ?, ?);");
+					.append("(SELECT MAX(").append(Constants.RESERVATION_NO_FIELD)
+					.append(") FROM ").append(Constants.RESERVATION_TABLE)
+					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ")
+					.append("(SELECT MAX(").append(Constants.ID_FIELD)
+					.append(") FROM ").append(Constants.PASSENGER_TABLE)
+					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ?, ?, ?, ?);");
 			stmt = conn.prepareStatement(query.toString());
 			stmt.setInt(1, customer.getAccNum());
 			stmt.setInt(2, customer.getAccNum());

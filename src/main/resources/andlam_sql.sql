@@ -472,7 +472,7 @@ CREATE TABLE `reservationpassenger` (
 
 LOCK TABLES `reservationpassenger` WRITE;
 /*!40000 ALTER TABLE `reservationpassenger` DISABLE KEYS */;
-INSERT INTO `reservationpassenger` VALUES (2,4,4,'24','First','Potatoes'),(3,5,5,'14','Economic','Spaghetti Carbonara with Pancetta and Mushrooms'),(19,0,6,'2D','Economy','chipotle'),(22,12,7,'2E','Economy','meal1');
+INSERT INTO `reservationpassenger` VALUES (2,4,4,'24','First','Potatoes'),(3,5,5,'14','Economy','Spaghetti Carbonara with Pancetta and Mushrooms'),(19,0,6,'2D','Economy','chipotle'),(22,12,7,'2E','Economy','meal1');
 /*!40000 ALTER TABLE `reservationpassenger` ENABLE KEYS */;
 UNLOCK TABLES;
 
