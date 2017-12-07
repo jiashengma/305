@@ -86,7 +86,7 @@ public class AdminController {
         ModelAndView mv = new ModelAndView("customer-representatives");
 
         List<Employee> cusReps = regitrationService.getAllCustomerRepresentatives();
-        mv.addObject(Constants.CUSTOMER_REPRESENTATIVE, cusReps);
+        mv.addObject("customerRepresentatives", cusReps);
 
         return mv;
     }
@@ -127,6 +127,30 @@ public class AdminController {
         
         // updateUser() only use these four fields
         return personEntitiesService.updateEmployee(employee);
+    }
+    
+    @RequestMapping(value = "/employee/delete", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public boolean empDeleteCustomer(@RequestParam("id") int id, HttpServletRequest request) {
+        return personEntitiesService.deleteCustomer(id);
+    }
+
+    @RequestMapping(value = "/employee/update", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public boolean empEditCustomer(
+            @ModelAttribute("employee") Customer customer,
+            BindingResult r1,
+            @ModelAttribute("address") Address address,
+            BindingResult r2,
+            @RequestParam("state") String state) {
+        if (r1.hasErrors() || r2.hasErrors()) {
+            System.err.println(r1.toString() + " | " + r2.toString());
+            return false;
+        }
+        address.setState(state);
+        customer.setAddress(address);
+        
+        return personEntitiesService.updateCustomer(customer);
     }
 
 }

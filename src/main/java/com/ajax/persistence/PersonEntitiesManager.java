@@ -551,7 +551,7 @@ public class PersonEntitiesManager {
     }
 
     public List<Customer> getAllCustomersByRepSSN(String ssn) {
-        String query = "SELECT "
+        String query = "SELECT DISTINCT "
                 + " P." + Constants.FIRSTNAME_FILED + ", "
                 + " P." + Constants.LASTNAME_FILED + ", "
                 + " P." + Constants.STREET_FILED + ", "
@@ -602,6 +602,8 @@ public class PersonEntitiesManager {
                         new Address(street, city, state, zipCode),
                         credNo,
                         email);
+                customer.setAccNum(accNo);
+                customer.setRating(rating);
 
                 // do not forget to set access control 
                 customer.setAccessControl(AccessControl.CUSTOMER);
@@ -682,15 +684,12 @@ public class PersonEntitiesManager {
                     + "ZipCode = ?, "
                     + "Phone = ? "
                     + "WHERE Id = ?;";
-        
         Connection conn = null;
         try {
             conn = MySQLConnection.connect();
 
-            
             PreparedStatement stmt = conn.prepareStatement(query);
-        
-            stmt = conn.prepareStatement(query);
+            
             stmt.setString(1,customer.getFirstName());
             stmt.setString(2,customer.getLastName());
             stmt.setString(3,customer.getAddress().getStreet());
@@ -699,10 +698,17 @@ public class PersonEntitiesManager {
             stmt.setInt(6,customer.getAddress().getZipCode());
             stmt.setString(7,customer.getPhone());
             stmt.setInt(8,customer.getId());
+            stmt.executeUpdate();
             
+            query = "update customer set CreditCardNo = ?, Email = ? where Id = ?";
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1,customer.getCreditCard());
+            stmt.setString(2,customer.getEmail());
+            stmt.setInt(3,customer.getId());
             stmt.executeUpdate();
             
             conn.commit();
+
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -720,6 +726,7 @@ public class PersonEntitiesManager {
     }
 
     public boolean updateEmployee(Employee employee) {
+        
         
         String query="UPDATE employee SET "
                 + " StartDate = ?, HourlyRate = ? WHERE Id = ?;";
@@ -773,18 +780,40 @@ public class PersonEntitiesManager {
         return false;
     }
 
-    public boolean deleteCustomer(int accNo) {
-        throw new UnsupportedOperationException("delete customer not yet supported");
-    }
-
-    public boolean deleteEmployee(int id) {
-        String query = "DELETE FROM employee WHERE Id = ?";
+    public boolean deleteCustomer(int id) {
+        String query = "DELETE FROM person WHERE Id = ?";
         Connection conn = null;
         try {
             conn = MySQLConnection.connect();
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, id);
             stmt.executeUpdate();
+            conn.commit();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public boolean deleteEmployee(int id) {
+        String query = "DELETE FROM person WHERE Id = ?";
+        Connection conn = null;
+        try {
+            conn = MySQLConnection.connect();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, id);
+            int r = stmt.executeUpdate();
+            System.out.println("\n\nr: " + r);
             conn.commit();
             return true;
         } catch (SQLException ex) {

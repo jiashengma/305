@@ -62,17 +62,17 @@ public class PersonEntitiesService {
         return personEntitiesManager.registerEmployee(customerRepresentative);
     }
 
-    public int updateCustomer(Customer customer) {
+    public boolean updateCustomer(Customer customer) {
         //NOTE: customer's email will be null, because email WILL NOT be updated
-        throw new UnsupportedOperationException("update customer not yet supported");
+        return personEntitiesManager.updateCustomer(customer);
     }
 
     public boolean updateEmployee(Employee employee) {
         return personEntitiesManager.updateEmployee(employee);
     }
 
-    public int deleteCustomer(Customer customer) {
-        throw new UnsupportedOperationException("delete customer not yet supported");
+    public boolean deleteCustomer(int id) {
+        return personEntitiesManager.deleteCustomer(id);
     }
 
     public boolean deleteEmployee(int id) {
