@@ -63,8 +63,6 @@ public class FlightReservationDAO {
 //	        System.out.printf(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo(), "2011-01-05", "2011-01-05");
 //	        System.out.println();
 
-	        try {	Thread.sleep(1000);	} catch (InterruptedException ignored) {}
-
 			PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo
 					? String.format(query.toString(), hasFlightFrom ?
 							flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo())
