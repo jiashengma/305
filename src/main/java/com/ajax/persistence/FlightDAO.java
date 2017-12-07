@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 /**
  *
  * @author majiasheng
- */GROUP BY (
+ */
 @Repository
 public class FlightDAO {
 
