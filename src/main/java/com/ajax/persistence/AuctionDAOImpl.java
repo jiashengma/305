@@ -67,7 +67,7 @@ public class AuctionDAOImpl implements AuctionDAO {
         try {
             String query = "SELECT A.* , IF(A.NYOP >= F.Fare, 'Yes', 'No') AS 'Accepted?' "
                     + "FROM auctions A, fare F "
-                    + "WHERE F.FareType='hidden' "
+                    + "WHERE F.FareType='Hidden' "
                     + "AND A.AirlineID=F.AirlineID "
                     + "AND A.FlightNo=F.FlightNo "
                     + "AND A.Class=F.Class "

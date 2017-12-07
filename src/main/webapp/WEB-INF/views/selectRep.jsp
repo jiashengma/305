@@ -15,7 +15,10 @@ ${msg}
     <!--TODO: check if this is from buy now or auction-->
     <c:choose>
         <c:when test="${empty auction}"><form id="bookingForm" action="/bookflight" method="POST"></c:when>
-        <c:otherwise><form action="/bookflightViaAuction" method="POST"></c:otherwise>
+        <c:otherwise>
+            <form action="/bookflightViaAuction" method="POST">
+            <input type="hidden" name="NYOP" value="${auction.NYOP}">
+        </c:otherwise>
     </c:choose>
         <select name="rep">
             <c:forEach var="rep" items="${customerRepresentatives}" varStatus="loop">
@@ -23,6 +26,7 @@ ${msg}
                 <option value="${rep.ssn}">${rep.firstName} ${rep.lastName}</option>
             </c:forEach>
         </select>
+            
 
         <input type="submit" value="Select"/>
     </form>

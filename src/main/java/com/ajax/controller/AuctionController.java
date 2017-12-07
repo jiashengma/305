@@ -51,7 +51,6 @@ public class AuctionController {
 
 //        mv.addObject(Constants.FLIGHT, flight);
         //mv.addObject(Constants.INDEX_OF_FLIGHT, indexOfFlight);
-
         return mv;
     }
 
@@ -66,24 +65,24 @@ public class AuctionController {
         if (result.hasErrors()) {
             System.err.println("\n\nerr!!");
         }
-        
+
         // save auction 
         if (!auctionService.saveAuction(auction)) {
             mv.addObject(Constants.MSG_ATTRIBUTE, "<p style=\"color:red\">Error Occurred while trying to save auction</p>");
             return mv;
         }
 
-        int indexOfFlight = (Integer)request.getSession().getAttribute(Constants.INDEX_OF_FLIGHT);
-        Flight selectedFlight = ((List<Flight>)(request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight);
+        int indexOfFlight = (Integer) request.getSession().getAttribute(Constants.INDEX_OF_FLIGHT);
+        Flight selectedFlight = ((List<Flight>) (request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight);
         double hiddenFare = selectedFlight.getHiddenFare();
-        
+
         if (auction.getNYOP() >= hiddenFare) {
             mv.setViewName("selectRep");
             mv.addObject(Constants.MSG_ATTRIBUTE, "<p style=\"color:green\">Bid success</p>");
-            // mv.addObject(Constants.AUCTION, auction);
+            mv.addObject(Constants.AUCTION, auction);
             // add auction "object" as an indication of coming from auction
-            mv.addObject(Constants.AUCTION, 0);
-            
+//            mv.addObject(Constants.AUCTION, 0);
+
         } else {
             mv.addObject(Constants.MSG_ATTRIBUTE, "Low Bid.. Please try again :)");
         }

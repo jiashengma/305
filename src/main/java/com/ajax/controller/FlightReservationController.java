@@ -126,6 +126,9 @@ public class FlightReservationController {
         int indexOfFlight = (Integer) request.getSession().getAttribute(Constants.INDEX_OF_FLIGHT);
         Flight selectedFlight = ((List<Flight>) (request.getSession().getAttribute(Constants.FLIGHT_SEARCH_RESULT))).get(indexOfFlight);
         selectedFlight.setFare(auction.getNYOP());
+        
+        System.out.println("\n\nauction.getNYOP(): " + auction.getNYOP());
+        
         if (flightReservationService.bookFlight((Customer) (request.getSession().getAttribute(Constants.PERSON)), repSSN, selectedFlight)) {
             return new ModelAndView("reservation-success");
         }

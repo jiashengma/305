@@ -48,7 +48,7 @@ public class FlightDAO {
                 f.setAirline(rs.getString(1));
                 f.setFlightNo(rs.getInt(2));
                 bestSellers.add(f);
-                
+
                 // bestSellers.add();
             }
 
@@ -75,7 +75,7 @@ public class FlightDAO {
      * @return
      */
     public List<Flight> getFlightSuggestion(int accNum) {
-        String query = "SELECT DISTINCT R.AccountNo, L.AirlineID, L.FlightNo "
+        String query = "SELECT DISTINCT L.AirlineID, L.FlightNo "
                 + "FROM Includes I, Reservation R, Leg L, Airport A, "
                 + "	(SELECT MAX(LegNo) AS LegNo FROM Includes GROUP BY ResrNo) M"
                 + "	WHERE R.ResrNo = I.ResrNo\n"
@@ -87,7 +87,7 @@ public class FlightDAO {
                 + "		AND AccountNo = ?\n"
                 + "	GROUP BY AccountNo, City\n"
                 + "	ORDER BY COUNT(City) DESC;";
-        
+
         Connection conn = null;
         List<Flight> flights = new ArrayList<>();
         try {
@@ -97,11 +97,14 @@ public class FlightDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 //TODO:
-
+                Flight f = new Flight();
+                f.setAirline(rs.getString(1));
+                f.setFlightNo(rs.getInt(2));
+                flights.add(f);
                 // .add();
             }
 
-            conn.close();
+            conn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -114,11 +117,11 @@ public class FlightDAO {
             }
 
         }
-        
+
         return flights;
-        
+
     }
-   
+
     public List<Flight> getFlightSuggestion(int repid, int accNum) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

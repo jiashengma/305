@@ -6,7 +6,6 @@
         <li><a href="/customer-representatives">All Customer Representatives</a></li>
         <li><a href="/customers">Customers</a></li>
         <li><a href="/mailing-list">Mailing lists</a></li>
-        TODO:
         <li><a href="/flight-suggestion-for-customer?requester=${person.id}">Flight suggestions for customers</a></li>
     </ul>
 
