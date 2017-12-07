@@ -20,7 +20,7 @@
         <span class="error"><form:errors path="employee.lastName"/></span><br>
         
         SSN<br>
-        <input type="password" name="ssn" placeholder="ssn" required>
+        <input type="password" name="ssn" placeholder="ssn" required pattern="[0-9]{9}">
         <span class="error"><form:errors path="employee.ssn"/></span><br>
         
         Hourly Rate<br>

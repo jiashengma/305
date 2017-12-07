@@ -133,11 +133,7 @@ public class ManagerController {
         ModelAndView mv = new ModelAndView("max-revenue");
         Connection conn = MySQLConnection.connect();
         try {
-            PreparedStatement stmt = conn.prepareStatement("SELECT C.Id, C.AccountNo, MAX(Revenue)"
-                    + " FROM (SELECT AccountNo, SUM(TotalFare) AS Revenue FROM reservation "
-                    + "GROUP BY AccountNo) _, customer C "
-                    + "WHERE C.AccountNo = _.AccountNo "
-                    + "GROUP BY C.AccountNo;");
+            PreparedStatement stmt = conn.prepareStatement("SELECT C.Id, C.AccountNo, Revenue FROM (SELECT  MAX(Revenue) as Revenue FROM ( SELECT AccountNo, SUM(TotalFare) AS Revenue FROM reservation GROUP BY AccountNo) _, customer C WHERE C.AccountNo = _.AccountNo) RES, reservation R, customer C WHERE R.TotalFare = RES.Revenue AND R.AccountNo = C.AccountNo;");
 
             ResultSet rs = stmt.executeQuery();
             conn.commit();
