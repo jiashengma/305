@@ -97,6 +97,7 @@ table.accSettingTable > tr > td{
     color:green;
 }
 
-.empInfo {
-    width:20%;
+.adminManageForm > input, .empInfo {
+    width:7.8em;
 }
+

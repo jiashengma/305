@@ -1,11 +1,11 @@
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:if test="${person.accessControl ne 'MANAGER' or person.accessControl ne 'CUSTOMER_REPRESENTATIVE'}">
+<c:if test="${person.accessControl eq 'CUSTOMER'}">
     <c:redirect url="/"/>
 </c:if>
 <h2>All Customer Representatives</h2>
 <hr>
-<div id="msg"></div>>
+<div id="msg"></div>
 <div id="cusRep">
     <table>
         <tr>

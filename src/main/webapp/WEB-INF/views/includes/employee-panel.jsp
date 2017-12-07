@@ -7,7 +7,7 @@
         <li><a href="/customers">Customers</a></li>
         <li><a href="/mailing-list">Mailing lists</a></li>
         TODO:
-        <li><a href="">Produce a list of flight suggestions for a given customer (based on that customer's past reservations)</a></li>
+        <li><a href="/flight-suggestion-for-customer?requester=${person.id}">Flight suggestions for customers</a></li>
     </ul>
 
 </div>

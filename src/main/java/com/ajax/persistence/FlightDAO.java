@@ -8,6 +8,7 @@ package com.ajax.persistence;
 import com.ajax.model.Airport;
 import com.ajax.model.Constants;
 import com.ajax.model.Flight;
+import com.ajax.model.FlightClass;
 import com.ajax.model.Leg;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,8 +34,8 @@ public class FlightDAO {
         String query = "SELECT AirlineID, FlightNo, COUNT(ResrNo) AS NumOfResr "
                 + " FROM includes I "
                 + " GROUP BY AirlineID, FlightNo "
-                + " HAVING COUNT(ResrNo) > " + BEST_SELLER_NUM
-                + " ORDER BY NumOfResr DESC";
+                + " ORDER BY NumOfResr DESC "
+                + " LIMIT 5;";
         Connection conn = null;
         try {
             conn = MySQLConnection.connect();
@@ -43,11 +44,15 @@ public class FlightDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 //TODO:
-
+                Flight f = new Flight();
+                f.setAirline(rs.getString(1));
+                f.setFlightNo(rs.getInt(2));
+                bestSellers.add(f);
+                
                 // bestSellers.add();
             }
 
-            conn.close();
+            conn.commit();
         } catch (SQLException ex) {
             Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL Error", ex);
         } finally {
@@ -112,7 +117,10 @@ public class FlightDAO {
         throw new UnsupportedOperationException("Not supported yet.");
         
     }
-    
+   
+    public List<Flight> getFlightSuggestion(int repid, int accNum) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 //    private Flight getFlight(Connection conn, String airlineID, int flightNum, int legNum) {
 //		StringBuilder query = new StringBuilder();
 //		try {
@@ -208,5 +216,4 @@ public class FlightDAO {
 //		}
 //		return null;
 //	}
-
 }

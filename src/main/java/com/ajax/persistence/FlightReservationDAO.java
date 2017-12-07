@@ -385,15 +385,20 @@ public class FlightReservationDAO {
                 + ", P." + Constants.FIRSTNAME_FILED
                 + ", P." + Constants.LASTNAME_FILED
                 + ", P." + Constants.PHONE_FILED
+                + ", RP." + Constants.CLASS_FIELD
+                + ", RP." + Constants.SEATNO_FIELD
+                + ", I." + Constants.AIRLINEID_FIELD
+                + ", I." + Constants.FLIGHTNO_FIELD
 
-                + " FROM " + Constants.RESERVATION_TABLE + " R, " + Constants.EMPLOYEE_TABLE + " E, " + Constants.PERSON_TABLE + " P "
+                + " FROM " + Constants.RESERVATION_TABLE + " R, " + Constants.EMPLOYEE_TABLE + " E, " + Constants.PERSON_TABLE + " P, " + Constants.RESERVATION_PASSENGER_TABLE + " RP, " + Constants.INCLUDES_TABLE + " I "
                 + "WHERE R." + Constants.ACCOUNTNO_FIELD + " = ? "
-                + "AND R." + Constants.REP_SSN_FIELD + " = E." + Constants.EMPLOYEE_SSN_FIELD
+                + " AND R." + Constants.RESERVATION_NO_FIELD + " = I." + Constants.RESERVATION_NO_FIELD
+                + " AND R." + Constants.REP_SSN_FIELD + " = E." + Constants.EMPLOYEE_SSN_FIELD
                 + " AND E." + Constants.ID_FIELD + " = P." + Constants.ID_FIELD + ";";
         
         Connection conn = MySQLConnection.connect();
         try {
-            PreparedStatement stmt = conn.prepareCall(query);
+            PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, accNo);
             
             ResultSet rs = stmt.executeQuery();
@@ -406,6 +411,10 @@ public class FlightReservationDAO {
                 String fname = rs.getString(6);
                 String lname = rs.getString(7);
                 String phone = rs.getString(8);
+                String flightClass = rs.getString(9);
+                String seatNo = rs.getString(10);
+                String airlineId = rs.getString(11);
+                int flightNo = rs.getInt(12);
                 
                 Reservation reservation = new Reservation(
                         reservationNo, 
@@ -414,7 +423,12 @@ public class FlightReservationDAO {
                         totalFare, 
                         null, 
                         new Employee(ssn, null, 0, fname, lname, phone, null), null);
-                        
+                Flight f = new Flight();
+                f.setAirline(airlineId);
+                f.setSeatNum(seatNo);
+                f.setFlightClass(flightClass);
+                f.setFlightNo(flightNo);
+                reservation.setFlight(f);
                 reservations.add(reservation);
             }
             
