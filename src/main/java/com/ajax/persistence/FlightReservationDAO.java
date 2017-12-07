@@ -72,7 +72,6 @@ public class FlightReservationDAO {
 							new java.sql.Date(flightSearchForm.getRetDate().getTime())));
 			ResultSet rs = stmt.executeQuery();
 			conn.commit();
-			conn.close();
 
 			while (rs.next()) {	// hard coded numbers because I chose order in SELECT query above
 				flights.add(getFlight(rs.getString(1), rs.getInt(2), rs.getInt(3),
@@ -83,14 +82,13 @@ public class FlightReservationDAO {
 
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException ex) {
+				Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL closing error", ex);
+			}
 		}
-//		finally {
-//			try {
-//				conn.close();
-//			} catch (SQLException ex) {
-//				Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL closing error", ex);
-//			}
-//		}
 		return flights;
 	}
 
