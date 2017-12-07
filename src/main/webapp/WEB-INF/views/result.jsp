@@ -1,4 +1,5 @@
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${person.accessControl eq 'CUSTOMER_REPRESENTATIVE' or person.accessControl eq 'MANAGER'}">
     <c:redirect url=""/>
 </c:if>
@@ -22,7 +23,7 @@
                         <td>${flight.airline}</td>
                         <td>${flight.flightNo}</td>
                         <td>${flight.flightClass}</td>
-                        <td>${flight.fare}</td>
+                        <td><fmt:formatNumber type="currency" currencySymbol="$">${flight.fare}</fmt:formatNumber></td>
 
                     <form class="reservationFormGroup" name="bookingForm" action="/selectRep" method="POST">
                         <!--TODO:
