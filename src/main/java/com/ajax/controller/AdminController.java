@@ -96,9 +96,9 @@ public class AdminController {
 
         ModelAndView mv = new ModelAndView("customers");
 
-        String repId = ((Employee) (request.getSession().getAttribute(Constants.PERSON))).getSsn();
+        String repssn = ((Employee) (request.getSession().getAttribute(Constants.PERSON))).getSsn();
 
-        List<Customer> customers = regitrationService.getAllCustomersByRepId(repId);
+        List<Customer> customers = regitrationService.getAllCustomersByRepSSN(repssn);
         mv.addObject(Constants.CUSTOMERS, customers);
 
         return mv;

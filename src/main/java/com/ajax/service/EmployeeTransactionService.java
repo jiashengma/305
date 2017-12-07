@@ -25,6 +25,6 @@ public class EmployeeTransactionService {
     }
     
     public List<Customer> getCustomersByEmpId(String ssn) {
-        return personEntitiesManager.getAllCustomersByRepId(ssn);
+        return personEntitiesManager.getAllCustomersByRepSSN(ssn);
     }
 }

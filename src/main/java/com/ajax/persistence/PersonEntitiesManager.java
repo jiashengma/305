@@ -544,7 +544,7 @@ public class PersonEntitiesManager {
         return customers;
     }
 
-    public List<Customer> getAllCustomersByRepId(String ssn) {
+    public List<Customer> getAllCustomersByRepSSN(String ssn) {
         String query = "SELECT "
                 + " P." + Constants.FIRSTNAME_FILED + ", "
                 + " P." + Constants.LASTNAME_FILED + ", "
@@ -666,7 +666,51 @@ public class PersonEntitiesManager {
     }
 
     public boolean updateCustomer(Customer customer) {
-        throw new UnsupportedOperationException("update customer not yet supported");
+        
+        String query = "UPDATE person "
+                    + "SET FirstName = ?, "
+                    + "LastName =  ?, "
+                    + "Street = ?, "
+                    + "City = ?, "
+                    + "State = ?, "
+                    + "ZipCode = ?, "
+                    + "Phone = ? "
+                    + "WHERE Id = ?;";
+        
+        Connection conn = null;
+        try {
+            conn = MySQLConnection.connect();
+
+            
+            PreparedStatement stmt = conn.prepareStatement(query);
+        
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1,customer.getFirstName());
+            stmt.setString(2,customer.getLastName());
+            stmt.setString(3,customer.getAddress().getStreet());
+            stmt.setString(4,customer.getAddress().getCity());
+            stmt.setString(5,customer.getAddress().getState().name());
+            stmt.setInt(6,customer.getAddress().getZipCode());
+            stmt.setString(7,customer.getPhone());
+            stmt.setInt(8,customer.getId());
+            
+            stmt.executeUpdate();
+            
+            conn.commit();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        }
+        return false;
     }
 
     public boolean updateEmployee(Employee employee) {

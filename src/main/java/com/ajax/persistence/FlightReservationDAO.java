@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FlightReservationDAO {
 	private static final double SYSTEM_FEE = 1.2;
-	private static final int DEFAULT_MAX_COST = 500;
+	private static final int DEFAULT_MAX_COST = Integer.MAX_VALUE / 1372;
 
 	public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
 		List<Flight> flights = new ArrayList<>();
@@ -63,8 +63,6 @@ public class FlightReservationDAO {
 //	        System.out.printf(query.toString(), flightSearchForm.getFlyingFrom(), flightSearchForm.getFlyingTo(), "2011-01-05", "2011-01-05");
 //	        System.out.println();
 
-	        try {	Thread.sleep(1000);	} catch (InterruptedException ignored) {}
-
 			PreparedStatement stmt = conn.prepareStatement(hasFlightFrom ^ hasFlightTo
 					? String.format(query.toString(), hasFlightFrom ?
 							flightSearchForm.getFlyingFrom() : flightSearchForm.getFlyingTo())
@@ -73,28 +71,36 @@ public class FlightReservationDAO {
 							new java.sql.Date(flightSearchForm.getDepDate().getTime()),
 							new java.sql.Date(flightSearchForm.getRetDate().getTime())));
 			ResultSet rs = stmt.executeQuery();
+			conn.commit();
+			conn.close();
 
 			while (rs.next()) {	// hard coded numbers because I chose order in SELECT query above
-				flights.add(getFlight(conn, rs.getString(1), rs.getInt(2), rs.getInt(3),
+				flights.add(getFlight(rs.getString(1), rs.getInt(2), rs.getInt(3),
 						flightSearchForm.getPrefClass()));
 			}
 
 			flights.forEach(System.out::println);
-			conn.commit();
+
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException ex) {
-				Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL closing error", ex);
-			}
 		}
+//		finally {
+//			try {
+//				conn.close();
+//			} catch (SQLException ex) {
+//				Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL closing error", ex);
+//			}
+//		}
 		return flights;
 	}
 
+	public Flight getFlight(String airlineID, int flightNum) {
+		return getFlight(airlineID, flightNum, 0, FlightClass.Economy.toString());
+	}
+
 	// obtaining L1.AirlineID, L1.FlightNo, L1.LegNo
-	private Flight getFlight(Connection conn, String airlineID, int flightNum, int legNum, String prefClass) {
+	private Flight getFlight(String airlineID, int flightNum, int legNum, String prefClass) {
+		Connection conn = MySQLConnection.connect();
 		StringBuilder query = new StringBuilder();
 		try {
 			/* for this (airline, flight num) get fares
@@ -302,8 +308,14 @@ public class FlightReservationDAO {
 
 			processedRequest = true;
 		} catch (SQLException ex) {
-			//System.out.println("DUP ERROR - person has already reserved this flight!!");
+			System.out.println("DUP ERROR - flight already reserved!!");
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL DUP Error", ex);
+			try {
+				conn.rollback();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return processedRequest;
