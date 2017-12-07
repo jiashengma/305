@@ -335,10 +335,10 @@ public class ManagerController {
         Connection conn = MySQLConnection.connect();
 
         try {
-            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT %s, %s, COUNT(ResrNo)"
-                    + "FROM includes"
-                    + "GROUP BY %s, %s"
-                    + "ORDER BY COUNT(ResrNo) DESC"
+            PreparedStatement stmt = conn.prepareStatement(String.format("SELECT %s, %s, COUNT(ResrNo) "
+                    + "FROM includes "
+                    + "GROUP BY %s, %s "
+                    + "ORDER BY COUNT(ResrNo) DESC "
                     + "LIMIT 10;", Constants.AIRLINEID_FIELD, Constants.FLIGHTNO_FIELD,
                     Constants.AIRLINEID_FIELD, Constants.FLIGHTNO_FIELD));
             ResultSet rs = stmt.executeQuery();
