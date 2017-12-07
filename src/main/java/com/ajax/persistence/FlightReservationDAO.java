@@ -394,7 +394,8 @@ public class FlightReservationDAO {
                 + " AND R." + Constants.RESERVATION_NO_FIELD + " = I." + Constants.RESERVATION_NO_FIELD
                 + " AND R." + Constants.REP_SSN_FIELD + " = E." + Constants.EMPLOYEE_SSN_FIELD
                 + " AND E." + Constants.ID_FIELD + " = P." + Constants.ID_FIELD + ";";
-        
+
+		System.out.println(query);
         Connection conn = MySQLConnection.connect();
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
