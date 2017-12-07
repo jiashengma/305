@@ -51,4 +51,8 @@ public class FlightReservationService {
     public List<Reservation> getReservationHistory(int accNo) {
         return flightReservationDAO.getReservationHistory(accNo);
     }
+    
+    public boolean cancelFlight(int resrNo){
+        return flightReservationDAO.cancelFlight(resrNo);
+    }
 }
