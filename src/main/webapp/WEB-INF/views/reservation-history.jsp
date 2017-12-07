@@ -1,9 +1,3 @@
-<%-- 
-    Document   : reservation-history
-    Created on : Dec 4, 2017, 2:34:44 PM
-    Author     : majiasheng
---%>
-
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!--prohibit unlogged in user to get to this page-->
@@ -12,7 +6,7 @@
         <c:redirect url=""/>
     </c:when>
 </c:choose>
-<h2>Auction History</h2>
+<h2>Reservation History</h2>
 <hr>
 <!-- body -->
 <div id="reservationHistory">

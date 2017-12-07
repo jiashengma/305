@@ -36,7 +36,8 @@ public class FlightReservationService {
     }
 
     public boolean bookFlight(Customer customer, String repSSN, Auction auction) {
-        return flightReservationDAO.reserveFlightFromAuction(auction);
+        // return flightReservationDAO.reserveFlightFromAuction(auction);
+        throw new UnsupportedOperationException("Reserve via an auction object is not supported");
     }
 
     public boolean bookFlight(Customer customer, String repSSN, Flight flight) {

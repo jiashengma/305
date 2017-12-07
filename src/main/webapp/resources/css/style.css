@@ -72,7 +72,7 @@ th, td {
 }
 
 .mask {
-    
+
 }
 
 table.accSettingTable > tr > td{
@@ -84,11 +84,19 @@ table.accSettingTable > tr > td{
     border: none;
 }
 
-.error {
+.error, .red {
     color:red;
 }
 
 .number-textfield{
     -moz-appearance: textfield;
     -webkit-appearance: textfield;
+}
+
+.green {
+    color:green;
+}
+
+.empInfo {
+    width:20%;
 }

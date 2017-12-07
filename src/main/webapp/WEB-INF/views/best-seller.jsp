@@ -7,18 +7,18 @@
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!--prohibit unlogged in user to get to this page-->
-<c:choose>
-    <c:when test="${person.accessControl ne 'CUSTOMER_REPRESENTATIVE' and person.accessControl ne 'MANAGER'}">
+<%--<c:choose>
+    <c:when test="${empty person}">
         <c:redirect url=""/>
     </c:when>
-</c:choose>
+</c:choose>--%>
 <h2>Best Sellers</h2>
 <hr>
 <!-- body -->
 <div id="flightSuggestion">
     <c:choose>
         <c:when test="${fn:length(bestSeller) <= 0}">
-            <h3>No Best Seller Yet/ OR LIST ALL FLIGHTS</h3>
+            <h3>Grant Opening...Help Us Pick Your Best Seller :)</h3>
         </c:when>
         <c:otherwise>
             <table>
