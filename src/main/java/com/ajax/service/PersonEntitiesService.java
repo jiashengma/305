@@ -75,8 +75,8 @@ public class PersonEntitiesService {
         throw new UnsupportedOperationException("delete customer not yet supported");
     }
 
-    public boolean deleteEmployee(String repssn) {
-        return personEntitiesManager.deleteEmployee(repssn);
+    public boolean deleteEmployee(int id) {
+        return personEntitiesManager.deleteEmployee(id);
     }
     
 }

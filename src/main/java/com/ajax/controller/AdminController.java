@@ -106,8 +106,8 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/delete", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public boolean adminDeleteUser(@RequestParam("ssn") String repssn, HttpServletRequest request) {
-        return personEntitiesService.deleteEmployee(repssn);
+    public boolean adminDeleteUser(@RequestParam("id") int id, HttpServletRequest request) {
+        return personEntitiesService.deleteEmployee(id);
     }
 
     @RequestMapping(value = "/admin/update", method = RequestMethod.GET, produces = "application/json")

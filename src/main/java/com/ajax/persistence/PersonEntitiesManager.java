@@ -412,6 +412,7 @@ public class PersonEntitiesManager {
 
     public List<Employee> getAllCustomerRepresentatives() {
         String query = "SELECT "
+                + " P." + Constants.ID_FIELD + ", "
                 + " P." + Constants.FIRSTNAME_FILED + ", "
                 + " P." + Constants.LASTNAME_FILED + ", "
                 + " P." + Constants.STREET_FILED + ", "
@@ -443,6 +444,7 @@ public class PersonEntitiesManager {
             conn.commit();
 
             while (rs.next()) {
+                int id = rs.getInt(Constants.ID_FIELD);
                 String firstname = rs.getString(Constants.FIRSTNAME_FILED);
                 String lastname = rs.getString(Constants.LASTNAME_FILED);
                 String street = rs.getString(Constants.STREET_FILED);
@@ -455,6 +457,7 @@ public class PersonEntitiesManager {
                 double hourlyRate = rs.getDouble(Constants.EMPLOYEE_HOURLY_RATE_FIELD);
                 Employee employee = new Employee(ssn, startDate, hourlyRate, firstname, lastname, phone,
                         new Address(street, city, state, zipCode));
+                employee.setId(id);
 
                 // do not forget to set access control 
                 employee.setAccessControl(AccessControl.CUSTOMER_REPRESENTATIVE);
@@ -667,7 +670,8 @@ public class PersonEntitiesManager {
 
     public boolean updateEmployee(Employee employee) {
         
-        String query="";
+        String query="UPDATE employee SET "
+                + " StartDate = ?, HourlyRate = ? WHERE Id = ?;";
         
         Connection conn = null;
         try {
@@ -676,9 +680,32 @@ public class PersonEntitiesManager {
             PreparedStatement stmt = conn.prepareStatement(query);
             
             //TODO: set params
-            
+            stmt.setDate(1, employee.getStartDate());
+            stmt.setDouble(2, employee.getHourlyRate());
+            stmt.setInt(3, employee.getId());
             stmt.executeUpdate();
-            conn.close();
+            
+            query = "UPDATE person "
+                    + "SET FirstName = ?, "
+                    + "LastName =  ?, "
+                    + "Street = ?, "
+                    + "City = ?, "
+                    + "State = ?, "
+                    + "ZipCode = ?, "
+                    + "Phone = ? "
+                    + "WHERE Id = ?;";
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1,employee.getFirstName());
+            stmt.setString(2,employee.getLastName());
+            stmt.setString(3,employee.getAddress().getStreet());
+            stmt.setString(4,employee.getAddress().getCity());
+            stmt.setString(5,employee.getAddress().getState().name());
+            stmt.setInt(6,employee.getAddress().getZipCode());
+            stmt.setString(7,employee.getPhone());
+            stmt.setInt(8,employee.getId());
+            stmt.executeUpdate();
+            
+            conn.commit();
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -699,15 +726,15 @@ public class PersonEntitiesManager {
         throw new UnsupportedOperationException("delete customer not yet supported");
     }
 
-    public boolean deleteEmployee(String repssn) {
-        String query = "DELETE FROM employee WHERE SSN = ?";
+    public boolean deleteEmployee(int id) {
+        String query = "DELETE FROM employee WHERE Id = ?";
         Connection conn = null;
         try {
             conn = MySQLConnection.connect();
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, repssn);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
-            conn.close();
+            conn.commit();
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();

@@ -19,7 +19,8 @@ $(document).ready(function () {
         e.preventDefault();
 
         var data = new Object();
-        data["ssn"] = this.ssn.value;
+//        data["ssn"] = this.ssn.value;
+        data["id"] = this.id.value;
 
         // only use these for edit operation
         if (action === "Update") {
@@ -48,7 +49,7 @@ $(document).ready(function () {
                 if (response) {
                     if (action === "Delete") {
                         // remove row
-                        $('#' + data["ssn"]).remove();
+                        $('#' + data["id"]).remove();
                         $("#msg").html("<p class=\"green\">Deleted successfully</p>");
                     } else if (action === "Update") {
                         $("#msg").html("<p class=\"green\">Updated successfully</p>");
