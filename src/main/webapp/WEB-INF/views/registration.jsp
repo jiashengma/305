@@ -32,7 +32,7 @@
         <input type="password" name="repassword" placeholder="Re-enter password" required><br>
         <div id="pwMisMatch"></div>
         
-        Tel<br>
+        Tel (10 numbers)<br>
         <input type="text" name="phone" placeholder="Phone Number" required>
         <span class="error"><form:errors path="customer.phone"/></span><br>
         
@@ -49,7 +49,7 @@
         <span class="error"><form:errors path="customer.address.city"/></span>
         <span class="error"><form:errors path="customer.address.zipCode"/></span><br>
         
-        Credit Card Number<br><input type="text" name="creditCard" placeholder="Credit Card No."><br>
+        Credit Card (16 Numbers)<br><input type="text" name="creditCard" placeholder="Credit Card No."><br>
         <span class="error"><form:errors path="customer.creditCard"/></span><br>
         
         <select name="prefMeal">
