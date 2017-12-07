@@ -296,8 +296,8 @@ public class FlightReservationDAO {
 					CURRENT_TIMESTAMP);*/
 			query.setLength(0);
 			query.append("INSERT INTO ").append(Constants.INCLUDES_TABLE)
-					.append(" VALUES ((SELECT ")
-					.append(Constants.RESERVATION_NO_FIELD).append(" FROM ")
+					.append(" VALUES ((SELECT MAX(")
+					.append(Constants.RESERVATION_NO_FIELD).append(") FROM ")
 					.append(Constants.RESERVATION_TABLE).append(" WHERE ")
 					.append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ?, ?, ?, CURRENT_TIMESTAMP);");
 			stmt = conn.prepareStatement(query.toString());
