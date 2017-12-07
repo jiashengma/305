@@ -193,11 +193,13 @@ public class PersonEntitiesManager {
                     + " C." + Constants.CREDITCARDNO_FIELD + ", "
                     + " C." + Constants.EMAIL_FIELD + ", "
                     + " C." + Constants.RATING_FIELD + ", "
-					+ " CP." + Constants.CUSTOMER_PREFERENCE
+					+ " CP." + Constants.CUSTOMER_PREFERENCE + ", "
+                    + " L." + Constants.USERNAME_FIELD
                     + " FROM "
                     + Constants.CUSTOMER_TABLE + " C, "
                     + Constants.PERSON_TABLE + " P, "
-                    + Constants.CUSTOMER_PREFERENCES_TABLE + " CP"
+                    + Constants.CUSTOMER_PREFERENCES_TABLE + " CP, "
+                    + Constants.LOGIN_TABLE + " L "
                     + " WHERE "
                     + " P." + Constants.ID_FIELD
                     + " = ? "
@@ -209,6 +211,8 @@ public class PersonEntitiesManager {
 					+ " CP." + Constants.ACCOUNTNO_FIELD
 					+ " = "
 					+ " C." + Constants.ACCOUNTNO_FIELD
+                                        + " AND L." + Constants.ID_FIELD
+                                        + " = C." + Constants.ID_FIELD
                     + " LIMIT 1;";
 
 //			System.out.println(query);
@@ -235,6 +239,7 @@ public class PersonEntitiesManager {
 			String email = rs.getString(Constants.EMAIL_FIELD);
 			int rating = rs.getInt(Constants.RATING_FIELD);
 			String prefMeal = rs.getString(Constants.CUSTOMER_PREFERENCE);
+                        String username = rs.getString(Constants.USERNAME_FIELD);
 
 			System.out.println(
 					"\nname: " + firstname + " " + lastname + "\n"
@@ -251,6 +256,7 @@ public class PersonEntitiesManager {
 			customer.setRating(rating);
 			customer.setAccessControl(AccessControl.CUSTOMER);
 			customer.setPrefMeal(prefMeal);
+                        customer.setUserName(username);
 			// customer.setRating(rating);       //TODO: set rating later?
 
         } catch (SQLException ex) {

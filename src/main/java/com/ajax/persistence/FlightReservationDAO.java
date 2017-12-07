@@ -253,8 +253,8 @@ public class FlightReservationDAO {
 					.append("VALUES (?, ?, ?, ?);");
 
 			stmt = conn.prepareStatement(query.toString());
-			stmt.setDouble(1, flight.getFare() * SYSTEM_FEE);
-			stmt.setDouble(2, flight.getFare());
+			stmt.setDouble(1, flight.getFare());
+			stmt.setDouble(2, flight.getFare() * SYSTEM_FEE);
 			stmt.setString(3, repSSN);
 			stmt.setInt(4, customer.getAccNum());
 			stmt.executeUpdate();

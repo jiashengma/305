@@ -2,11 +2,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!--prohibit unlogged in user to get to this page-->
-<c:choose>
-    <c:when test="${person.accessControl ne 'CUSTOMER'}">
+<c:if test="${person.accessControl ne 'CUSTOMER'}">
         <c:redirect url=""/>
-    </c:when>
-</c:choose>
+</c:if>
 <h2>Reservation History</h2>
 <hr>
 <!-- body -->
@@ -33,7 +31,7 @@
                         <td>${reservation.flight.seatNum}</td>
                         <td><fmt:formatNumber type="currency" currencySymbol="$">${reservation.totalFare}</fmt:formatNumber></td>
                         <td>${reservation.reservationTime}</td>
-                        
+                        <td><a class="button" href="/delete-reservation?resrNo=${reservation.reservationNo}">Delete</a></td>
                     </tr>
                 </c:forEach>
                 <%--<c:forEach var="auction" items="${auctions}">

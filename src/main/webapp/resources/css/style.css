@@ -101,3 +101,8 @@ table.accSettingTable > tr > td{
     width:7.8em;
 }
 
+.button {
+    appearance: button;
+    -moz-appearance: button;
+    -webkit-appearance: button;
+}

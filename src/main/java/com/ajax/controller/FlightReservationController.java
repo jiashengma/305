@@ -143,5 +143,18 @@ public class FlightReservationController {
         mv.addObject(Constants.RESERVATIONS, reservations);
         return mv;
     }
-
+    
+    @RequestMapping(value = "/delete-reservation", method=RequestMethod.GET)
+    public ModelAndView deleteReservation(@RequestParam Map<String, String> requestParams){
+        ModelAndView mv = new ModelAndView("delete-reservation");
+        String resrNo = requestParams.getOrDefault("resrNo", "");
+        if (!resrNo.matches("[0-9]+")){
+            return mv;
+        }
+        else {
+            flightReservationService.cancelFlight(Integer.parseInt(resrNo));
+            mv.addObject("success", "success!");
+        }
+        return mv;
+    }
 }
