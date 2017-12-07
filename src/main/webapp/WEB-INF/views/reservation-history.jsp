@@ -9,21 +9,32 @@
 <h2>Reservation History</h2>
 <hr>
 <!-- body -->
-<div id="reservationHistory">
+<div id="reservationHistory" class="mask">
     <c:choose>
-        <c:when test="${fn:length(reservations) <= 0}">
+        <c:when test="${empty reservations}">
             <h3>No Reservation History</h3>
         </c:when>
         <c:otherwise>
             <table>
                 <tr>
                     <th>Airline</th>
-                    <th>FlightNo</th>
+                    <th>Flight Number</th>
                     <th>Class</th>
-                    <th>Bid ($)</th>
+                    <th>Seat Number</th>
+                    <th>Total Fare</th>
                     <th>Date</th>
-                    <th>Accepted?</th>
                 </tr>
+                <c:forEach items="${reservations}" var="reservation">
+                    <tr>
+                        <td>${reservation.flight.airline}</td>
+                        <td>${reservation.flight.flightNo}</td>
+                        <td>${reservation.flight.flightClass}</td>
+                        <td>${reservation.flight.seatNum}</td>
+                        <td>${reservation.totalFare}</td>
+                        <td>${reservation.reservationTime}</td>
+                        
+                    </tr>
+                </c:forEach>
                 <%--<c:forEach var="auction" items="${auctions}">
                     <tr>
                         <td>${auction.airline}</td>

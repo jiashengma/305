@@ -15,7 +15,7 @@
 <h2>Best Sellers</h2>
 <hr>
 <!-- body -->
-<div id="flightSuggestion">
+<div id="flightSuggestion" class="mask">
     <c:choose>
         <c:when test="${fn:length(bestSeller) <= 0}">
             <h3>Grant Opening...Help Us Pick Your Best Seller :)</h3>

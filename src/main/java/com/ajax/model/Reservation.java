@@ -17,6 +17,15 @@ public class Reservation {
     private Employee rep;
     private List<Leg> legs;
     private Timestamp date;
+    private Flight flight;
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
 
     public Timestamp getDate() {
         return date;

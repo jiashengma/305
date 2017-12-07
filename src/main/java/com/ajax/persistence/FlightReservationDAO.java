@@ -73,13 +73,22 @@ public class FlightReservationDAO {
 			ResultSet rs = stmt.executeQuery();
 			conn.commit();
 
+			//String airlineID, int flightNum, int legNum, String prefClass
+			List<String> airlineIDs = new ArrayList<>();
+			List<Integer> flightNums = new ArrayList<>();
+			List<Integer> legNums = new ArrayList<>();
 			while (rs.next()) {	// hard coded numbers because I chose order in SELECT query above
-				flights.add(getFlight(rs.getString(1), rs.getInt(2), rs.getInt(3),
-						flightSearchForm.getPrefClass()));
+				airlineIDs.add(rs.getString(1));
+				flightNums.add(rs.getInt(2));
+				legNums.add(rs.getInt(3));
 			}
 
-			flights.forEach(System.out::println);
+			for (int i = 0; i < airlineIDs.size(); i++)
+				flights.add(getFlight(airlineIDs.get(i), flightNums.get(i), legNums.get(i),flightSearchForm.getPrefClass()));
 
+			flights.forEach(System.out::println);
+			conn.commit();
+			conn.close();
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
 		} finally {
@@ -187,7 +196,7 @@ public class FlightReservationDAO {
 				currSeat *= 6;
 				currSeat += (seat.charAt(seat.length() -1) - 'A');
 			}
-			System.out.printf("%n (%s %s) ->max: %d, curr: %d ", airlineID, flightNum, maxSeat, currSeat);
+			System.out.printf("%n(%s %s) -> max: %d, curr: %d%n", airlineID, flightNum, maxSeat, currSeat);
 			return maxSeat <= ++currSeat ? null : new Flight(airlineID, flightNum, legs, prefClass, fare, hiddenFare, currSeat);
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL parse error", ex);
@@ -225,8 +234,8 @@ public class FlightReservationDAO {
 		boolean processedRequest = false;
 		Connection conn = MySQLConnection.connect();
 		try {
-			// INSERT INTO passenger VALUES (4, 4);
-			StringBuilder query = new StringBuilder("INSERT INTO ");
+			// INSERT IGNORE INTO passenger VALUES (4, 4);
+			StringBuilder query = new StringBuilder("INSERT IGNORE INTO ");
 			query.append(Constants.PASSENGER_TABLE).append(" VALUES (?, ?);");
 
 			PreparedStatement stmt = conn.prepareStatement(query.toString());
@@ -248,7 +257,6 @@ public class FlightReservationDAO {
 			stmt.setDouble(2, flight.getFare());
 			stmt.setString(3, repSSN);
 			stmt.setInt(4, customer.getAccNum());
-
 			stmt.executeUpdate();
 
 			/* INSERT INTO reservationpassenger
@@ -266,11 +274,12 @@ public class FlightReservationDAO {
 					.append(" VALUES (")
 					.append("(SELECT ").append(Constants.RESERVATION_NO_FIELD)
 					.append(" FROM ").append(Constants.RESERVATION_TABLE)
-					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ")
+					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? ORDER BY ")
+						.append(Constants.RESERVATION_NO_FIELD).append(" DESC LIMIT 1), ")
 					.append("(SELECT ").append(Constants.ID_FIELD)
 					.append(" FROM ").append(Constants.PASSENGER_TABLE)
-					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? LIMIT 1), ?, ?, ?, ?);");
-//			System.out.println(query.toString() + ">> " + customer.getPrefMeal());
+					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=? ORDER BY ")
+						.append(Constants.RESERVATION_NO_FIELD).append(" DESC LIMIT 1), ?, ?, ?, ?);");
 			stmt = conn.prepareStatement(query.toString());
 			stmt.setInt(1, customer.getAccNum());
 			stmt.setInt(2, customer.getAccNum());
@@ -329,55 +338,40 @@ public class FlightReservationDAO {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-    public boolean cancelFlight(Customer customer, Flight flight) {
+    public boolean cancelFlight(int resrNo) {
+		boolean processedRequest = false;
         Connection conn = MySQLConnection.connect();
         try {
-            // DELETE FROM passenger WHERE id=3;
-            StringBuilder query = new StringBuilder("INSERT INTO ");
-            query.append(Constants.PASSENGER_TABLE).append(" VALUES (%d, %d);");
-
-            PreparedStatement stmt = conn.prepareStatement(String.format(query.toString(), customer.getId(), customer.getAccNum()));
+            // DELETE FROM reservation WHERE resrNo=3;
+            StringBuilder query = new StringBuilder("DELETE FROM ").append(Constants.RESERVATION_TABLE)
+					.append(" WHERE ").append(Constants.RESERVATION_NO_FIELD).append("=?;");
+            PreparedStatement stmt = conn.prepareStatement(query.toString());
+            stmt.setInt(1, resrNo);
             stmt.executeUpdate();
 
-            // INSERT INTO reservation (BookingFee, TotalFare, RepSSN, AccountNo) VALUES (100, 120, 0, 4);
-            query.setLength(0);
-            query.append("INSERT INFO ").append(Constants.RESERVATION_TABLE).append(" (")
-                    .append(Constants.BOOKING_FEE_FIELD).append(", ")
-                    .append(Constants.TOTAL_FARE_FIELD).append(", ")
-                    .append(Constants.REP_SSN_FIELD).append(", ")
-                    .append(Constants.ACCOUNTNO_FIELD).append(") VALUES (%d, %d, %s, %d);");
-            stmt = conn.prepareStatement(String.format(query.toString(),
-                    flight.getFare() * SYSTEM_FEE, flight.getFare(), customer.getAccNum()));
-            stmt.executeUpdate();
-
-			//  INSERT INTO reservationpassenger VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1),
-			// (SELECT Id FROM passenger WHERE AccountNo=5 LIMIT 1), 5, "14A", "Economic", "Spaghetti Carbonara with Pancetta and Mushrooms");
+			//  DELETE FROM reservationpassenger WHERE resrNo=3;
 			query.setLength(0);
-			query.append("INSERT INFO ").append(Constants.RESERVATION_PASSENGER_TABLE).append(" VALUES (")
-					.append("(SELECT ").append(Constants.RESERVATION_NO_FIELD).append(" FROM ").append(Constants.RESERVATION_TABLE)
-					.append(" WHERE ").append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), (SELECT ")
-					.append(Constants.ID_FIELD).append(" FROM ").append(Constants.PASSENGER_TABLE).append(" WHERE")
-					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %s, %s);");
-			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(), customer.getAccNum(),
-					customer.getAccNum(), flight.getSeatNum(), flight.getFlightClass(), flight.getMeal()));
+			query.append("DELETE FROM ").append(Constants.RESERVATION_PASSENGER_TABLE).append(" WHERE ")
+					.append(Constants.RESERVATION_NO_FIELD).append("=?;");
+			stmt = conn.prepareStatement(query.toString());
+			stmt.setInt(1, resrNo);
 			stmt.executeUpdate();
 
-			// INSERT INTO includes VALUES ((SELECT ResrNo FROM reservation WHERE AccountNo=5 LIMIT 1), "JA", 111, 1, CURRENT_TIMESTAMP);
+			// DELETE FROM includes WHERE resrNo=3;
 			query.setLength(0);
-			query.append("INSERT INTO ").append(Constants.INCLUDES_TABLE).append(" VALUES ((SELECT ")
-					.append(Constants.RESERVATION_TABLE).append(" WHERE ")
-					.append(Constants.ACCOUNTNO_FIELD).append("=%d LIMIT 1), %s, %d, %d, CURRENT_TIMESTAMP");
-			stmt = conn.prepareStatement(String.format(query.toString(), customer.getAccNum(),
-					flight.getAirline(), flight.getFlightNo(), flight.getLegs().get(0).getNumber()));
+			query.append("DELETE FROM ").append(Constants.INCLUDES_TABLE).append(" WHERE ")
+					.append(Constants.RESERVATION_NO_FIELD).append("=?;");
+			stmt = conn.prepareStatement(query.toString());
+			stmt.setInt(1, resrNo);
 			stmt.executeUpdate();
 			conn.commit();
 			conn.close();
 
-//			processedRequest = true;
+			processedRequest = true;
         } catch (SQLException ex) {
-            Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
+            Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL cancel reservation Error", ex);
         }
-        return false;
+        return processedRequest;
     }
 
     public List<Reservation> getReservationHistory(int accNo) {
@@ -391,15 +385,20 @@ public class FlightReservationDAO {
                 + ", P." + Constants.FIRSTNAME_FILED
                 + ", P." + Constants.LASTNAME_FILED
                 + ", P." + Constants.PHONE_FILED
+                + ", RP." + Constants.CLASS_FIELD
+                + ", RP." + Constants.SEATNO_FIELD
+                + ", I." + Constants.AIRLINEID_FIELD
+                + ", I." + Constants.FLIGHTNO_FIELD
 
-                + " FROM " + Constants.RESERVATION_TABLE + " R, " + Constants.EMPLOYEE_TABLE + " E, " + Constants.PERSON_TABLE + " P "
+                + " FROM " + Constants.RESERVATION_TABLE + " R, " + Constants.EMPLOYEE_TABLE + " E, " + Constants.PERSON_TABLE + " P, " + Constants.RESERVATION_PASSENGER_TABLE + " RP, " + Constants.INCLUDES_TABLE + " I "
                 + "WHERE R." + Constants.ACCOUNTNO_FIELD + " = ? "
-                + "AND R." + Constants.REP_SSN_FIELD + " = E." + Constants.EMPLOYEE_SSN_FIELD
+                + " AND R." + Constants.RESERVATION_NO_FIELD + " = I." + Constants.RESERVATION_NO_FIELD
+                + " AND R." + Constants.REP_SSN_FIELD + " = E." + Constants.EMPLOYEE_SSN_FIELD
                 + " AND E." + Constants.ID_FIELD + " = P." + Constants.ID_FIELD + ";";
         
         Connection conn = MySQLConnection.connect();
         try {
-            PreparedStatement stmt = conn.prepareCall(query);
+            PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, accNo);
             
             ResultSet rs = stmt.executeQuery();
@@ -412,6 +411,10 @@ public class FlightReservationDAO {
                 String fname = rs.getString(6);
                 String lname = rs.getString(7);
                 String phone = rs.getString(8);
+                String flightClass = rs.getString(9);
+                String seatNo = rs.getString(10);
+                String airlineId = rs.getString(11);
+                int flightNo = rs.getInt(12);
                 
                 Reservation reservation = new Reservation(
                         reservationNo, 
@@ -420,7 +423,12 @@ public class FlightReservationDAO {
                         totalFare, 
                         null, 
                         new Employee(ssn, null, 0, fname, lname, phone, null), null);
-                        
+                Flight f = new Flight();
+                f.setAirline(airlineId);
+                f.setSeatNum(seatNo);
+                f.setFlightClass(flightClass);
+                f.setFlightNo(flightNo);
+                reservation.setFlight(f);
                 reservations.add(reservation);
             }
             
