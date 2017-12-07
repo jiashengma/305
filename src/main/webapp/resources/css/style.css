@@ -87,3 +87,8 @@ table.accSettingTable > tr > td{
 .error {
     color:red;
 }
+
+.number-textfield{
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+}

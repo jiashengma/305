@@ -1,7 +1,7 @@
 <%@include file="/WEB-INF/views/includes/header.jsp" %>
-<%-- <c:if test="${person.accessControl ne 'MANAGER'}">
+<c:if test="${person.accessControl ne 'MANAGER'}">
     <c:redirect url="" />
-</c:if> --%>
+</c:if>
 <script src="/resources/js/jquery.min.js"></script>
 <script>
     document.body.onload = function(){
@@ -23,11 +23,7 @@
     }
 </script>    
 <h2>Search Reservations</h2>
-<c:if test="${not empty error}">
-    <div class="mask error">
-        ${error}
-    </div>
-</c:if>
+<%@include file="/WEB-INF/views/includes/error.jsp" %>
 <div class="mask">
     <form method="POST" action="/reservation-search">
         <strong>Search by:</strong>
@@ -35,7 +31,7 @@
         <input type="radio" name="mode" value="customerName" />Customer Id<br/>
         <div id="flightFields">
             Airline Id: <input type="text" name="airlineId" id="airlineId" required />
-            Flight No: <input type="number" name="flightNo" id="flightNo" required pattern="[0-9]+"/><br/>
+            Flight No: <input type="number" name="flightNo" id="flightNo" class="number-textfield" required pattern="[0-9]+"/><br/>
         </div>
         <div id="customerNameFields" hidden="true">
             Customer Name: <input type="text" name="customerName" id="customerName"/><br/>
