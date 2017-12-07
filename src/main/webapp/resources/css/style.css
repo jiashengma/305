@@ -88,6 +88,11 @@ table.accSettingTable > tr > td{
     color:red;
 }
 
+.number-textfield{
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+}
+
 .green {
     color:green;
 }
