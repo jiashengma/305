@@ -31,8 +31,8 @@ public class FlightDAO {
     public List<Flight> getBestSellers() {
         List<Flight> bestSellers = new ArrayList<>();
         String query = "SELECT AirlineID, FlightNo, COUNT(ResrNo) AS NumOfResr "
-                + " FROM Includes I, "
-                + " GROUP BY AirlineID, FlightNo "
+                + " FROM includes I, "
+                + " GROUP BY (AirlineID, FlightNo) "
                 + " HAVING COUNT(ResrNo) > " + BEST_SELLER_NUM
                 + " ORDER BY NumOfResr DESC";
         Connection conn = null;

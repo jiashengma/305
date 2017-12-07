@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FlightReservationDAO {
 	private static final double SYSTEM_FEE = 1.2;
-	private static final int DEFAULT_MAX_COST = Integer.MAX_VALUE;
+	private static final int DEFAULT_MAX_COST = 500;
 
 	public List<Flight> searchFlight(FlightSearchForm flightSearchForm) {
 		List<Flight> flights = new ArrayList<>();
@@ -302,8 +302,8 @@ public class FlightReservationDAO {
 
 			processedRequest = true;
 		} catch (SQLException ex) {
-			System.out.println("DUP ERROR - person has already reserved this flight!!");
-//			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL DUP Error", ex);
+			//System.out.println("DUP ERROR - person has already reserved this flight!!");
+			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL DUP Error", ex);
 		}
 
 		return processedRequest;

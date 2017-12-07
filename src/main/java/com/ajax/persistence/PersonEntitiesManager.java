@@ -356,7 +356,7 @@ public class PersonEntitiesManager {
             conn.commit();
 
             // construct user
-            rs.next();
+            if (rs.next()){
 			int personId = rs.getInt("id");
 
 			// query db to construct person object
@@ -366,6 +366,7 @@ public class PersonEntitiesManager {
 			person.setUserName(username);
 			person.setPassword(password);
 			// limit 1
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
