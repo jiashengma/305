@@ -71,6 +71,7 @@ public class FlightReservationDAO {
 							new java.sql.Date(flightSearchForm.getDepDate().getTime()),
 							new java.sql.Date(flightSearchForm.getRetDate().getTime())));
 			ResultSet rs = stmt.executeQuery();
+			conn.commit();
 
 			//String airlineID, int flightNum, int legNum, String prefClass
 			List<String> airlineIDs = new ArrayList<>();
@@ -90,14 +91,13 @@ public class FlightReservationDAO {
 			conn.close();
 		} catch (SQLException ex) {
 			Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL query Error", ex);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException ex) {
+				Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL closing error", ex);
+			}
 		}
-//		finally {
-//			try {
-//				conn.close();
-//			} catch (SQLException ex) {
-//				Logger.getLogger(FlightReservationDAO.class.getName()).log(Level.SEVERE, "SQL closing error", ex);
-//			}
-//		}
 		return flights;
 	}
 
