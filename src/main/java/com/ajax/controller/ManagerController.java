@@ -5,17 +5,19 @@
  */
 package com.ajax.controller;
 
-import com.ajax.model.AccessControl;
 import com.ajax.model.Airport;
 import com.ajax.model.Constants;
 import com.ajax.model.Customer;
-import com.ajax.model.CustomerRepresentative;
 import com.ajax.model.Employee;
 import com.ajax.model.Flight;
 import com.ajax.model.Leg;
 import com.ajax.model.Reservation;
 import com.ajax.persistence.MySQLConnection;
 import com.ajax.persistence.PersonEntitiesManager;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -492,5 +495,36 @@ public class ManagerController {
         }
         return mv;
     }
-
+    
+    @RequestMapping(value="/backup.sql", method=RequestMethod.GET)
+    public ModelAndView backupDatabase(HttpServletResponse resp){
+        ModelAndView mv = new ModelAndView("backup");
+        try {
+            Process p = Runtime.getRuntime().exec(String.format("mysqldump %s -u%s -p%s", Constants.DBNAME, 
+                    Constants.USERNAME, Constants.PASSWORD));
+            StringBuilder output;
+            try (InputStream stdout = p.getInputStream()) {
+                output = new StringBuilder();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(stdout));
+                String line;
+                while ((line = reader.readLine()) != null){
+                    output.append(line);
+                    output.append(System.lineSeparator());
+                }
+            }
+            int exitCode = p.waitFor();
+            if (exitCode == 0){
+                mv.addObject("dump", output);
+            } else {
+                resp.setHeader("Content-Disposition", "inline");
+                mv.addObject("dump", "There was an error creating the dump.");
+                return mv;
+            }
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(ManagerController.class.getName()).log(Level.SEVERE, null, ex);
+            resp.setHeader("Content-Disposition", "inline");
+            mv.addObject("dump", "There was an error creating the dump.");
+        }
+        return mv;
+    }
 }
